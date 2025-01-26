@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CieNderellaApplication {
+public class CIENderellaApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CieNderellaApplication.class, args);
+		SpringApplication.run(CIENderellaApplication.class, args);
 	}
 
 }
