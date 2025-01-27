@@ -5,10 +5,15 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @ToString
-public class Reason {
-    String text;
+public class Form {
+    Content content;
+    Reason reason;
+    Writer writer;
+    LocalDate date;
 }
