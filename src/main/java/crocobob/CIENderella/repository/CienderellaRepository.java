@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface CienderellaRepository {
 
-    Optional<Form> generateForm();
+//    Optional<Form> generateForm();
 
     void addContent(Content content);
     Optional<Content> getContent();

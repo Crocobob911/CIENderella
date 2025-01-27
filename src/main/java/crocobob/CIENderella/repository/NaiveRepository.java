@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.*;
 
-@Repository
 public class NaiveRepository implements CienderellaRepository {
 
     // 여기서 List나 Map 써서 나이브하게 저장하는 게 좋을 듯?
@@ -29,16 +28,6 @@ public class NaiveRepository implements CienderellaRepository {
 //    List<Reason> reasons;
 //    List<Writer> writers;
 
-    @Override
-    public Optional<Form> generateForm() {
-            return Optional.of(new Form(
-                    getContent().orElseThrow(),
-                    getAnyReason().orElseThrow(),
-                    getAnyWriter().orElseThrow(),
-                    LocalDate.now()
-                    )
-                );
-    }
 
 
     @Override

@@ -7,8 +7,7 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
+@Getter @Setter
 @AllArgsConstructor
 @ToString
 public class Form {
