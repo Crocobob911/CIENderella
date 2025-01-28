@@ -1,8 +1,14 @@
 package crocobob.CIENderella.service;
 
-import crocobob.CIENderella.domain.FormInfo;
+import crocobob.CIENderella.domain.Content;
+import crocobob.CIENderella.domain.Form;
+import crocobob.CIENderella.domain.Reason;
+import crocobob.CIENderella.domain.Writer;
 import crocobob.CIENderella.repository.CienderellaRepository;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 public class DataManagementService {
@@ -12,7 +18,25 @@ public class DataManagementService {
         this.repo = repo;
     }
 
-    public void createRequestInfo(FormInfo formInfo) {
+    public Optional<Form> getForm() {
         // -> 이거 "동적 치환" 뭐시기 알아본다고 하더라
+        return Optional.of(new Form(
+                repo.getContent().orElseThrow(),
+                repo.getAnyReason().orElseThrow(),
+                repo.getAnyWriter().orElseThrow(),
+                LocalDate.now())
+        );
+    }
+
+    public void createContent(Content content){
+        repo.addContent(content);
+    }
+
+    public void createReason(Reason reason){
+        repo.addReason(reason);
+    }
+
+    public void createWriter(Writer writer){
+        repo.addWriter(writer);
     }
 }

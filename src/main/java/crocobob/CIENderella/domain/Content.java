@@ -1,5 +1,6 @@
 package crocobob.CIENderella.domain;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,10 +9,9 @@ import lombok.*;
 
 @Data
 @Entity
-public class Writer {
-
+public class Content {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
-    String text;
-    boolean valid;
+    String title;
+    String content;
 }
