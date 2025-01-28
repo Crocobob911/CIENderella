@@ -1,6 +1,7 @@
 package crocobob.CIENderella;
 
 import crocobob.CIENderella.repository.CienderellaRepository;
+import crocobob.CIENderella.repository.JdbcTemplateCienderellaRepository;
 import crocobob.CIENderella.repository.JpaCienderellaRepository;
 import crocobob.CIENderella.service.DataManagementService;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +26,8 @@ public class SpringConfig {
 
     @Bean
     public CienderellaRepository cienderellaRepository() {
-        return new JpaCienderellaRepository(em);
+//        return new JpaCienderellaRepository(em);
+        return new JdbcTemplateCienderellaRepository(dataSource);
     }
+
 }

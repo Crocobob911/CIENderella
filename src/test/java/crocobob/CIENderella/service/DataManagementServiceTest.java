@@ -18,18 +18,18 @@ class DataManagementServiceTest {
 
     @BeforeEach
     void beforeEach(){
-        repo = new NaiveRepository();
-        service = new DataManagementService(repo);
-
-        repo.addContent(new Content("title", "text"));
-
-        repo.addReason(new Reason("reason1"));
-        repo.addReason(new Reason("reason2"));
-        repo.addReason(new Reason("reason3"));
-
-        repo.addWriter(new Writer("writer1"));
-        repo.addWriter(new Writer("writer2"));
-        repo.addWriter(new Writer("writer3"));
+//        repo = new NaiveRepository();
+//        service = new DataManagementService(repo);
+//
+//        repo.addContent(new Content("title", "text"));
+//
+//        repo.addReason(new Reason("reason1"));
+//        repo.addReason(new Reason("reason2"));
+//        repo.addReason(new Reason("reason3"));
+//
+//        repo.addWriter(new Writer("writer1"));
+//        repo.addWriter(new Writer("writer2"));
+//        repo.addWriter(new Writer("writer3"));
     }
 
     @AfterEach
