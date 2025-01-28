@@ -13,4 +13,5 @@ public class Reason {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
     String text;
+    boolean valid;
 }

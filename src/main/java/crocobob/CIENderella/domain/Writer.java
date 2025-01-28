@@ -13,4 +13,5 @@ public class Writer {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
     String text;
+    boolean valid;
 }
