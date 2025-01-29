@@ -6,13 +6,18 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter @Setter
 @AllArgsConstructor
 @ToString
 public class Form {
-    Content content;
+    Boolean status;
+    String title;
+    String text;
+    LocalDate date;
+    long password;
     Reason reason;
     Writer writer;
-    LocalDate date;
+    LocalTime time;
 }

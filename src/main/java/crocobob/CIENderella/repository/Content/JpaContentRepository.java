@@ -17,7 +17,7 @@ public class JpaContentRepository implements ContentRepository {
     @Override
     public void insert(Content content) {
         delete();
-        em.merge(content);
+        em.persist(content);
     }
 
     @Override
@@ -29,11 +29,11 @@ public class JpaContentRepository implements ContentRepository {
 
     @Override
     public void delete() {
+        try{
         Content content = em.find(Content.class, 1);
         em.remove(content);
-    }
-
-    public long generateRandId(long num){
-        return (long) (Math.random()*(int)num+1);
+        }catch(Exception e){
+            return;
+        }
     }
 }
