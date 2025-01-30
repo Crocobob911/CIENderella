@@ -27,9 +27,8 @@ public class JpaReasonRepository implements ReasonRepository {
 
     @Override
     public Optional<Reason> findAny() {
-        return find(generateRandId(entityCount()));
+        return find(generateRandId(reasonCount));
     }
-
 
     @Override
     public void delete(long id) {
@@ -43,12 +42,7 @@ public class JpaReasonRepository implements ReasonRepository {
         entity.setValid(isValid);
     }
 
-
     private long generateRandId(long num){
         return (long) (Math.random()*(int)num+1);
-    }
-
-    private long entityCount(){
-        return;
     }
 }

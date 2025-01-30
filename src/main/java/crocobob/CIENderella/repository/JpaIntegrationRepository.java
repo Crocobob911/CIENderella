@@ -33,32 +33,52 @@ public class JpaIntegrationRepository implements IntegrationRepository {
     }
 
     @Override
-    public <T> Optional<T> find(Class<T> c, long id) {
-        return switch (c.class){
-            case Content.class -> contentRepo.find();
-            case Reason.class -> reasonRepo.find(id);
-            case Writer.class -> writerRepo.find(id);
-            default -> throw new IllegalArgumentException("Invalid class");
-        };
+    public Optional<Content> findContent(long id) {
+        return contentRepo.find();
     }
 
     @Override
-    public <T> Optional<T> findAny(Class<T> c) {
-        return switch(c.class){
-            case Reason.class -> reasonRepo.findAny();
-            case Writer.class -> writerRepo.findAny();
-            default -> throw new IllegalArgumentException("Invalid class");
-        };
+    public Optional<Reason> findReason(long id) {
+        return reasonRepo.find(id);
     }
+
+    @Override
+    public Optional<Writer> findWriter(long id) {
+        return writerRepo.find(id);
+    }
+
+    @Override
+    public Optional<Reason> findAnyReason() {
+        return reasonRepo.findAny();
+    }
+
+    @Override
+    public Optional<Writer> findAnyWriter() {
+        return writerRepo.findAny();
+    }
+
 
     @Override
     public <T> void delete(T entity) {
-
+        switch (entity) {
+            case Content content -> contentRepo.delete();
+            case Reason reason -> reasonRepo.delete(reason.getId());
+            case Writer writer -> writerRepo.delete(writer.getId());
+            default -> throw new IllegalArgumentException("Invalid entity");
+        }
     }
 
     @Override
     public <T> void updateValid(T entity, boolean isValid) {
-
+        switch (entity) {
+            case Reason reason -> reasonRepo.updateValid(reason.getId(), isValid);
+            case Writer writer -> writerRepo.updateValid(writer.getId(), isValid);
+            default -> throw new IllegalArgumentException("Invalid entity");
+        }
     }
 
+    @Override
+    public void updateContentStatus(boolean onOff) {
+        contentRepo.updateStatus(onOff);
+    }
 }

@@ -30,10 +30,16 @@ public class JpaContentRepository implements ContentRepository {
     @Override
     public void delete() {
         try{
-        Content content = em.find(Content.class, 1);
+        var content = em.find(Content.class, 1);
         em.remove(content);
         }catch(Exception e){
             return;
         }
+    }
+
+    @Override
+    public void updateStatus(boolean status) {
+        var entity = em.find(Content.class, 1L);
+        entity.setStatus(status);
     }
 }

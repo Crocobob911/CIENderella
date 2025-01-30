@@ -8,4 +8,5 @@ public interface ContentRepository {
     void insert(Content content);
     Optional<Content> find();
     void delete();
+    void updateStatus(boolean status);
 }
