@@ -4,7 +4,7 @@ import crocobob.CIENderella.domain.Content;
 import crocobob.CIENderella.domain.Form;
 import crocobob.CIENderella.domain.Reason;
 import crocobob.CIENderella.domain.Writer;
-import crocobob.CIENderella.repository.JpaIntegrationRepository;
+import crocobob.CIENderella.repository.IntegrationRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -13,9 +13,9 @@ import java.util.Optional;
 
 @Service
 public class DataManagementService {
-    private JpaIntegrationRepository repo;
+    private IntegrationRepository repo;
 
-    public DataManagementService(JpaIntegrationRepository repo) {
+    public DataManagementService(IntegrationRepository repo) {
         this.repo = repo;
     }
 
@@ -35,16 +35,16 @@ public class DataManagementService {
         ));
     }
 
-    public void insertContent(Content content){
-        repo.insert(content);
+    public void saveContent(Content content){
+        repo.save(content);
     }
 
-    public void insertReason(Reason reason){
-        repo.insert(reason);
+    public void saveReason(Reason reason){
+        repo.save(reason);
     }
 
-    public void insertWriter(Writer writer){
-        repo.insert(writer);
+    public void saveWriter(Writer writer){
+        repo.save(writer);
     }
 
     public void systemOnOff(boolean onOff){

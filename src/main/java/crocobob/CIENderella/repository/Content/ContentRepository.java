@@ -5,8 +5,7 @@ import crocobob.CIENderella.domain.Content;
 import java.util.Optional;
 
 public interface ContentRepository {
-    void insert(Content content);
-    Optional<Content> find();
-    void delete();
-    void updateStatus(boolean status);
+    void save(Content content);
+    Optional<Content> findFirst1ById();
+    void delete(Content content);
 }

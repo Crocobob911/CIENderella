@@ -5,10 +5,8 @@ import crocobob.CIENderella.domain.Writer;
 import java.util.Optional;
 
 public interface WriterRepository {
-    void insert(Writer writer);
-    Optional<Writer> find(long id);
-    void delete(long id);
-    void updateValid(long id, boolean isValid);
-
-    Optional<Writer> findAny();
+    void save(Writer writer);
+    Optional<Writer> findById(long id);
+    Optional<Writer> findByValidEquals(boolean valid);
+    void delete(Writer writer);
 }
