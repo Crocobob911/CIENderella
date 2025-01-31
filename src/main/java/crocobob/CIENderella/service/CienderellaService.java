@@ -28,7 +28,7 @@ public class CienderellaService {
                 todayContent.getTitle(),
                 todayContent.getText(),
                 LocalDate.now(),
-                todayContent.getPassward(),
+                todayContent.getPassword(),
                 repo.findAnyReason().orElseThrow(),
                 repo.findAnyWriter().orElseThrow(),
                 LocalTime.now()

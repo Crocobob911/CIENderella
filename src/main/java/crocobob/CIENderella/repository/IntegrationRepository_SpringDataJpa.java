@@ -6,11 +6,14 @@ import crocobob.CIENderella.domain.Writer;
 import crocobob.CIENderella.repository.Content.ContentRepository;
 import crocobob.CIENderella.repository.Reason.ReasonRepository;
 import crocobob.CIENderella.repository.Writer.WriterRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Component
+@Repository
+@Transactional
 public class IntegrationRepository_SpringDataJpa implements IntegrationRepository {
     private final ContentRepository contentRepo;
     private final ReasonRepository reasonRepo;

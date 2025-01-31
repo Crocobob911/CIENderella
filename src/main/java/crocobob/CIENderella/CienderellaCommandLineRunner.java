@@ -1,11 +1,7 @@
 package crocobob.CIENderella;
 
-import crocobob.CIENderella.domain.Content;
 import crocobob.CIENderella.domain.Reason;
-import crocobob.CIENderella.domain.Writer;
 import crocobob.CIENderella.repository.IntegrationRepository_SpringDataJpa;
-import crocobob.CIENderella.service.CienderellaService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 

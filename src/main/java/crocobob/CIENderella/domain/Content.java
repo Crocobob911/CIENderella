@@ -14,7 +14,7 @@ import lombok.*;
 public class Content {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
-    String passward;
+    String password;
     Boolean status;
     String title;
     String text;
