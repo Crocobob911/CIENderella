@@ -7,11 +7,10 @@ import crocobob.CIENderella.domain.Writer;
 import java.util.Optional;
 
 public interface IntegrationRepository {
+
     public <T> void save(T entity);
 
     public Optional<Content> findContent(long id);
-    public Optional<Reason> findReasonById(long id);
-    public Optional<Writer> findWriterById(long id);
 
     public Optional<Reason> findAnyReason();
     public Optional<Writer> findAnyWriter();

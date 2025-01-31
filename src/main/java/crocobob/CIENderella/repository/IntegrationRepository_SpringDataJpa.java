@@ -34,17 +34,7 @@ public class IntegrationRepository_SpringDataJpa implements IntegrationRepositor
 
     @Override
     public Optional<Content> findContent(long id) {
-        return contentRepo.findFirst1ById();
-    }
-
-    @Override
-    public Optional<Reason> findReasonById(long id) {
-        return reasonRepo.findById(id);
-    }
-
-    @Override
-    public Optional<Writer> findWriterById(long id) {
-        return writerRepo.findById(id);
+        return contentRepo.findById(1);
     }
 
     @Override
@@ -56,7 +46,6 @@ public class IntegrationRepository_SpringDataJpa implements IntegrationRepositor
     public Optional<Writer> findAnyWriter() {
         return writerRepo.findByValidEquals(true).stream().findAny();
     }
-
 
     @Override
     public <T> void delete(T entity) {
@@ -79,10 +68,6 @@ public class IntegrationRepository_SpringDataJpa implements IntegrationRepositor
 
     @Override
     public void updateContentStatus(boolean onOff) {
-        contentRepo.findFirst1ById().orElseThrow().setStatus(onOff);
-    }
-
-    private long generateRandomId(int num){
-        return (long) (Math.random()*num);
+        contentRepo.findById(1).orElseThrow().setStatus(onOff);
     }
 }

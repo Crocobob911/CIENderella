@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import lombok.*;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Reason {
 

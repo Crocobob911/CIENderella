@@ -8,11 +8,13 @@ import jakarta.persistence.Id;
 import lombok.*;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Content {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
-    long passward;
+    String passward;
     Boolean status;
     String title;
     String text;

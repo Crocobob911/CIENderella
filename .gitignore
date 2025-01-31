@@ -54,3 +54,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Docker Compose Password ###
+/db/password.txt

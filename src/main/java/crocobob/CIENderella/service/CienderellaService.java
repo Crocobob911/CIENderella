@@ -12,10 +12,10 @@ import java.time.LocalTime;
 import java.util.Optional;
 
 @Service
-public class DataManagementService {
+public class CienderellaService {
     private IntegrationRepository repo;
 
-    public DataManagementService(IntegrationRepository repo) {
+    public CienderellaService(IntegrationRepository repo) {
         this.repo = repo;
     }
 
