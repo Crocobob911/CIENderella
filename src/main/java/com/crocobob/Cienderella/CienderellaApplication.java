@@ -1,14 +1,13 @@
-package crocobob.CIENderella;
+package com.crocobob.Cienderella;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CIENderellaApplication {
+public class CienderellaApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CIENderellaApplication.class, args);
-
+		SpringApplication.run(CienderellaApplication.class, args);
 	}
 
 }
