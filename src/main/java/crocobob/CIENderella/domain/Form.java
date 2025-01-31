@@ -17,7 +17,7 @@ public class Form {
     String text;
     LocalDate date;
     String password;
-    Reason reason;
-    Writer writer;
+    String reason;
+    String writer;
     LocalTime time;
 }

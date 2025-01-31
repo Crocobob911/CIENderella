@@ -1,6 +1,8 @@
 package crocobob.CIENderella;
 
+import crocobob.CIENderella.domain.Content;
 import crocobob.CIENderella.domain.Reason;
+import crocobob.CIENderella.domain.Writer;
 import crocobob.CIENderella.repository.IntegrationRepository_SpringDataJpa;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -16,13 +18,17 @@ public class CienderellaCommandLineRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        repo.save(new Content(1L, "password",true,"hello","hello"));
+        // For Test
+        repo.save(new Content("password", true, "title", "text"));
 
-        repo.save(new Reason(1L, "reason1", true));
+        repo.save(new Reason("reason1", true));
+        repo.save(new Reason("reason2", true));
+        repo.save(new Reason("reason3", true));
+        repo.save(new Reason("reason4", true));
 
-//        System.out.println(repo.findAnyReason().toString());
-
-//        System.out.println(repo.findAnyWriter());
-
+        repo.save(new Writer("writer1", true));
+        repo.save(new Writer("writer2", true));
+        repo.save(new Writer("writer3", true));
+        repo.save(new Writer("writer4", true));
     }
 }

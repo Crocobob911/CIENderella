@@ -16,4 +16,9 @@ public class Writer {
     long id;
     String text;
     boolean valid;
+
+    public Writer(String text, boolean valid) {
+        this.text = text;
+        this.valid = valid;
+    }
 }

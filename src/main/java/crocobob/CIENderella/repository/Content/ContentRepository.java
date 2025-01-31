@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface ContentRepository {
     Content save(Content content);
-    Optional<Content> findById(long id);
+    Optional<Content> findTopByOrderByIdDesc();
     void delete(Content content);
 }

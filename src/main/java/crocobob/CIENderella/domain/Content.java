@@ -9,7 +9,6 @@ import lombok.*;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class Content {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,4 +17,11 @@ public class Content {
     Boolean status;
     String title;
     String text;
+
+    public Content(String password, Boolean status, String title, String text) {
+        this.password = password;
+        this.status = status;
+        this.title = title;
+        this.text = text;
+    }
 }

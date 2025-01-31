@@ -8,7 +8,6 @@ import lombok.*;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class Reason {
 
@@ -16,4 +15,9 @@ public class Reason {
     long id;
     String text;
     boolean valid;
+
+    public Reason(String text, boolean valid) {
+        this.text = text;
+        this.valid = valid;
+    }
 }

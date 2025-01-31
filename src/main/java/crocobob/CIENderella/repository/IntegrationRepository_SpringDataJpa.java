@@ -7,10 +7,10 @@ import crocobob.CIENderella.repository.Content.ContentRepository;
 import crocobob.CIENderella.repository.Reason.ReasonRepository;
 import crocobob.CIENderella.repository.Writer.WriterRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.Random;
 
 @Repository
 @Transactional
@@ -18,6 +18,8 @@ public class IntegrationRepository_SpringDataJpa implements IntegrationRepositor
     private final ContentRepository contentRepo;
     private final ReasonRepository reasonRepo;
     private final WriterRepository writerRepo;
+
+    private Random rand = new Random();
 
     public IntegrationRepository_SpringDataJpa(ContentRepository contentRepo, ReasonRepository reasonRepo, WriterRepository writerRepo) {
         this.contentRepo = contentRepo;
@@ -36,18 +38,20 @@ public class IntegrationRepository_SpringDataJpa implements IntegrationRepositor
     }
 
     @Override
-    public Optional<Content> findContent(long id) {
-        return contentRepo.findById(1);
+    public Optional<Content> findContent() {
+        return contentRepo.findTopByOrderByIdDesc();
     }
 
     @Override
     public Optional<Reason> findAnyReason() {
-        return reasonRepo.findByValidEquals(true).stream().findAny();
+        var reasons = reasonRepo.findByValidEquals(true);
+        return Optional.ofNullable(reasons.get(generateRandIndex(reasons.size())));
     }
 
     @Override
     public Optional<Writer> findAnyWriter() {
-        return writerRepo.findByValidEquals(true).stream().findAny();
+        var writers = writerRepo.findByValidEquals(true);
+        return Optional.ofNullable(writers.get(generateRandIndex(writers.size())));
     }
 
     @Override
@@ -71,6 +75,10 @@ public class IntegrationRepository_SpringDataJpa implements IntegrationRepositor
 
     @Override
     public void updateContentStatus(boolean onOff) {
-        contentRepo.findById(1).orElseThrow().setStatus(onOff);
+        contentRepo.findTopByOrderByIdDesc().orElseThrow().setStatus(onOff);
+    }
+
+    private int generateRandIndex(int num){
+        return rand.nextInt(num-1);
     }
 }

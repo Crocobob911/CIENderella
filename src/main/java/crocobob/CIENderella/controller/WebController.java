@@ -5,6 +5,7 @@ import crocobob.CIENderella.service.CienderellaService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -23,9 +24,10 @@ public class WebController {
     }
 
     @GetMapping("/new-form")
+    @ResponseBody
     public String generateNewForm(Model model) {
         // 여기서 form 만들어 갖다주기
-        return null;
+        return service.getForm().orElseThrow().toString();
     }
 
     @GetMapping("/reasons")

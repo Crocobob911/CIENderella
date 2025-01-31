@@ -21,7 +21,7 @@ public class CienderellaService {
 
     public Optional<Form> getForm() {
         // -> 이거 "동적 치환" 뭐시기 알아본다고 하더라
-        var todayContent = repo.findContent(1).orElseThrow();
+        var todayContent = repo.findContent().orElseThrow();
 
         return Optional.of(new Form(
                 todayContent.getStatus(),
@@ -29,8 +29,8 @@ public class CienderellaService {
                 todayContent.getText(),
                 LocalDate.now(),
                 todayContent.getPassword(),
-                repo.findAnyReason().orElseThrow(),
-                repo.findAnyWriter().orElseThrow(),
+                repo.findAnyReason().orElseThrow().getText(),
+                repo.findAnyWriter().orElseThrow().getText(),
                 LocalTime.now()
         ));
     }

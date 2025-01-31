@@ -10,7 +10,7 @@ public interface IntegrationRepository {
 
     public <T> void save(T entity);
 
-    public Optional<Content> findContent(long id);
+    public Optional<Content> findContent();
 
     public Optional<Reason> findAnyReason();
     public Optional<Writer> findAnyWriter();
