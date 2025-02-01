@@ -9,6 +9,7 @@ import crocobob.CIENderella.repository.Writer.WriterRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -40,6 +41,16 @@ public class IntegrationRepository_SpringDataJpa implements IntegrationRepositor
     @Override
     public Optional<Content> findContent() {
         return contentRepo.findTopByOrderByIdDesc();
+    }
+
+    @Override
+    public List<Reason> findAllReasons() {
+        return reasonRepo.findAll();
+    }
+
+    @Override
+    public List<Writer> findAllWriters() {
+        return writerRepo.findAll();
     }
 
     @Override

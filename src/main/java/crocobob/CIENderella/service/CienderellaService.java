@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,6 +47,12 @@ public class CienderellaService {
     public void saveWriter(Writer writer){
         repo.save(writer);
     }
+
+    public Optional<Content> getContent(){ return repo.findContent(); }
+
+    public List<Reason> getAllReasons(){ return repo.findAllReasons(); }
+
+    public List<Writer> getAllWriters(){ return repo.findAllWriters(); }
 
     public void systemOnOff(boolean onOff){
         repo.updateContentStatus(onOff);
