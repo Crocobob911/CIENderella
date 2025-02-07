@@ -57,3 +57,6 @@ out/
 
 ### Docker Compose Password ###
 /db/password.txt
+
+### application properties
+**/resources/application-*.properties
