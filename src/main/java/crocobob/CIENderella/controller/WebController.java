@@ -8,6 +8,7 @@ import crocobob.CIENderella.service.CienderellaService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Controller
+@RestController
 public class WebController {
 
     private CienderellaService service;
@@ -55,6 +56,23 @@ public class WebController {
         // 여기서 writers(작성자)들 리스트 갖다주기
         return service.getAllWriters();
     }
+
+
+    @PostMapping("/content")
+    public String saveNewContent(Model model, Content content) {
+        return null;
+    }
+
+    @PostMapping("/reason")
+    public String saveNewReason(Model model, Reason reason) {
+        return null;
+    }
+
+    @PostMapping("/writer")
+    public String saveNewWriter(Model model, Writer writer) {
+        return null;
+    }
+
 
     // POST 들은 어떻게 구현하지?
 }
