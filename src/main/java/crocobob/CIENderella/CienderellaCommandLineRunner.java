@@ -18,7 +18,7 @@ public class CienderellaCommandLineRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // For Test
+/*        // For Test
         repo.save(new Content("password", true, "title", "text"));
 
         repo.save(new Reason("reason1", true));
@@ -29,6 +29,6 @@ public class CienderellaCommandLineRunner implements CommandLineRunner {
         repo.save(new Writer("writer1", true));
         repo.save(new Writer("writer2", true));
         repo.save(new Writer("writer3", true));
-        repo.save(new Writer("writer4", true));
+        repo.save(new Writer("writer4", true));*/
     }
 }
