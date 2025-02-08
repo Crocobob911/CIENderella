@@ -7,72 +7,20 @@ import crocobob.CIENderella.domain.Writer;
 import crocobob.CIENderella.service.CienderellaService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@RestController
+@Controller
 public class WebController {
 
-    private CienderellaService service;
-
-    public WebController(CienderellaService service) {
-        this.service = service;
-    }
-
-    @GetMapping("/")
+    @RequestMapping("/")
     public String home(Model model) {
         return "home";
+        // 리다이렉션은 못 시키나?
+        // 그냥 localhost:8080으로 들어온 사람을
+        // localhost:8080/home 으로 리다이렉트
     }
-
-    @GetMapping("/get-form")
-    @ResponseBody
-    public Form generateNewForm(Model model) {
-        // 여기서 form 만들어 갖다주기
-        return service.getForm().orElseThrow();
-    }
-
-    @GetMapping("/content")
-    @ResponseBody
-    public Content getContent(Model model) {
-        return service.getContent().orElseThrow();
-    }
-
-    @GetMapping("/reasons")
-    @ResponseBody
-    public List<Reason> getReasons(Model model) {
-        // 여기서 reason(사유)들 리스트 갖다주기
-        return service.getAllReasons();
-    }
-
-    @GetMapping("/writers")
-    @ResponseBody
-    public List<Writer> getWriters(Model model) {
-        // 여기서 writers(작성자)들 리스트 갖다주기
-        return service.getAllWriters();
-    }
-
-
-    @PostMapping("/content")
-    public String saveNewContent(Model model, Content content) {
-        return null;
-    }
-
-    @PostMapping("/reason")
-    public String saveNewReason(Model model, Reason reason) {
-        return null;
-    }
-
-    @PostMapping("/writer")
-    public String saveNewWriter(Model model, Writer writer) {
-        return null;
-    }
-
-
-    // POST 들은 어떻게 구현하지?
 }
