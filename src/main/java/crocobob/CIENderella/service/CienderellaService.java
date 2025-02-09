@@ -71,11 +71,13 @@ public class CienderellaService {
         repo.updateContentStatus(onOff);
     }
 
-    public void updateReasonIsValid(Reason reason, boolean isValid) {
+    public void updateReasonIsValid(String reasonText, boolean isValid) {
+        var reason = repo.findReasonByText(reasonText);
         repo.updateValid(reason, isValid);
     }
 
-    public void updateWriterIsValid(Writer writer, boolean isValid) {
+    public void updateWriterIsValid(String writerText, boolean isValid) {
+        var writer = repo.findWriterByText(writerText);
         repo.updateValid(writer, isValid);
     }
 }

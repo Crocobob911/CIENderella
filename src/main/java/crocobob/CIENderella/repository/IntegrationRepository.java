@@ -22,6 +22,10 @@ public interface IntegrationRepository {
 
     public Writer findAnyWriter();
 
+    public Reason findReasonByText(String text);
+
+    public Writer findWriterByText(String text);
+
 
     public <T> void delete(T entity);
 

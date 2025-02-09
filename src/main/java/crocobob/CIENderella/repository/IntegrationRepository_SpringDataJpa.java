@@ -60,6 +60,16 @@ public class IntegrationRepository_SpringDataJpa implements IntegrationRepositor
     }
 
     @Override
+    public Reason findReasonByText(String text) {
+        return reasonRepo.findByText(text).orElseThrow();
+    }
+
+    @Override
+    public Writer findWriterByText(String text) {
+        return writerRepo.findByText(text).orElseThrow();
+    }
+
+    @Override
     public Writer findAnyWriter() {
         var writers = writerRepo.findByValidEquals(true);
         return writers.get(generateRandIndex(writers.size()));
