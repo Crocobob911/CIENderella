@@ -39,8 +39,8 @@ public class IntegrationRepository_SpringDataJpa implements IntegrationRepositor
     }
 
     @Override
-    public Optional<Content> findContent() {
-        return contentRepo.findTopByOrderByIdDesc();
+    public Content findContent() {
+        return contentRepo.findTopByOrderByIdDesc().orElseThrow();
     }
 
     @Override
@@ -54,15 +54,15 @@ public class IntegrationRepository_SpringDataJpa implements IntegrationRepositor
     }
 
     @Override
-    public Optional<Reason> findAnyReason() {
+    public Reason findAnyReason() {
         var reasons = reasonRepo.findByValidEquals(true);
-        return Optional.ofNullable(reasons.get(generateRandIndex(reasons.size())));
+        return reasons.get(generateRandIndex(reasons.size()));
     }
 
     @Override
-    public Optional<Writer> findAnyWriter() {
+    public Writer findAnyWriter() {
         var writers = writerRepo.findByValidEquals(true);
-        return Optional.ofNullable(writers.get(generateRandIndex(writers.size())));
+        return writers.get(generateRandIndex(writers.size()));
     }
 
     @Override

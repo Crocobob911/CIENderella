@@ -27,13 +27,13 @@ public class RestApiController {
     @ResponseBody
     public Form generateNewForm(Model model) {
         // 여기서 form 만들어 갖다주기
-        return service.getForm().orElseThrow();
+        return service.getForm();
     }
 
     @GetMapping("/api/content")
     @ResponseBody
     public Content getContent(Model model) {
-        return service.getContent().orElseThrow();
+        return service.getContent();
     }
 
     @GetMapping("/api/reasons")

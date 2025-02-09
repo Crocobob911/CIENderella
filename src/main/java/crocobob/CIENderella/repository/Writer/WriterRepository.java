@@ -9,6 +9,7 @@ public interface WriterRepository {
     Writer save(Writer writer);
     List<Writer> findAll();
     Optional<Writer> findById(long id);
+    Optional<Writer> findByText(String name);
     List<Writer> findByValidEquals(boolean valid);
     void delete(Writer writer);
 

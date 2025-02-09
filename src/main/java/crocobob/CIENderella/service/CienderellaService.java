@@ -21,17 +21,15 @@ public class CienderellaService {
         this.templateEngine = templateEngine;
     }
 
-    public Optional<Form> getForm() {
+    public Form getForm() {
         // -> 이거 "동적 치환" 뭐시기 알아본다고 하더라
-        var todayContent = repo.findContent().orElseThrow();
+        var todayContent = repo.findContent();
 
-        return Optional.of(
-                new Form(todayContent.getTitle(),
+        return new Form(todayContent.getTitle(),
                         todayContent.getPassword(),
                         generateText(LocalDate.now(),
-                            repo.findAnyReason().orElseThrow().getText(),
-                            repo.findAnyWriter().orElseThrow().getText())
-                ));
+                            repo.findAnyReason().getText(),
+                            repo.findAnyWriter().getText()));
     }
 
     public String generateText(LocalDate date, String reason, String writer) {
@@ -57,7 +55,7 @@ public class CienderellaService {
         repo.save(writer);
     }
 
-    public Optional<Content> getContent() {
+    public Content getContent() {
         return repo.findContent();
     }
 

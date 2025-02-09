@@ -12,15 +12,15 @@ public interface IntegrationRepository {
     public <T> void save(T entity);
 
 
-    public Optional<Content> findContent();
+    public Content findContent();
 
     List<Reason> findAllReasons();
 
     List<Writer> findAllWriters();
 
-    public Optional<Reason> findAnyReason();
+    public Reason findAnyReason();
 
-    public Optional<Writer> findAnyWriter();
+    public Writer findAnyWriter();
 
 
     public <T> void delete(T entity);
