@@ -53,11 +53,30 @@ public class IntegrationRepository_SpringDataJpa implements IntegrationRepositor
         return writerRepo.findAll();
     }
 
+
+    @Override
+    public Reason findReasonById(long id) {
+        return reasonRepo.findById(id).orElseThrow();
+    }
+
+    @Override
+    public Writer findWriterById(long id) {
+        return writerRepo.findById(id).orElseThrow();
+    }
+
+
     @Override
     public Reason findAnyReason() {
         var reasons = reasonRepo.findByValidEquals(true);
         return reasons.get(generateRandIndex(reasons.size()));
     }
+
+    @Override
+    public Writer findAnyWriter() {
+        var writers = writerRepo.findByValidEquals(true);
+        return writers.get(generateRandIndex(writers.size()));
+    }
+
 
     @Override
     public Reason findReasonByText(String text) {
@@ -69,11 +88,6 @@ public class IntegrationRepository_SpringDataJpa implements IntegrationRepositor
         return writerRepo.findByText(text).orElseThrow();
     }
 
-    @Override
-    public Writer findAnyWriter() {
-        var writers = writerRepo.findByValidEquals(true);
-        return writers.get(generateRandIndex(writers.size()));
-    }
 
     @Override
     public <T> void delete(T entity) {
@@ -100,6 +114,7 @@ public class IntegrationRepository_SpringDataJpa implements IntegrationRepositor
     }
 
     private int generateRandIndex(int num){
-        return rand.nextInt(num-1);
+        return rand.nextInt(num);
     }
+
 }

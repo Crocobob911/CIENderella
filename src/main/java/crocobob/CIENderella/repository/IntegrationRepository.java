@@ -22,6 +22,10 @@ public interface IntegrationRepository {
 
     public Writer findAnyWriter();
 
+    public Reason findReasonById(long id);
+
+    public Writer findWriterById(long id);
+
     public Reason findReasonByText(String text);
 
     public Writer findWriterByText(String text);

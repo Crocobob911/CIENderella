@@ -1,0 +1,5 @@
+신청서
+신청 날짜 : <span th:text="${date}"></span>
+신청자 : <span th:text="${writer}"></span>
+신청 사유 : <span th:text="${reason}"></span>
+위와 같은 내용으로 신청합니다.

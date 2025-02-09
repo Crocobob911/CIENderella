@@ -59,6 +59,14 @@ public class CienderellaService {
         return repo.findContent();
     }
 
+    public Reason getReason(long id) {
+        return repo.findReasonById(id);
+    }
+
+    public Writer getWriter(long id) {
+        return repo.findWriterById(id);
+    }
+
     public List<Reason> getAllReasons() {
         return repo.findAllReasons();
     }

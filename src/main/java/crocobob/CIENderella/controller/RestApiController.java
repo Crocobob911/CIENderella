@@ -5,9 +5,12 @@ import crocobob.CIENderella.domain.Form;
 import crocobob.CIENderella.domain.Reason;
 import crocobob.CIENderella.domain.Writer;
 import crocobob.CIENderella.service.CienderellaService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -36,12 +39,22 @@ public class RestApiController {
         return service.getAllReasons();
     }
 
+    @GetMapping(path = "/reasons/{id}")
+    public Reason getReason(@PathVariable long id) {
+        return service.getReason(id);
+    }
+
     @GetMapping(path = "/writers")
     public List<Writer> getWriters() {
         // 여기서 writers(작성자)들 리스트 갖다주기
         return service.getAllWriters();
     }
 
+    @GetMapping(path = "/writers/{id}")
+    public Writer getWriter(@PathVariable long id) {
+        // 여기서 writers(작성자)들 리스트 갖다주기
+        return service.getWriter(id);
+    }
 
 
     @PostMapping("/content")
@@ -50,20 +63,32 @@ public class RestApiController {
     }
 
     @PostMapping("/reasons")
-    public void createReason(@RequestBody Reason reason) {
+    public ResponseEntity<Object> createReason(@RequestBody Reason reason) {
         service.saveReason(reason);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(reason.getId())
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
 
     @PostMapping("/writers")
-    public void createWriter(@RequestBody Writer writer) {
+    public ResponseEntity<Object> createWriter(@RequestBody Writer writer) {
         service.saveWriter(writer);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(writer.getId())
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
 
 
     @PatchMapping("/content")
-    public void updateContent(@RequestBody Content content) {
-
-    }
+    public void updateContent(@RequestBody Content content) {}
 
     @PatchMapping("/reasons")
     public void updateReason(@RequestBody Reason reason) {}
