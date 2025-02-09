@@ -5,12 +5,8 @@ import crocobob.CIENderella.domain.Form;
 import crocobob.CIENderella.domain.Reason;
 import crocobob.CIENderella.domain.Writer;
 import crocobob.CIENderella.service.CienderellaService;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,27 +19,27 @@ public class RestApiController {
         this.service = service;
     }
 
-    @GetMapping("/api/get-form")
+    @GetMapping("/get-form")
     @ResponseBody
     public Form generateNewForm(Model model) {
         // 여기서 form 만들어 갖다주기
         return service.getForm();
     }
 
-    @GetMapping("/api/content")
+    @GetMapping("/content")
     @ResponseBody
     public Content getContent(Model model) {
         return service.getContent();
     }
 
-    @GetMapping("/api/reasons")
+    @GetMapping("/reasons")
     @ResponseBody
     public List<Reason> getReasons(Model model) {
         // 여기서 reason(사유)들 리스트 갖다주기
         return service.getAllReasons();
     }
 
-    @GetMapping("/api/writers")
+    @GetMapping("/writers")
     @ResponseBody
     public List<Writer> getWriters(Model model) {
         // 여기서 writers(작성자)들 리스트 갖다주기
@@ -51,18 +47,19 @@ public class RestApiController {
     }
 
 
-    @PostMapping("/api/content")
-    public String saveNewContent(Model model, Content content) {
-        return null;
+
+    @PostMapping("/content")
+    public void createContent(@RequestBody Content content) {
+        service.saveContent(content);
     }
 
-    @PostMapping("/api/reason")
-    public String saveNewReason(Model model, Reason reason) {
-        return null;
+    @PostMapping("/reasons")
+    public void createReason(@RequestBody Reason reason) {
+        service.saveReason(reason);
     }
 
-    @PostMapping("/api/writer")
-    public String saveNewWriter(Model model, Writer writer) {
-        return null;
+    @PostMapping("/writers")
+    public void createWriter(@RequestBody Writer writer) {
+        service.saveWriter(writer);
     }
 }
