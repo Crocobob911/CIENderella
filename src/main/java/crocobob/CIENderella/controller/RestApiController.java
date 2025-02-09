@@ -19,29 +19,25 @@ public class RestApiController {
         this.service = service;
     }
 
-    @GetMapping("/get-form")
-    @ResponseBody
+    @GetMapping(path = "/get-form")
     public Form generateNewForm(Model model) {
         // 여기서 form 만들어 갖다주기
         return service.getForm();
     }
 
-    @GetMapping("/content")
-    @ResponseBody
-    public Content getContent(Model model) {
+    @GetMapping(path = "/content")
+    public Content getContent() {
         return service.getContent();
     }
 
-    @GetMapping("/reasons")
-    @ResponseBody
-    public List<Reason> getReasons(Model model) {
+    @GetMapping(path = "/reasons")
+    public List<Reason> getReasons() {
         // 여기서 reason(사유)들 리스트 갖다주기
         return service.getAllReasons();
     }
 
-    @GetMapping("/writers")
-    @ResponseBody
-    public List<Writer> getWriters(Model model) {
+    @GetMapping(path = "/writers")
+    public List<Writer> getWriters() {
         // 여기서 writers(작성자)들 리스트 갖다주기
         return service.getAllWriters();
     }
