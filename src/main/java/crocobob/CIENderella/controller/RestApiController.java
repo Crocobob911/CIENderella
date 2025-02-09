@@ -1,5 +1,6 @@
 package crocobob.CIENderella.controller;
 
+import crocobob.CIENderella.Exception.EntityNotFoundException;
 import crocobob.CIENderella.domain.Content;
 import crocobob.CIENderella.domain.Form;
 import crocobob.CIENderella.domain.Reason;
@@ -30,18 +31,30 @@ public class RestApiController {
 
     @GetMapping(path = "/content")
     public Content getContent() {
-        return service.getContent();
+        try {
+            return service.getContent();
+        } catch (EntityNotFoundException e) {
+            throw e;
+        }
     }
 
     @GetMapping(path = "/reasons")
     public List<Reason> getReasons() {
         // 여기서 reason(사유)들 리스트 갖다주기
-        return service.getAllReasons();
+        try {
+            return service.getAllReasons();
+        } catch (EntityNotFoundException e) {
+            throw e;
+        }
     }
 
     @GetMapping(path = "/reasons/{id}")
     public Reason getReason(@PathVariable long id) {
-        return service.getReason(id);
+        try {
+            return service.getReason(id);
+        } catch (EntityNotFoundException e) {
+            throw e;
+        }
     }
 
     @GetMapping(path = "/writers")
@@ -88,11 +101,14 @@ public class RestApiController {
 
 
     @PatchMapping("/content")
-    public void updateContent(@RequestBody Content content) {}
+    public void updateContent(@RequestBody Content content) {
+    }
 
     @PatchMapping("/reasons")
-    public void updateReason(@RequestBody Reason reason) {}
+    public void updateReason(@RequestBody Reason reason) {
+    }
 
     @PatchMapping("/writers")
-    public void updateWriter(@RequestBody Writer writer) {}
+    public void updateWriter(@RequestBody Writer writer) {
+    }
 }

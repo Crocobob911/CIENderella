@@ -6,6 +6,7 @@ import crocobob.CIENderella.domain.Writer;
 import crocobob.CIENderella.repository.Content.ContentRepository;
 import crocobob.CIENderella.repository.Reason.ReasonRepository;
 import crocobob.CIENderella.repository.Writer.WriterRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
@@ -40,52 +41,68 @@ public class IntegrationRepository_SpringDataJpa implements IntegrationRepositor
 
     @Override
     public Content findContent() {
-        return contentRepo.findTopByOrderByIdDesc().orElseThrow();
+        return contentRepo.findTopByOrderByIdDesc().orElseThrow(
+                () -> new EntityNotFoundException("No content found.")
+        );
     }
 
     @Override
     public List<Reason> findAllReasons() {
-        return reasonRepo.findAll();
+        var reasons = reasonRepo.findAll();
+        if(reasons.isEmpty()) throw new EntityNotFoundException("There is no Reason in DB.");
+        else return reasons;
     }
 
     @Override
     public List<Writer> findAllWriters() {
-        return writerRepo.findAll();
+        var writers = writerRepo.findAll();
+        if(writers.isEmpty()) throw new EntityNotFoundException("There is no Writer in DB.");
+        else return writers;
     }
 
 
     @Override
     public Reason findReasonById(long id) {
-        return reasonRepo.findById(id).orElseThrow();
+        return reasonRepo.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("No Reason with id : " + id + " found.")
+        );
     }
 
     @Override
     public Writer findWriterById(long id) {
-        return writerRepo.findById(id).orElseThrow();
+        return writerRepo.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("No Writer with id : " + id + " found.")
+        );
     }
 
 
     @Override
     public Reason findAnyReason() {
-        var reasons = reasonRepo.findByValidEquals(true);
-        return reasons.get(generateRandIndex(reasons.size()));
+        var validReasons = reasonRepo.findByValidEquals(true);
+        if(validReasons.isEmpty()) throw new EntityNotFoundException("There is no valid Reason in DB.");
+        else return validReasons.get(generateRandIndex(validReasons.size()));
     }
 
     @Override
     public Writer findAnyWriter() {
-        var writers = writerRepo.findByValidEquals(true);
-        return writers.get(generateRandIndex(writers.size()));
+        var validWriters = writerRepo.findByValidEquals(true);
+        if(validWriters.isEmpty()) throw new EntityNotFoundException("There is no valid Writer in DB.");
+        else return validWriters.get(generateRandIndex(validWriters.size()));
     }
 
 
     @Override
     public Reason findReasonByText(String text) {
-        return reasonRepo.findByText(text).orElseThrow();
+        return reasonRepo.findByText(text).orElseThrow(
+                () -> new EntityNotFoundException("No Reason with text : " + text + " found.")
+        );
     }
 
     @Override
     public Writer findWriterByText(String text) {
-        return writerRepo.findByText(text).orElseThrow();
+        return writerRepo.findByText(text).orElseThrow(
+                () -> new EntityNotFoundException("No Writer with text : " + text + " found.")
+        );
     }
 
 
@@ -102,15 +119,17 @@ public class IntegrationRepository_SpringDataJpa implements IntegrationRepositor
     @Override
     public <T> void updateValid(T entity, boolean isValid) {
         switch (entity) {
-            case Reason reason -> reasonRepo.findById(reason.getId()).orElseThrow().setValid(isValid);
-            case Writer writer -> writerRepo.findById(writer.getId()).orElseThrow().setValid(isValid);
+            case Reason reason -> findReasonById(reason.getId()).setValid(isValid);
+            case Writer writer -> findWriterById(writer.getId()).setValid(isValid);
             default -> throw new IllegalArgumentException("Invalid entity");
         }
     }
 
     @Override
     public void updateContentStatus(boolean onOff) {
-        contentRepo.findTopByOrderByIdDesc().orElseThrow().setStatus(onOff);
+        contentRepo.findTopByOrderByIdDesc().orElseThrow(
+                () -> new EntityNotFoundException("No content found.")
+        ).setStatus(onOff);
     }
 
     private int generateRandIndex(int num){
