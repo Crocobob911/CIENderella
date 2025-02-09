@@ -58,4 +58,16 @@ public class RestApiController {
     public void createWriter(@RequestBody Writer writer) {
         service.saveWriter(writer);
     }
+
+
+    @PatchMapping("/content")
+    public void updateContent(@RequestBody Content content) {
+
+    }
+
+    @PatchMapping("/reasons")
+    public void updateReason(@RequestBody Reason reason) {}
+
+    @PatchMapping("/writers")
+    public void updateWriter(@RequestBody Writer writer) {}
 }
