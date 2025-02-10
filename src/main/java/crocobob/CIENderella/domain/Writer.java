@@ -15,9 +15,9 @@ public class Writer {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
     String text;
-    boolean valid;
+    Boolean valid;
 
-    public Writer(String text, boolean valid) {
+    public Writer(String text, Boolean valid) {
         this.text = text;
         this.valid = valid;
     }

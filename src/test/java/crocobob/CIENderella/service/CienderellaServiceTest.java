@@ -14,36 +14,4 @@ import java.time.LocalDate;
 @SpringBootTest
 class CienderellaServiceTest {
 
-    @Autowired
-    private CienderellaService service;
-
-    @Autowired
-    private SpringTemplateEngine engine;
-
-    @Autowired
-    private IntegrationRepository repo;
-
-    @Autowired
-    private ContentRepository contentRepo;
-    @Autowired
-    private ReasonRepository reasonRepo;
-    @Autowired
-    private WriterRepository writerRepo;
-
-
-    @Test
-    public void generateText_Test(){
-
-
-        System.out.println(service.generateText(LocalDate.now(),"reason1", "writer1"));
-
-
-/*        Context context = new Context();
-
-        context.setVariable("date", LocalDate.now());
-        context.setVariable("reason", "reason1");
-        context.setVariable("writer", "writer1");
-
-        System.out.println(engine.process("formPractice",context));*/
-    }
 }

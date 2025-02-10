@@ -23,11 +23,14 @@ public class RestApiController {
         this.service = service;
     }
 
-    @GetMapping(path = "/get-form")
+    @GetMapping(path = "/form")
     public Form generateNewForm(Model model) {
         // 여기서 form 만들어 갖다주기
         return service.getForm();
     }
+
+    // ====================================================
+    // << get >>
 
     @GetMapping(path = "/content")
     public Content getContent() {
@@ -39,7 +42,7 @@ public class RestApiController {
     }
 
     @GetMapping(path = "/reasons")
-    public List<Reason> getReasons() {
+    public List<Reason> getReasonList() {
         // 여기서 reason(사유)들 리스트 갖다주기
         try {
             return service.getAllReasons();
@@ -58,7 +61,7 @@ public class RestApiController {
     }
 
     @GetMapping(path = "/writers")
-    public List<Writer> getWriters() {
+    public List<Writer> getWriterList() {
         // 여기서 writers(작성자)들 리스트 갖다주기
         return service.getAllWriters();
     }
@@ -69,6 +72,8 @@ public class RestApiController {
         return service.getWriter(id);
     }
 
+    //=======================================================
+    // << create >>
 
     @PostMapping("/content")
     public void createContent(@RequestBody Content content) {
@@ -99,16 +104,20 @@ public class RestApiController {
         return ResponseEntity.created(location).build();
     }
 
+    //=======================================================
+    // << update >>
 
     @PatchMapping("/content")
     public void updateContent(@RequestBody Content content) {
     }
 
-    @PatchMapping("/reasons")
-    public void updateReason(@RequestBody Reason reason) {
+    @PatchMapping("/reasons/{id}")
+    public void updateReason(@PathVariable long id, @RequestBody Reason reason) {
+        service.patchUpdateReason(id, reason);
     }
 
-    @PatchMapping("/writers")
-    public void updateWriter(@RequestBody Writer writer) {
+    @PatchMapping("/writers/{id}")
+    public void updateWriter(@PathVariable long id, @RequestBody Writer writer) {
+        service.patchUpdateWriter(id, writer);
     }
 }

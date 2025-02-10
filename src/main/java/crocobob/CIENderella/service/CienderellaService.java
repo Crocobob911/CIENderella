@@ -100,15 +100,23 @@ public class CienderellaService {
 
     }
 
-    public void updateReason(long reasonId, Reason newReason) {
-//        getReason(reasonId).
+    public void patchUpdateReason(long reasonId, Reason newReason) {
+        Reason oldReason = getReason(reasonId);
+
+        if(newReason.getText() != null) oldReason.setText(newReason.getText());
+        if(newReason.getValid() != null) oldReason.setValid(newReason.getValid());
+
+        reasonRepo.save(oldReason);
     }
 
-    public void updateWriter(long writerId, Writer newWriter) {
-//        var writer = repo.findWriterById(writerId);
-//        repo.updateValid(writer, isValid);
-    }
+    public void patchUpdateWriter(long writerId, Writer newWriter) {
+        Writer oldWriter = getWriter(writerId);
 
+        if(newWriter.getText() != null) oldWriter.setText(newWriter.getText());
+        if(newWriter.getValid() != null) oldWriter.setValid(newWriter.getValid());
+
+        writerRepo.save(oldWriter);
+    }
 
 
 
