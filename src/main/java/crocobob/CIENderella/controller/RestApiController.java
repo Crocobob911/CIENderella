@@ -7,6 +7,11 @@ import crocobob.CIENderella.domain.Form;
 import crocobob.CIENderella.domain.Reason;
 import crocobob.CIENderella.domain.Writer;
 import crocobob.CIENderella.service.CienderellaService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +30,15 @@ public class RestApiController {
     }
 
     @GetMapping(path = "/form")
+    @Operation(
+            summary = "신청서 조회",
+            description = "야간 사용 신청서를 조회합니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "성공"
+    )
+    @Tag(name = "Form", description = "신청서")
     public Form generateNewForm(Model model) throws JsonProcessingException {
         // 여기서 form 만들어 갖다주기
         return service.getForm();
