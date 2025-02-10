@@ -1,7 +1,6 @@
 package crocobob.CIENderella.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import crocobob.CIENderella.TextGenerator;
 import crocobob.CIENderella.repository.Content.ContentRepository;
 import crocobob.CIENderella.repository.Reason.ReasonRepository;
 import crocobob.CIENderella.repository.Writer.WriterRepository;

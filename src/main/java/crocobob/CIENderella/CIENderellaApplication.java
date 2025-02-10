@@ -15,6 +15,6 @@ public class CIENderellaApplication {
 		app.setBannerMode(Banner.Mode.OFF);
 		app.run(args);
 
-		log.info("Application started");
+		log.info("<< Application started >>");
 	}
 }

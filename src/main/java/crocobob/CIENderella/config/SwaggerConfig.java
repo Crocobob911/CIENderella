@@ -12,13 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @OpenAPIDefinition(
         info = @Info(
-                title = "CIEN데렐라 API 문서",
-                version = "0.1",
-                description = "API 문서입니다.",
-                contact = @Contact(
-                        name = "CIEN",
-                        email = "mmungjun@gmail.com")),
+                title = "CIENderella API 문서",
+                version = "0.1.0"),
         security = @SecurityRequirement(name = "bearerAuth"))
-public class SwaggerConfig {
-
-}
+public class SwaggerConfig {}
