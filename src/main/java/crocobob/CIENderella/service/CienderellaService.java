@@ -1,35 +1,45 @@
 package crocobob.CIENderella.service;
 
+import crocobob.CIENderella.repository.Content.ContentRepository;
+import crocobob.CIENderella.repository.Reason.ReasonRepository;
+import crocobob.CIENderella.repository.Writer.WriterRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.thymeleaf.context.Context;
 import crocobob.CIENderella.domain.*;
-import crocobob.CIENderella.repository.IntegrationRepository;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class CienderellaService {
     private final SpringTemplateEngine templateEngine;
-    private IntegrationRepository repo;
 
-    public CienderellaService(IntegrationRepository repo, SpringTemplateEngine templateEngine) {
-        this.repo = repo;
+    private final ContentRepository contentRepo;
+    private final ReasonRepository reasonRepo;
+    private final WriterRepository writerRepo;
+
+    private Random rand = new Random();
+
+    public CienderellaService(SpringTemplateEngine templateEngine, ContentRepository contentRepo, ReasonRepository reasonRepo, WriterRepository writerRepo) {
         this.templateEngine = templateEngine;
+        this.contentRepo = contentRepo;
+        this.reasonRepo = reasonRepo;
+        this.writerRepo = writerRepo;
     }
 
     public Form getForm() {
         // -> 이거 "동적 치환" 뭐시기 알아본다고 하더라
-        var todayContent = repo.findContent();
+        var todayContent = getContent();
 
         return new Form(todayContent.getTitle(),
                         todayContent.getPassword(),
                         generateText(LocalDate.now(),
-                            repo.findAnyReason().getText(),
-                            repo.findAnyWriter().getText()));
+                            findAnyReason().getText(),
+                            findAnyWriter().getText()));
     }
 
     public String generateText(LocalDate date, String reason, String writer) {
@@ -44,48 +54,77 @@ public class CienderellaService {
     }
 
     public void saveContent(Content content) {
-        repo.save(content);
+        contentRepo.save(content);
     }
 
     public void saveReason(Reason reason) {
-        repo.save(reason);
+        reasonRepo.save(reason);
     }
 
     public void saveWriter(Writer writer) {
-        repo.save(writer);
+        writerRepo.save(writer);
     }
 
     public Content getContent() {
-        return repo.findContent();
+        return contentRepo.findTopByOrderByIdDesc()
+                .orElseThrow(() -> new RuntimeException("Content not found"));
     }
 
     public Reason getReason(long id) {
-        return repo.findReasonById(id);
+        return reasonRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("No Reason with id : " + id + " found."));
     }
 
     public Writer getWriter(long id) {
-        return repo.findWriterById(id);
+        return writerRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("No Writer with id : " + id + " found."));
     }
 
     public List<Reason> getAllReasons() {
-        return repo.findAllReasons();
+        var reasons = reasonRepo.findAll();
+        if(reasons.isEmpty()) throw new RuntimeException("There is no reason");
+        else return reasons;
     }
 
     public List<Writer> getAllWriters() {
-        return repo.findAllWriters();
+        var writers = writerRepo.findAll();
+        if(writers.isEmpty()) throw new RuntimeException("There is no writer");
+        else return writers;
     }
 
     public void systemOnOff(boolean onOff) {
-        repo.updateContentStatus(onOff);
+//        repo.updateContentStatus(onOff);
     }
 
-    public void updateReasonIsValid(String reasonText, boolean isValid) {
-        var reason = repo.findReasonByText(reasonText);
-        repo.updateValid(reason, isValid);
+    public void updateContent(Content content) {
+
     }
 
-    public void updateWriterIsValid(String writerText, boolean isValid) {
-        var writer = repo.findWriterByText(writerText);
-        repo.updateValid(writer, isValid);
+    public void updateReason(long reasonId, Reason newReason) {
+//        getReason(reasonId).
+    }
+
+    public void updateWriter(long writerId, Writer newWriter) {
+//        var writer = repo.findWriterById(writerId);
+//        repo.updateValid(writer, isValid);
+    }
+
+
+
+
+    private Reason findAnyReason(){
+        var validReasons = reasonRepo.findByValidEquals(true);
+        if(validReasons.isEmpty()) throw new EntityNotFoundException("There is no valid Reason in DB.");
+        else return validReasons.get(generateRandIndex(validReasons.size()));
+    }
+
+    private Writer findAnyWriter(){
+        var validWriters = writerRepo.findByValidEquals(true);
+        if(validWriters.isEmpty()) throw new EntityNotFoundException("There is no valid Writer in DB.");
+        else return validWriters.get(generateRandIndex(validWriters.size()));
+    }
+
+    private int generateRandIndex(int num){
+        return rand.nextInt(num);
     }
 }
