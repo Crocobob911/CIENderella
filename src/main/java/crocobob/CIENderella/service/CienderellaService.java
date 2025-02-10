@@ -1,5 +1,6 @@
 package crocobob.CIENderella.service;
 
+import crocobob.CIENderella.TextGenerator;
 import crocobob.CIENderella.repository.Content.ContentRepository;
 import crocobob.CIENderella.repository.Reason.ReasonRepository;
 import crocobob.CIENderella.repository.Writer.WriterRepository;
@@ -16,7 +17,7 @@ import java.util.Random;
 
 @Service
 public class CienderellaService {
-    private final SpringTemplateEngine templateEngine;
+    private final TextGenerator textGenerator;
 
     private final ContentRepository contentRepo;
     private final ReasonRepository reasonRepo;
@@ -24,8 +25,8 @@ public class CienderellaService {
 
     private Random rand = new Random();
 
-    public CienderellaService(SpringTemplateEngine templateEngine, ContentRepository contentRepo, ReasonRepository reasonRepo, WriterRepository writerRepo) {
-        this.templateEngine = templateEngine;
+    public CienderellaService(TextGenerator textGenerator, ContentRepository contentRepo, ReasonRepository reasonRepo, WriterRepository writerRepo) {
+        this.textGenerator = textGenerator;
         this.contentRepo = contentRepo;
         this.reasonRepo = reasonRepo;
         this.writerRepo = writerRepo;
@@ -37,24 +38,9 @@ public class CienderellaService {
 
         return new Form(todayContent.getTitle(),
                         todayContent.getPassword(),
-                        generateText(LocalDate.now(),
+                        textGenerator.generateText(LocalDate.now(),
                             findAnyReason().getText(),
                             findAnyWriter().getText()));
-    }
-
-    public String generateText(LocalDate date, String reason, String writer) {
-
-        Context context = new Context();
-
-        context.setVariable("date", date);
-        context.setVariable("reason", reason);
-        context.setVariable("writer", writer);
-
-        return templateEngine.process("formPractice", context);
-    }
-
-    public void saveContent(Content content) {
-        contentRepo.save(content);
     }
 
     public void saveReason(Reason reason) {
@@ -96,8 +82,15 @@ public class CienderellaService {
 //        repo.updateContentStatus(onOff);
     }
 
-    public void updateContent(Content content) {
+    public void patchUpdateContent(Content newContent) {
+        Content oldContent = getContent();
 
+        if(newContent.getPassword() != null) oldContent.setPassword(newContent.getPassword());
+        if(newContent.getStatus() != null) oldContent.setStatus(newContent.getStatus());
+        if(newContent.getTitle() != null) oldContent.setTitle(newContent.getTitle());
+        if(newContent.getText() != null) oldContent.setText(newContent.getText());
+
+        contentRepo.save(oldContent);
     }
 
     public void patchUpdateReason(long reasonId, Reason newReason) {

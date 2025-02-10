@@ -75,11 +75,6 @@ public class RestApiController {
     //=======================================================
     // << create >>
 
-    @PostMapping("/content")
-    public void createContent(@RequestBody Content content) {
-        service.saveContent(content);
-    }
-
     @PostMapping("/reasons")
     public ResponseEntity<Object> createReason(@RequestBody Reason reason) {
         service.saveReason(reason);
@@ -109,6 +104,7 @@ public class RestApiController {
 
     @PatchMapping("/content")
     public void updateContent(@RequestBody Content content) {
+        service.patchUpdateContent(content);
     }
 
     @PatchMapping("/reasons/{id}")
