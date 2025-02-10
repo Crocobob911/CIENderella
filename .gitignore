@@ -3,6 +3,7 @@
 !src/**/build/
 compose.yml
 
+
 # Ignore Gradle GUI config
 gradle-app.setting
 
@@ -58,6 +59,9 @@ out/
 
 ### Docker Compose Password ###
 /db/password.txt
+
+### Docker compose yml ###
+compose.yml
 
 ### application properties
 **/resources/application-*.properties

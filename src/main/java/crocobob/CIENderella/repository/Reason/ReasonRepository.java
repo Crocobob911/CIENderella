@@ -9,7 +9,6 @@ public interface ReasonRepository {
     Reason save(Reason reason);
     List<Reason> findAll();
     Optional<Reason> findById(long id);
-    Optional<Reason> findByText(String name);
     List<Reason> findByValidEquals(boolean valid);
     void delete(Reason Reason);
 
