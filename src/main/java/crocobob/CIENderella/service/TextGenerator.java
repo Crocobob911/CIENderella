@@ -1,4 +1,4 @@
-package crocobob.CIENderella;
+package crocobob.CIENderella.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.stereotype.Component;

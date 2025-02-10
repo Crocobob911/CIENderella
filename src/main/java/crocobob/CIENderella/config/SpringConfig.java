@@ -1,4 +1,4 @@
-package crocobob.CIENderella;
+package crocobob.CIENderella.config;
 
 import jakarta.persistence.EntityManager;
 import javax.sql.DataSource;
