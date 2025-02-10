@@ -8,13 +8,21 @@ import java.time.LocalDate;
 @Component
 public class TextGenerator {
 
-    public String generateTitle(String title, LocalDate date) {
-        return title.replace("{month}", date.getMonth().toString())
-                .replace("{date}", date.getDayOfMonth());
+    public String generateTitle(String title) {
+        LocalDate today = LocalDate.now();
+
+        return title
+                .replace("{month}", Integer.toString(today.getMonth().getValue()))
+                .replace("{day}", Integer.toString(today.getDayOfMonth()));
     }
 
     public String generateContent(String content, String reason, String writer) throws JsonProcessingException {
-        return content.replace("{reason}", reason)
-                .replace("{writer}", writer);
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+
+        return content
+                .replace("{next_month}",Integer.toString(tomorrow.getMonth().getValue()))
+                .replace("{next_day}", Integer.toString(tomorrow.getDayOfMonth()))
+                .replace("{writer}", writer)
+                .replace("{reason}", reason);
     }
 }

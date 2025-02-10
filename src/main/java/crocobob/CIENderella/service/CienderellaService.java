@@ -34,7 +34,7 @@ public class CienderellaService {
         // -> 이거 "동적 치환" 뭐시기 알아본다고 하더라
         var todayContent = getContent();
 
-        return new Form(todayContent.getTitle(),
+        return new Form(textGenerator.generateTitle(todayContent.getTitle()),
                         todayContent.getPassword(),
                         textGenerator.generateContent(
                                 todayContent.getText(),
@@ -77,9 +77,6 @@ public class CienderellaService {
         else return writers;
     }
 
-    public void systemOnOff(boolean onOff) {
-//        repo.updateContentStatus(onOff);
-    }
 
     public void patchUpdateContent(Content newContent) {
         Content oldContent = getContent();
