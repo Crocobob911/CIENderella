@@ -1,12 +1,7 @@
 package crocobob.CIENderella;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import crocobob.CIENderella.domain.Content;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class TextGeneratorTest {
 
@@ -20,7 +15,7 @@ class TextGeneratorTest {
         String reason = "수면";
 
         System.out.println(
-                tg.generateText_Json(LocalDate.now(), contentText, reason, writer)
+                tg.generateContent(contentText, reason, writer)
         );
     }
 }

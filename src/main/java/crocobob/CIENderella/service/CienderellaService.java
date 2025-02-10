@@ -6,13 +6,10 @@ import crocobob.CIENderella.repository.Content.ContentRepository;
 import crocobob.CIENderella.repository.Reason.ReasonRepository;
 import crocobob.CIENderella.repository.Writer.WriterRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.thymeleaf.context.Context;
 import crocobob.CIENderella.domain.*;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.spring6.SpringTemplateEngine;
 
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
 
@@ -39,8 +36,8 @@ public class CienderellaService {
 
         return new Form(todayContent.getTitle(),
                         todayContent.getPassword(),
-                        textGenerator.generateText_Json(LocalDate.now(),
-                            todayContent.getText(),
+                        textGenerator.generateContent(
+                                todayContent.getText(),
                             findAnyReason().getText(),
                             findAnyWriter().getText()));
     }
