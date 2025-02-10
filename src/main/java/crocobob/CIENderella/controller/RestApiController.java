@@ -1,5 +1,6 @@
 package crocobob.CIENderella.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import crocobob.CIENderella.Exception.EntityNotFoundException;
 import crocobob.CIENderella.domain.Content;
 import crocobob.CIENderella.domain.Form;
@@ -24,7 +25,7 @@ public class RestApiController {
     }
 
     @GetMapping(path = "/form")
-    public Form generateNewForm(Model model) {
+    public Form generateNewForm(Model model) throws JsonProcessingException {
         // 여기서 form 만들어 갖다주기
         return service.getForm();
     }

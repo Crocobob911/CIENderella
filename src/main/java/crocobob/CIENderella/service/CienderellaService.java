@@ -1,5 +1,6 @@
 package crocobob.CIENderella.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import crocobob.CIENderella.TextGenerator;
 import crocobob.CIENderella.repository.Content.ContentRepository;
 import crocobob.CIENderella.repository.Reason.ReasonRepository;
@@ -32,13 +33,14 @@ public class CienderellaService {
         this.writerRepo = writerRepo;
     }
 
-    public Form getForm() {
+    public Form getForm() throws JsonProcessingException {
         // -> 이거 "동적 치환" 뭐시기 알아본다고 하더라
         var todayContent = getContent();
 
         return new Form(todayContent.getTitle(),
                         todayContent.getPassword(),
-                        textGenerator.generateText(LocalDate.now(),
+                        textGenerator.generateText_Json(LocalDate.now(),
+                            todayContent.getText(),
                             findAnyReason().getText(),
                             findAnyWriter().getText()));
     }
