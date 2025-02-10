@@ -25,7 +25,12 @@ public class CienderellaCommandLineRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // For Test
-        contentRepo.save(new Content("default_password", true, "default_title", "default_text"));
+        contentRepo.save(new Content("default_password", true,
+                "{month}/{day}_CIEN 사용신청입니다.",
+                "동아리명: CIEN\n" +
+                        "사용 날짜 및 시간 :{next_month}월 {next_day}일 00시~07시\n" +
+                        "신청자 : {writer}\n" +
+                        "사유 : {reason}"));
 
         reasonRepo.save(new Reason("게임 분석 스터디", true));
         reasonRepo.save(new Reason("창립제 준비", true));
