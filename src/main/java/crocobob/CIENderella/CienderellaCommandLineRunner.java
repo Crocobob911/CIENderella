@@ -33,9 +33,9 @@ public class CienderellaCommandLineRunner implements CommandLineRunner {
                         "사유 : {reason}"));
 
         reasonRepo.save(new Reason("게임 분석 스터디", true));
-        reasonRepo.save(new Reason("창립제 준비", true));
+        reasonRepo.save(new Reason("게임잼 준비", true));
         reasonRepo.save(new Reason("C# 프로그래밍 튜터링", true));
-        reasonRepo.save(new Reason("게임잼 진행", true));
+        reasonRepo.save(new Reason("게임 개발 회의", true));
 
         writerRepo.save(new Writer("이유정", true));
         writerRepo.save(new Writer("김현수", true));
