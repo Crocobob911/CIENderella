@@ -30,15 +30,16 @@ public class CienderellaService {
     }
 
     public Form getForm() throws JsonProcessingException {
-        // -> 이거 "동적 치환" 뭐시기 알아본다고 하더라
         var todayContent = getContent();
+        var tmpWriter = findAnyWriter().getText();
 
         return new Form(textGenerator.generateTitle(todayContent.getTitle()),
+                        tmpWriter,
                         todayContent.getPassword(),
                         textGenerator.generateContent(
                                 todayContent.getText(),
                             findAnyReason().getText(),
-                            findAnyWriter().getText()));
+                            tmpWriter));
     }
 
     public void saveReason(Reason reason) {

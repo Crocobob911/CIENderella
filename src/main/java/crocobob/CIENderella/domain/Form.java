@@ -10,9 +10,9 @@ import java.time.LocalTime;
 
 @Getter @Setter
 @AllArgsConstructor
-@ToString
 public class Form {
     String title;
+    String writer;
     String password;
     String content;
 }

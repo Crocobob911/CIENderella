@@ -11,5 +11,4 @@ public interface WriterRepository {
     Optional<Writer> findById(long id);
     List<Writer> findByValidEquals(boolean valid);
     void delete(Writer writer);
-
 }
