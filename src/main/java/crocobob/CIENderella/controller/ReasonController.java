@@ -1,8 +1,7 @@
 package crocobob.CIENderella.controller;
 
-import crocobob.CIENderella.Exception.EntityNotFoundException;
+import crocobob.CIENderella.Exception.DBEntityNotFoundException;
 import crocobob.CIENderella.domain.Reason;
-import crocobob.CIENderella.repository.Reason.ReasonRepository;
 import crocobob.CIENderella.service.CienderellaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -37,7 +36,7 @@ public class ReasonController {
         // 여기서 reason(사유)들 리스트 갖다주기
         try {
             return service.getAllReasons();
-        } catch (EntityNotFoundException e) {
+        } catch (DBEntityNotFoundException e) {
             throw e;
         }
     }
@@ -51,12 +50,8 @@ public class ReasonController {
             responseCode = "200",
             description = "성공"
     )
-    public Reason getReason(@PathVariable long id) {
-        try {
+    public Reason getReason(@PathVariable long id) throws DBEntityNotFoundException {
             return service.getReason(id);
-        } catch (EntityNotFoundException e) {
-            throw e;
-        }
     }
 
     @PostMapping("/reasons")

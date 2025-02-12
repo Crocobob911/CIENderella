@@ -1,8 +1,7 @@
 package crocobob.CIENderella.controller;
 
-import crocobob.CIENderella.Exception.EntityNotFoundException;
+import crocobob.CIENderella.Exception.DBEntityNotFoundException;
 import crocobob.CIENderella.domain.Content;
-import crocobob.CIENderella.repository.Content.ContentRepository;
 import crocobob.CIENderella.service.CienderellaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -34,7 +33,7 @@ public class ContentController {
     public Content getContent() {
         try {
             return service.getContent();
-        } catch (EntityNotFoundException e) {
+        } catch (DBEntityNotFoundException e) {
             throw e;
         }
     }
