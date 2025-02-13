@@ -15,6 +15,7 @@ import java.util.Random;
 @Service
 public class CienderellaService {
     private final TextGenerator textGenerator;
+    private final CamApiService camApiService;
 
     private final ContentRepository contentRepo;
     private final ReasonRepository reasonRepo;
@@ -22,11 +23,12 @@ public class CienderellaService {
 
     private Random rand = new Random();
 
-    public CienderellaService(TextGenerator textGenerator, ContentRepository contentRepo, ReasonRepository reasonRepo, WriterRepository writerRepo) {
-        this.textGenerator = textGenerator;
-        this.contentRepo = contentRepo;
-        this.reasonRepo = reasonRepo;
+    public CienderellaService(WriterRepository writerRepo, ReasonRepository reasonRepo, ContentRepository contentRepo, CamApiService camApiService, TextGenerator textGenerator) {
         this.writerRepo = writerRepo;
+        this.reasonRepo = reasonRepo;
+        this.contentRepo = contentRepo;
+        this.camApiService = camApiService;
+        this.textGenerator = textGenerator;
     }
 
     public Form getForm() throws JsonProcessingException {
@@ -38,8 +40,10 @@ public class CienderellaService {
                         todayContent.getPassword(),
                         textGenerator.generateContent(
                                 todayContent.getText(),
-                            findAnyReason().getText(),
-                            tmpWriter));
+                                findAnyReason().getText(),
+                                tmpWriter,
+                                camApiService.getCamApiResponse()
+                                ));
     }
 
     public void saveReason(Reason reason) {

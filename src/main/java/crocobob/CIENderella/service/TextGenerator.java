@@ -1,6 +1,7 @@
 package crocobob.CIENderella.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import crocobob.CIENderella.domain.CamApiResponse;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -16,13 +17,26 @@ public class TextGenerator {
                 .replace("{day}", Integer.toString(today.getDayOfMonth()));
     }
 
-    public String generateContent(String content, String reason, String writer) throws JsonProcessingException {
+    public String generateContent(String content, String reason, String writer, CamApiResponse response) throws JsonProcessingException {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
+
+        String writerAndPeople = generateWriterAndPeople(writer, response);
 
         return content
                 .replace("{next_month}",Integer.toString(tomorrow.getMonth().getValue()))
                 .replace("{next_day}", Integer.toString(tomorrow.getDayOfMonth()))
-                .replace("{writer}", writer)
+                .replace("{writer}", writerAndPeople)
                 .replace("{reason}", reason);
+    }
+
+    private static String generateWriterAndPeople(String writer, CamApiResponse response) {
+
+        String returnString = writer;
+
+        if(response.getIsPeopleThere())
+            if(response.getPeopleCount() >= 2)
+                returnString = " 외 " + (response.getPeopleCount()-1) + "인";
+
+        return returnString;
     }
 }
