@@ -35,7 +35,7 @@ public class TextGenerator {
 
         if(response.getIsPeopleThere())
             if(response.getPeopleCount() >= 2)
-                returnString = " 외 " + (response.getPeopleCount()-1) + "인";
+                returnString += " 외 " + (response.getPeopleCount()-1) + "인";
 
         return returnString;
     }
