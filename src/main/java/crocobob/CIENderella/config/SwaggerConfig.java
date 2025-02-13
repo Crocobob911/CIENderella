@@ -13,6 +13,6 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition(
         info = @Info(
                 title = "CIENderella API 문서",
-                version = "0.1.1"),
+                version = "0.1.2"),
         security = @SecurityRequirement(name = "bearerAuth"))
 public class SwaggerConfig {}
