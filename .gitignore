@@ -65,3 +65,7 @@ compose.yml
 
 ### application properties
 **/resources/application-*.properties
+
+
+### log
+log.txt
