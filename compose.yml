@@ -12,7 +12,7 @@ services:
       - MYSQL_HOST=%
       - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db-password
     ports:
-      - "3307:3306"
+      - "4306:3306"
 volumes:
   db-data:
 secrets:
