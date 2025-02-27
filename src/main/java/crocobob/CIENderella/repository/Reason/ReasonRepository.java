@@ -11,5 +11,4 @@ public interface ReasonRepository {
     Optional<Reason> findById(long id);
     List<Reason> findByValidEquals(boolean valid);
     void delete(Reason Reason);
-
 }

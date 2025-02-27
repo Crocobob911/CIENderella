@@ -2,6 +2,7 @@ package crocobob.CIENderella.controller;
 
 import crocobob.CIENderella.Exception.DBEntityNotFoundException;
 import crocobob.CIENderella.domain.Reason;
+import crocobob.CIENderella.domain.ReasonDTO;
 import crocobob.CIENderella.service.CienderellaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -63,8 +64,8 @@ public class ReasonController {
             responseCode = "200",
             description = "성공"
     )
-    public ResponseEntity<Object> createReason(@RequestBody Reason reason) {
-        service.saveReason(reason);
+    public ResponseEntity<Object> createReason(@RequestBody ReasonDTO dto) {
+        Reason reason = service.saveReason(dto);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

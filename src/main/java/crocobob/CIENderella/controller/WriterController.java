@@ -1,6 +1,7 @@
 package crocobob.CIENderella.controller;
 
 import crocobob.CIENderella.domain.Writer;
+import crocobob.CIENderella.domain.WriterDTO;
 import crocobob.CIENderella.service.CienderellaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -59,8 +60,8 @@ public class WriterController {
             responseCode = "200",
             description = "성공"
     )
-    public ResponseEntity<Object> createWriter(@RequestBody Writer writer) {
-        service.saveWriter(writer);
+    public ResponseEntity<Object> createWriter(@RequestBody WriterDTO dto) {
+        Writer writer = service.saveWriter(dto);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
