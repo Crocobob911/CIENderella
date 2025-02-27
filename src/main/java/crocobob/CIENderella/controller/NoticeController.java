@@ -27,6 +27,11 @@ public class NoticeController {
         return service.getNotices();
     }
 
+    @GetMapping(path="/dev/notices")
+    public List<Notice> dev_getAllNotice() {
+        return service.getAllNotices();
+    }
+
     @PostMapping(path="/notices")
     public ResponseEntity createNotice(@RequestBody NoticeDTO dto) {
         var notice = service.save(dto);

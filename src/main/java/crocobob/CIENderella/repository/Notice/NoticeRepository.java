@@ -1,6 +1,7 @@
 package crocobob.CIENderella.repository.Notice;
 
 import crocobob.CIENderella.domain.Notice;
+import crocobob.CIENderella.domain.NoticeDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,4 +11,5 @@ public interface NoticeRepository {
     Optional<Notice> findById(long id);
     List<Notice> findTop3ByOrderByIdDesc();
     void delete(Notice notice);
+    List<Notice> findAll();
 }

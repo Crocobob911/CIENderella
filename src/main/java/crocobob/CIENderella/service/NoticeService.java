@@ -25,5 +25,9 @@ public class NoticeService {
         return repo.findTop3ByOrderByIdDesc();
     }
 
+    public List<Notice> getAllNotices(){
+        return repo.findAll();
+    }
+
     public void delete(Notice notice) {}
 }
