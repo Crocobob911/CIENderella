@@ -47,10 +47,5 @@ public class CienderellaCommandLineRunner implements CommandLineRunner {
         writerRepo.save(new Writer("김현수", true));
         writerRepo.save(new Writer("김준", true));
         writerRepo.save(new Writer("최선재", true));
-
-        noticeRepo.save(new Notice("공지 예시 1", LocalDate.now()));
-        noticeRepo.save(new Notice("공지 예시 2", LocalDate.now()));
-        noticeRepo.save(new Notice("공지 예시 3", LocalDate.now()));
-        noticeRepo.save(new Notice("공지 예시 4", LocalDate.now()));
     }
 }
