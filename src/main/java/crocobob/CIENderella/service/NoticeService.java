@@ -20,7 +20,7 @@ public class NoticeService {
     public Notice save(NoticeDTO dto) {
         var notice = repo.findByNotice(dto.getNotice());
 
-        return notice.orElseGet(() -> repo.save(new Notice()));
+        return notice.orElseGet(() -> repo.save(new Notice(dto.getNotice(), LocalDate.now())));
     }
 
     public List<Notice> getNotices(){
