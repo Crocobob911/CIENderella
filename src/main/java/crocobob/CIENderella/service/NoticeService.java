@@ -18,11 +18,17 @@ public class NoticeService {
     }
 
     public Notice save(NoticeDTO dto) {
-        return repo.save(new Notice(dto.getNotice(), LocalDate.now()));
+        var notice = repo.findByNotice(dto.getNotice());
+
+        return notice.orElseGet(() -> repo.save(new Notice()));
     }
 
     public List<Notice> getNotices(){
-        return repo.findTop3ByOrderByIdDesc();
+        LocalDate twoMonthsAgo = LocalDate.now().minusMonths(2);
+
+        List<Notice> notices = repo.findTop3ByOrderByIdDesc();
+        notices.removeIf(notice -> notice.getDate().isBefore(twoMonthsAgo));
+        return notices;
     }
 
     public List<Notice> getAllNotices(){
