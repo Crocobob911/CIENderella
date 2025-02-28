@@ -25,7 +25,7 @@ public class ContentController {
     @GetMapping(path = "/content")
     @Operation(
             summary = "신청글 양식 조회",
-            description = "야간 사용 신청글 양식을 조회합니다."
+            description = "야간 사용 신청글 양식을 조회해요."
     )
     @ApiResponse(
             responseCode = "200",
@@ -42,7 +42,7 @@ public class ContentController {
     @PatchMapping("/content")
     @Operation(
             summary = "신청글 양식 수정",
-            description = "야간 사용 신청글 양식을 수정합니다."
+            description = "야간 사용 신청글 양식을 바꿔요."
     )
     @ApiResponse(
             responseCode = "200",

@@ -27,7 +27,7 @@ public class ReasonController {
     @GetMapping(path = "/reasons")
     @Operation(
             summary = "사유 전체 조회",
-            description = "저장된 모든 reason들을 갖다줄게."
+            description = "저장된 모든 reason들을 갖다줄게요."
     )
     @ApiResponse(
             responseCode = "200",
@@ -45,7 +45,7 @@ public class ReasonController {
     @GetMapping(path = "/reasons/{id}")
     @Operation(
             summary = "id로 사유 조회",
-            description = "그 id의 reason을 갖다줄게."
+            description = "그 id의 reason을 갖다줄게요."
     )
     @ApiResponse(
             responseCode = "200",
@@ -58,7 +58,7 @@ public class ReasonController {
     @PostMapping("/reasons")
     @Operation(
             summary = "사유 추가",
-            description = "갖다준 reason을 저장할게."
+            description = "갖다준 reason을 저장할게요."
     )
     @ApiResponse(
             responseCode = "200",
@@ -78,7 +78,7 @@ public class ReasonController {
     @PatchMapping("/reasons/{id}")
     @Operation(
             summary = "사유 수정",
-            description = "그 id의 reason을 수정할게."
+            description = "그 id의 reason을 수정할게요."
     )
     @ApiResponse(
             responseCode = "200",

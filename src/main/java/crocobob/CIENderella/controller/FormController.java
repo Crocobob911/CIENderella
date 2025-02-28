@@ -23,7 +23,7 @@ public class FormController {
     @GetMapping(path = "/form")
     @Operation(
             summary = "최종 신청글 생성",
-            description = "야간 사용 신청글을 생성합니다."
+            description = "저장된 데이터들을 기반으로, 야간 사용 신청글을 생성해요"
     )
     @ApiResponse(
             responseCode = "200",
