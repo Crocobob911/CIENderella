@@ -28,6 +28,10 @@ public class NoticeService {
 
         List<Notice> notices = repo.findTop3ByOrderByIdDesc();
         notices.removeIf(notice -> notice.getDate().isBefore(twoMonthsAgo));
+
+        if(notices.isEmpty())
+            notices.add(new Notice("지금은 공지가 없어요! 새로운 공지가 생기면 바로 알려드릴게요 :D", LocalDate.now()));
+
         return notices;
     }
 
