@@ -40,7 +40,7 @@ public class WriterController {
     @GetMapping(path = "/writers/{id}")
     @Operation(
             summary = "id로 작성자 조회",
-            description = "그 id의 작성자를 갖다줄게."
+            description = "그 id의 작성자를 갖다줄게요."
     )
     @ApiResponse(
             responseCode = "200",
@@ -54,7 +54,7 @@ public class WriterController {
     @PostMapping("/writers")
     @Operation(
             summary = "작성자 저장",
-            description = "갖다준 writer을 저장할게."
+            description = "갖다준 writer을 저장할게요."
     )
     @ApiResponse(
             responseCode = "200",
@@ -74,7 +74,7 @@ public class WriterController {
     @PatchMapping("/writers/{id}")
     @Operation(
             summary = "작성자 수정",
-            description = "그 id의 작성자를 수정할게."
+            description = "그 id의 작성자를 수정할게요."
     )
     @ApiResponse(
             responseCode = "200",

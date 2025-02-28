@@ -29,7 +29,7 @@ public class NoticeController {
     @GetMapping(path="/notices")
     @Operation(
             summary = "공지 3개 조회",
-            description = "1: 2달 내에 작성된. 2: 최신 순으로. 3: 3개만."
+            description = "1: 2달 내에 작성된. 2: 최신 순으로. 3: 최대 3개."
     )
     @ApiResponse(
             responseCode = "200",
@@ -43,7 +43,7 @@ public class NoticeController {
     @PostMapping(path="/notices")
     @Operation(
             summary = "공지 추가",
-            description = "갖다준 notice를 저장할게."
+            description = "크롤링 봇이 사용할 거예요. 다른 분들은 필요할 때만 요청해주세요."
     )
     @ApiResponse(
             responseCode = "200",
