@@ -1,13 +1,17 @@
 package crocobob.CIENderella;
 
 import crocobob.CIENderella.domain.Content;
+import crocobob.CIENderella.domain.Notice;
 import crocobob.CIENderella.domain.Reason;
 import crocobob.CIENderella.domain.Writer;
 import crocobob.CIENderella.repository.Content.ContentRepository;
+import crocobob.CIENderella.repository.Notice.NoticeRepository;
 import crocobob.CIENderella.repository.Reason.ReasonRepository;
 import crocobob.CIENderella.repository.Writer.WriterRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
 
 @Component
 public class CienderellaCommandLineRunner implements CommandLineRunner {
@@ -15,11 +19,13 @@ public class CienderellaCommandLineRunner implements CommandLineRunner {
     private final ContentRepository contentRepo;
     private final ReasonRepository reasonRepo;
     private final WriterRepository writerRepo;
+    private final NoticeRepository noticeRepo;
 
-    public CienderellaCommandLineRunner(ContentRepository contentRepo, ReasonRepository reasonRepo, WriterRepository writerRepo) {
+    public CienderellaCommandLineRunner(ContentRepository contentRepo, ReasonRepository reasonRepo, WriterRepository writerRepo, NoticeRepository noticeRepo) {
         this.contentRepo = contentRepo;
         this.reasonRepo = reasonRepo;
         this.writerRepo = writerRepo;
+        this.noticeRepo = noticeRepo;
     }
 
     @Override
@@ -41,5 +47,11 @@ public class CienderellaCommandLineRunner implements CommandLineRunner {
         writerRepo.save(new Writer("김현수", true));
         writerRepo.save(new Writer("김준", true));
         writerRepo.save(new Writer("최선재", true));
+
+        noticeRepo.save(new Notice("공지 예시 1", LocalDate.now()));
+        noticeRepo.save(new Notice("공지 예시 2", LocalDate.now()));
+        noticeRepo.save(new Notice("공지 예시 3", LocalDate.now()));
+        noticeRepo.save(new Notice("공지 예시 4", LocalDate.now()));
+
     }
 }

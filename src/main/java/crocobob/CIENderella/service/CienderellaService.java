@@ -46,12 +46,16 @@ public class CienderellaService {
                                 ));
     }
 
-    public void saveReason(Reason reason) {
-        reasonRepo.save(reason);
+    public Reason saveReason(ReasonDTO dto) {
+        Reason reason = new Reason(dto.getText(), true);
+
+        return reasonRepo.save(reason);
     }
 
-    public void saveWriter(Writer writer) {
-        writerRepo.save(writer);
+    public Writer saveWriter(WriterDTO dto) {
+        Writer writer = new Writer(dto.getText(), true);
+
+        return writerRepo.save(writer);
     }
 
     public Content getContent() {
@@ -82,7 +86,7 @@ public class CienderellaService {
     }
 
 
-    public void patchUpdateContent(Content newContent) {
+    public void patchUpdateContent(ContentDTO newContent) {
         Content oldContent = getContent();
 
         if(newContent.getPassword() != null) oldContent.setPassword(newContent.getPassword());

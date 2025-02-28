@@ -2,6 +2,7 @@ package crocobob.CIENderella.controller;
 
 import crocobob.CIENderella.Exception.DBEntityNotFoundException;
 import crocobob.CIENderella.domain.Content;
+import crocobob.CIENderella.domain.ContentDTO;
 import crocobob.CIENderella.service.CienderellaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -47,8 +48,8 @@ public class ContentController {
             responseCode = "200",
             description = "성공"
     )
-    public void updateContent(@RequestBody Content content) {
-        service.patchUpdateContent(content);
+    public void updateContent(@RequestBody ContentDTO dto) {
+        service.patchUpdateContent(dto);
     }
 
 }
