@@ -4,6 +4,9 @@ package crocobob.CIENderella.controller;
 import crocobob.CIENderella.domain.Notice;
 import crocobob.CIENderella.domain.NoticeDTO;
 import crocobob.CIENderella.service.NoticeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +18,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@Tag(name = "Discord Notice", description = "디스코드 공지")
 public class NoticeController {
     private final NoticeService service;
 
@@ -23,16 +27,28 @@ public class NoticeController {
     }
 
     @GetMapping(path="/notices")
+    @Operation(
+            summary = "공지 3개 조회",
+            description = "1: 2달 내에 작성된. 2: 최신 순으로. 3: 3개만."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "성공"
+    )
     public List<Notice> getNotice() {
         return service.getNotices();
     }
 
-    @GetMapping(path="/dev/notices")
-    public List<Notice> dev_getAllNotice() {
-        return service.getAllNotices();
-    }
 
     @PostMapping(path="/notices")
+    @Operation(
+            summary = "공지 추가",
+            description = "갖다준 notice를 저장할게."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "성공"
+    )
     public ResponseEntity createNotice(@RequestBody NoticeDTO dto) {
         var notice = service.save(dto);
 

@@ -52,6 +52,5 @@ public class CienderellaCommandLineRunner implements CommandLineRunner {
         noticeRepo.save(new Notice("공지 예시 2", LocalDate.now()));
         noticeRepo.save(new Notice("공지 예시 3", LocalDate.now()));
         noticeRepo.save(new Notice("공지 예시 4", LocalDate.now()));
-
     }
 }
