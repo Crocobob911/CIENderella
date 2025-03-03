@@ -1,5 +1,6 @@
 package crocobob.CIENderella.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import crocobob.CIENderella.domain.meal.MealInfo_AfterProcess;
@@ -44,35 +45,6 @@ public class MealService {
                     }
                 }
             }
-
-
-//            if(mealCrawlResults.isArray()){
-//                for(JsonNode mealRoot : mealCrawlResults){
-//                    JsonNode cafeteriaNode = result.get("cafeterias");
-//                    if(cafeteriaNode.isArray()){
-//                        for (JsonNode cafeteria : cafeteriaNode) {
-//                            MealInfo_AfterProcess mealInfo = new MealInfo_AfterProcess();
-//                            mealInfo.setDate(cafeteria.get("date").asText());
-//                            mealInfo.setCafeteria(cafeteria.get("cafeteriaName").asText());
-//
-//                            JsonNode mealNode = cafeteria.get("meal");
-//                                if(mealNode.isArray()){
-//                                    for (JsonNode meal : mealNode) {
-//                                        mealInfo.setMealType(meal.get("mealType").asText());
-//
-//                                        JsonNode menusNode = mealNode.get("menus");
-//                                    for (JsonNode menu : menusNode) {
-//                                        mealInfo.setMenu(menu.get("menu").toString());
-//                                        mealInfos.add(mealInfo);
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-
-
             return mealInfos.toString();
 
         } catch (Exception e) {
@@ -80,5 +52,19 @@ public class MealService {
             return "DEBUG : [MealService.addMeal_test] wrong input";
         }
 
+    }
+
+    public JsonNode getJsonNode(String jsonString, String key) {
+        ObjectMapper mapper = new ObjectMapper();
+        try{
+            return mapper.readTree(jsonString).get(key);
+        }catch (JsonProcessingException e){
+            return null;
+        }
+    }
+
+    public JsonNode getJsonNode(JsonNode jsonNode, String key) {
+        ObjectMapper mapper = new ObjectMapper();
+        return jsonNode.get(key);
     }
 }
