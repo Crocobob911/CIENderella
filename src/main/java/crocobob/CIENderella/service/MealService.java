@@ -61,19 +61,20 @@ public class MealService {
                         try {
                             JSONObject menuObject = new JSONObject(menu.toString());
                             JSONArray menuList = menuObject.getJSONArray("menu");
-                            StringBuilder menuString = new StringBuilder(menuList.get(0).toString());
+                            String menuString = "";
+                            menuString = menuList.get(0).toString();
                             for(int i = 1; i < menuList.length(); i++){
-                                menuString.append(",").append(menuList.get(i).toString());
+                                menuString += "," + menuList.get(i).toString();
                             }
                             MealInfo_AfterProcess mealInfo = new MealInfo_AfterProcess(
                                     result.get("date").asText(),
                                     reduceCafeteriaName(cafeteria.get("cafeteriaName").asText()),
                                     changeMealTypeString(meal.get("mealType").toString()),
-                                    menuString.toString()
+                                    menuString
                             );
                             repo.save(mealInfo);
                         }catch (JSONException e){
-                            return "Failed to Update Meals.";
+                            return "Failed to Update Meals. \n" + e.getMessage();
                             // 500으로 보내면 좋을텐데.
                         }
                     }
@@ -105,11 +106,6 @@ public class MealService {
     }
 
     private String changeMealTypeString(String mealType){
-        return switch (mealType){
-            case "\\\"아침\\\"" -> "아침";
-            case "\\\"점심\\\"" -> "점심";
-            case "\\\"저녁\\\"" -> "저녁";
-            default -> mealType;
-        };
+        return mealType.replaceAll("[^가-힣]", "");
     }
 }
