@@ -1,21 +1,19 @@
 package crocobob.CIENderella.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import crocobob.CIENderella.domain.meal.MealInfo_AfterProcess;
-import crocobob.CIENderella.domain.meal.MealRoot;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import crocobob.CIENderella.repository.Meal.MealRepository;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -23,11 +21,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 @SpringBootTest(classes = MealService.class)
 class MealServiceTest {
 
-    @Autowired
+    @Mock
+    private MealRepository repo;
+
+    @InjectMocks
     private MealService service;
 
     private String jsonString;
@@ -41,40 +44,45 @@ class MealServiceTest {
         }
     }
 
+
     @Test
-    public void testTest() {
-        try{
-            System.out.println("hello");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public void createWeeklyMeal_test() {
+        //given
+        doNothing().when(repo).deleteAll();
+        when(repo.save(any(MealInfo_AfterProcess.class))).thenReturn(null);
+
+        //when
+        String result = service.createWeeklyMealData();
+
+        //then
+        System.out.println(result);
+        System.out.println(repo.findAll());
     }
 
     @Test
-    public void readJson() {
-        try{
-            String inputJson = Files.readString(Paths.get("src/test/resources/mealJsonExample.json"));
-            assertNotNull(inputJson);
-            System.out.println(inputJson);
-        }catch (IOException e){
-            fail(e.getMessage());
-        }
+    public void findAll_test() {
+        //given
+
+        //when
+
+        //then
+
     }
 
     @Test
-    public void test_addMeal(){
+    public void test_createMealInfos(){
         try {
             String inputJson = Files.readString(Paths.get("src/test/resources/mealJsonExample.json"));
             assertNotNull(inputJson);
 
-            System.out.println(addMeal_Test(inputJson));
+            System.out.println(createMeal_Infos_Test(inputJson));
         } catch (IOException e) {
             fail("IOException occurred: " + e.getMessage());
         }
     }
 
     @Test
-    public String addMeal_Test(String crawlResultString) {
+    public String createMeal_Infos_Test(String crawlResultString) {
         ObjectMapper mapper = new ObjectMapper();
         List<MealInfo_AfterProcess> mealInfos = new ArrayList<MealInfo_AfterProcess>();
         try{
@@ -86,6 +94,7 @@ class MealServiceTest {
         return mealInfos.toString();
     }
 
+    /*
     @Test
     public void getJsonNode() {
         List<MealInfo_AfterProcess> mealInfoList = new ArrayList<MealInfo_AfterProcess>();
@@ -124,4 +133,5 @@ class MealServiceTest {
             System.out.println(mealInfoList.get(i).toString());
         }
     }
+    */
 }
