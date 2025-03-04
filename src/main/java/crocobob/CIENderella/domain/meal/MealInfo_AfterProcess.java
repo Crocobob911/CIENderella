@@ -1,10 +1,7 @@
 package crocobob.CIENderella.domain.meal;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +20,7 @@ public class MealInfo_AfterProcess {
     private long id;
     private String date;
     private String cafeteria;
+    @Column(name="mealtype")
     private String mealType;
     private String menu;
 
