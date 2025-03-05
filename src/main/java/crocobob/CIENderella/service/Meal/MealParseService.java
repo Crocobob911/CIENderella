@@ -26,7 +26,7 @@ public class MealParseService {
 
     public String createWeeklyMealData(){
         DeleteAllMealsInDatabase();
-        return createMealInfos(readMealJsonFile("src/main/resources/mealJsonExample.json"));
+        return createMealInfos(readMealJsonFile("/home/crocobob/cau-meal-crawler/Doc/WeeklyMealData.json"));
     }
 
     private void DeleteAllMealsInDatabase(){
