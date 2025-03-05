@@ -1,9 +1,11 @@
 package crocobob.CIENderella.controller;
 
+import crocobob.CIENderella.Exception.InvalidMealParameterException;
 import crocobob.CIENderella.domain.meal.MealInfo_AfterProcess;
 import crocobob.CIENderella.service.Meal.MealOutputService;
 import crocobob.CIENderella.service.Meal.MealParseService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +30,14 @@ public class MealController {
     @GetMapping(path="/meals/{time}")
     public List<MealInfo_AfterProcess> getMealOfGivenTime(@RequestParam int time) {
         return readService.findThreeMealFromNow(time);
+    }
+
+    @GetMapping(path="/meals/{day}/{mealType}")
+    public List<MealInfo_AfterProcess> getMeal(@PathVariable("day") String day, @PathVariable("mealType") String mealType) {
+        if(!day.equals("today") && !day.equals("tomorrow")) throw new InvalidMealParameterException("<<Invalid Day Parameter.>>");
+        if(!mealType.equals("morning") && !mealType.equals("lunch") && !mealType.equals("dinner")) throw new InvalidMealParameterException("<<Invalid MealType Parameter.>>");
+
+        return readService.findMeals(day, mealType);
     }
 
     @GetMapping(path="/meals/week")

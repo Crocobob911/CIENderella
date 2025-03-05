@@ -1,5 +1,6 @@
 package crocobob.CIENderella.service.Meal;
 
+import crocobob.CIENderella.Exception.InvalidMealParameterException;
 import crocobob.CIENderella.domain.meal.MealInfo_AfterProcess;
 import crocobob.CIENderella.repository.Meal.MealRepository;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,20 @@ public class MealOutputService {
 
     public List<MealInfo_AfterProcess> findAllMeals(){
         return repo.findAll();
+    }
+
+    public List<MealInfo_AfterProcess> findMeals(String day, String mealType){
+        return repo.findByDateAndMealType(
+                getFormattedDateFromString(day),
+                convertMealTypeToKorean(mealType));
+    }
+
+    public List<MealInfo_AfterProcess> findTodayMeals(String day, String mealType){
+        return repo.findByDateAndMealType(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), convertMealTypeToKorean(mealType));
+    }
+
+    public List<MealInfo_AfterProcess> findTomorrowMeals(String day, String mealType){
+        return repo.findByDateAndMealType(LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), convertMealTypeToKorean(mealType));
     }
 
     public List<MealInfo_AfterProcess> findThreeMealFromNow(){
@@ -55,5 +70,21 @@ public class MealOutputService {
         }
 
         return returnMealList;
+    }
+
+
+    private String getFormattedDateFromString(String day){
+        if (day.equals("today")) return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+        else if (day.equals("tomorrow")) return LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+        else return "";
+    }
+
+    private String convertMealTypeToKorean(String mealType) {
+        return switch (mealType) {
+            case "morning" -> "아침";
+            case "lunch" -> "점심";
+            case "dinner" -> "저녁";
+            default -> "";
+        };
     }
 }
