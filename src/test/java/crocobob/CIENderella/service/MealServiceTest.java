@@ -3,7 +3,7 @@ package crocobob.CIENderella.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import crocobob.CIENderella.domain.meal.MealInfo_AfterProcess;
+import crocobob.CIENderella.domain.MealInfo_AfterProcess;
 import crocobob.CIENderella.repository.Meal.MealRepository;
 
 import crocobob.CIENderella.service.Meal.MealParseService;

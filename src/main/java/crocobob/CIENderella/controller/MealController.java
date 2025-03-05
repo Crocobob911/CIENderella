@@ -1,7 +1,7 @@
 package crocobob.CIENderella.controller;
 
 import crocobob.CIENderella.Exception.InvalidMealParameterException;
-import crocobob.CIENderella.domain.meal.MealInfo_AfterProcess;
+import crocobob.CIENderella.domain.MealInfo_AfterProcess;
 import crocobob.CIENderella.service.Meal.MealOutputService;
 import crocobob.CIENderella.service.Meal.MealParseService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -29,8 +28,8 @@ public class MealController {
 
 
     @Operation(
-            summary = "이번 주의 모든 식단 조회",
-            description = "모든 식당의 주간 식단을 조회해요."
+            summary = "앞으로 일주일의 모든 식단 조회",
+            description = "모든 식당의 일주일 식단을 조회해요."
     )
     @ApiResponse(
             responseCode = "200",
