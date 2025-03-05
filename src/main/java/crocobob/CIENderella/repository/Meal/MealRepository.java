@@ -1,9 +1,8 @@
 package crocobob.CIENderella.repository.Meal;
 
-import crocobob.CIENderella.domain.meal.MealInfo_AfterProcess;
+import crocobob.CIENderella.domain.MealInfo_AfterProcess;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface MealRepository {
     MealInfo_AfterProcess save(MealInfo_AfterProcess meal);
