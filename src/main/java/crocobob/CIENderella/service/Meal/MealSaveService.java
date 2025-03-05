@@ -1,4 +1,4 @@
-package crocobob.CIENderella.service;
+package crocobob.CIENderella.service.Meal;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -12,19 +12,14 @@ import org.json.JSONException;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 
 @Service
-public class MealService {
+public class MealSaveService {
 
     private MealRepository repo;
 
-    public MealService(MealRepository mealRepo) {
+    public MealSaveService(MealRepository mealRepo) {
         this.repo = mealRepo;
-    }
-
-    public List<MealInfo_AfterProcess> findAllMeals(){
-        return repo.findAll();
     }
 
     public String createWeeklyMealData(){
@@ -61,17 +56,20 @@ public class MealService {
                         try {
                             JSONObject menuObject = new JSONObject(menu.toString());
                             JSONArray menuList = menuObject.getJSONArray("menu");
-                            String menuString = "";
-                            menuString = menuList.get(0).toString();
-                            for(int i = 1; i < menuList.length(); i++){
-                                menuString += "," + menuList.get(i).toString();
+
+                            String[] menuStringList = new String[menuList.length()];
+                            for (int i = 0; i < menuList.length(); i++) {
+                                menuStringList[i] = menuList.get(i).toString();
                             }
+                            String menuString = String.join(",", menuStringList);
+
                             MealInfo_AfterProcess mealInfo = new MealInfo_AfterProcess(
                                     result.get("date").asText(),
                                     reduceCafeteriaName(cafeteria.get("cafeteriaName").asText()),
                                     changeMealTypeString(meal.get("mealType").toString()),
                                     menuString
                             );
+
                             repo.save(mealInfo);
                         }catch (JSONException e){
                             return "Failed to Update Meals. \n" + e.getMessage();

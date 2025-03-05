@@ -2,11 +2,9 @@ package crocobob.CIENderella.controller;
 
 import crocobob.CIENderella.domain.meal.Meal;
 import crocobob.CIENderella.domain.meal.MealInfo_AfterProcess;
-import crocobob.CIENderella.domain.meal.MealRoot;
-import crocobob.CIENderella.service.MealService;
+import crocobob.CIENderella.service.Meal.MealReadService;
+import crocobob.CIENderella.service.Meal.MealSaveService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -14,16 +12,18 @@ import java.util.List;
 @RestController
 public class MealController {
 
-    public MealController(MealService service) {
-        this.service = service;
+    public MealController(MealSaveService saveService, MealReadService readService) {
+        this.saveService = saveService;
+        this.readService = readService;
     }
 
-    private MealService service;
+    private MealSaveService saveService;
+    private MealReadService readService;
 
 
     @GetMapping(path="/meals/week")
     public List<MealInfo_AfterProcess> findAllWeeklyMeals(){
-        return service.findAllMeals();
+        return readService.findAllMeals();
     }
 
     @GetMapping(path="/meals/now")
@@ -33,6 +33,6 @@ public class MealController {
 
     @GetMapping(path="/meals/parse")
     public String parseWeeklyMealData(){
-        return service.createWeeklyMealData();
+        return saveService.createWeeklyMealData();
     }
 }
