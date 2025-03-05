@@ -29,14 +29,22 @@ public class MealOutputService {
                 convertMealTypeToKorean(mealType));
     }
 
-    public List<MealInfo_AfterProcess> findTodayMeals(String day, String mealType){
-        return repo.findByDateAndMealType(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), convertMealTypeToKorean(mealType));
+    private String getFormattedDateFromString(String day){
+        if (day.equals("today")) return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+        else if (day.equals("tomorrow")) return LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+        else return "";
     }
 
-    public List<MealInfo_AfterProcess> findTomorrowMeals(String day, String mealType){
-        return repo.findByDateAndMealType(LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), convertMealTypeToKorean(mealType));
+    private String convertMealTypeToKorean(String mealType) {
+        return switch (mealType) {
+            case "morning" -> "아침";
+            case "lunch" -> "점심";
+            case "dinner" -> "저녁";
+            default -> "";
+        };
     }
 
+    /*
     public List<MealInfo_AfterProcess> findThreeMealFromNow(){
         return findThreeMealFromNow(LocalDateTime.now().getHour());
     }
@@ -71,20 +79,5 @@ public class MealOutputService {
 
         return returnMealList;
     }
-
-
-    private String getFormattedDateFromString(String day){
-        if (day.equals("today")) return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
-        else if (day.equals("tomorrow")) return LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
-        else return "";
-    }
-
-    private String convertMealTypeToKorean(String mealType) {
-        return switch (mealType) {
-            case "morning" -> "아침";
-            case "lunch" -> "점심";
-            case "dinner" -> "저녁";
-            default -> "";
-        };
-    }
+*/
 }
