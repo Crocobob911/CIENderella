@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import crocobob.CIENderella.domain.meal.MealInfo_AfterProcess;
 import crocobob.CIENderella.repository.Meal.MealRepository;
 
-import crocobob.CIENderella.service.Meal.MealSaveService;
+import crocobob.CIENderella.service.Meal.MealParseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,14 +25,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest(classes = MealSaveService.class)
+@SpringBootTest(classes = MealParseService.class)
 class MealServiceTest {
 
     @Mock
     private MealRepository repo;
 
     @InjectMocks
-    private MealSaveService service;
+    private MealParseService service;
 
     private String jsonString;
 

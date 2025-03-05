@@ -7,7 +7,7 @@ import crocobob.CIENderella.repository.Content.ContentRepository;
 import crocobob.CIENderella.repository.Notice.NoticeRepository;
 import crocobob.CIENderella.repository.Reason.ReasonRepository;
 import crocobob.CIENderella.repository.Writer.WriterRepository;
-import crocobob.CIENderella.service.Meal.MealSaveService;
+import crocobob.CIENderella.service.Meal.MealParseService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -18,9 +18,9 @@ public class CienderellaCommandLineRunner implements CommandLineRunner {
     private final ReasonRepository reasonRepo;
     private final WriterRepository writerRepo;
     private final NoticeRepository noticeRepo;
-    private final MealSaveService mealService;
+    private final MealParseService mealService;
 
-    public CienderellaCommandLineRunner(ContentRepository contentRepo, ReasonRepository reasonRepo, WriterRepository writerRepo, NoticeRepository noticeRepo, MealSaveService mealService) {
+    public CienderellaCommandLineRunner(ContentRepository contentRepo, ReasonRepository reasonRepo, WriterRepository writerRepo, NoticeRepository noticeRepo, MealParseService mealService) {
         this.contentRepo = contentRepo;
         this.reasonRepo = reasonRepo;
         this.writerRepo = writerRepo;

@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface MealRepository {
     MealInfo_AfterProcess save(MealInfo_AfterProcess meal);
     List<MealInfo_AfterProcess> findAll();
-    Optional<MealInfo_AfterProcess> findByDateAndMealType(String date, String mealType);
+    List<MealInfo_AfterProcess> findByDateAndMealType(String date, String mealType);
     void delete(MealInfo_AfterProcess meal);
     void deleteAll();
 }
