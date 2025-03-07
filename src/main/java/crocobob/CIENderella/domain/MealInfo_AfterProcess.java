@@ -16,6 +16,7 @@ public class MealInfo_AfterProcess {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String date;
+    private String dueTime;
     private String cafeteria;
     @Column(name="mealtype")
     private String mealType;
@@ -25,10 +26,11 @@ public class MealInfo_AfterProcess {
         this.menu += menu;
     }
 
-    public MealInfo_AfterProcess(String date, String cafeteria, String mealType, String menuList) {
+    public MealInfo_AfterProcess(String date, String dueTime, String cafeteria, String mealType, String menu) {
         this.date = date;
+        this.dueTime = dueTime;
         this.cafeteria = cafeteria;
         this.mealType = mealType;
-        this.menu = menuList.toString();
+        this.menu = menu;
     }
 }
