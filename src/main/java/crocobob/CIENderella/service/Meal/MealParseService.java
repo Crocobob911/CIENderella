@@ -68,9 +68,12 @@ public class MealParseService {
 
                         MealInfo_AfterProcess mealInfo = new MealInfo_AfterProcess(
                                 result.get("date").asText(),
+                                makeDueTime(
+                                        cleaningStringToOnlyTime(meal.get("startTime").toString()),
+                                        cleaningStringToOnlyTime(meal.get("endTime").toString())),
                                 reduceCafeteriaName(cafeteria.get("cafeteriaName").asText()),
-                                changeMealTypeString(meal.get("mealType").toString()),
-                                menuString
+                                cleaningStringToOnlyKorean(meal.get("mealType").toString()),
+                                eraseStarCharToComma(menuString)
                         );
                         repo.save(mealInfo);
                     }
@@ -93,9 +96,12 @@ public class MealParseService {
 
                                 MealInfo_AfterProcess mealInfo = new MealInfo_AfterProcess(
                                         result.get("date").asText(),
+                                        makeDueTime(
+                                                cleaningStringToOnlyTime(meal.get("startTime").toString()),
+                                                cleaningStringToOnlyTime(meal.get("endTime").toString())),
                                         reduceCafeteriaName(cafeteria.get("cafeteriaName").asText()),
-                                        changeMealTypeString(meal.get("mealType").toString()),
-                                        menuString
+                                        cleaningStringToOnlyKorean(meal.get("mealType").toString()),
+                                        eraseStarCharToComma(menuString)
                                 );
                                 repo.save(mealInfo);
 
@@ -123,20 +129,26 @@ public class MealParseService {
 
     private String reduceCafeteriaName(String name){
         return switch (name) {
-            case "생활관식당(블루미르308관)" -> "308관 기숙사";
-            case "생활관식당(블루미르309관)" -> "309관 기숙사";
-            case "참슬기식당(310관 B4층)" -> "310관 B4층";
-            case "학생식당(303관B1층)" -> "303관 B1층";
-            case "University Club(102관11층)" -> "102관 12층";
+            case "생활관식당(블루미르308관)" -> "308관";
+            case "생활관식당(블루미르309관)" -> "309관";
+            case "참슬기식당(310관 B4층)" -> "310관";
+            case "학생식당(303관B1층)" -> "303관";
+            case "University Club(102관11층)" -> "102관";
             default -> name;
         };
     }
 
-    private String changeMealTypeString(String mealType){
-        return mealType.replaceAll("[^가-힣]", "");
+    private String cleaningStringToOnlyKorean(String str){
+        return str.replaceAll("[^가-힣]", "");
     }
+
+    private String cleaningStringToOnlyTime(String str){ return str.replace("\"",""); }
 
     private String[] convertListToArray(List<String> list){
         return list.toArray(new String[list.size()]);
     }
+
+    private String eraseStarCharToComma(String str){ return str.replace("*","&"); }
+
+    private String makeDueTime(String start, String end){ return start + " - " + end; }
 }
