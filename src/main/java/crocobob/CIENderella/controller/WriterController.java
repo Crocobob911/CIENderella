@@ -46,7 +46,7 @@ public class WriterController {
             responseCode = "200",
             description = "성공"
     )
-    public Writer getWriter(@PathVariable long id) {
+    public Writer getWriter(@PathVariable("id") long id) {
         // 여기서 writers(작성자)들 리스트 갖다주기
         return service.getWriter(id);
     }
@@ -80,7 +80,21 @@ public class WriterController {
             responseCode = "200",
             description = "성공"
     )
-    public void updateWriter(@PathVariable long id, @RequestBody Writer writer) {
+    public void updateWriter(@PathVariable("id") long id, @RequestBody Writer writer) {
         service.patchUpdateWriter(id, writer);
+    }
+
+
+    @DeleteMapping(path = "writers/{id}")
+    @Operation(
+            summary = "작성자 삭제",
+            description = "그 id의 writer를 삭제할게요."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "성공"
+    )
+    public void deleteWriter(@PathVariable("id") long id) {
+        service.deleteWriter(id);
     }
 }
