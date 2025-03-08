@@ -51,7 +51,6 @@ public class CienderellaService {
                 ));
     }
 
-
     @Scheduled(cron = "0 0 6 * * ?")
     public void generatePostTimeOfToday() {
         var content = getContent();
