@@ -5,6 +5,7 @@ import crocobob.CIENderella.domain.CamApiResponse;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Component
 public class TextGenerator {
@@ -12,9 +13,12 @@ public class TextGenerator {
     public String generateTitle(String title) {
         LocalDate today = LocalDate.now();
 
+        int day = today.getDayOfMonth();
+        if(LocalDateTime.now().getHour() <= 5)  day -= 1;
+
         return title
                 .replace("{month}", Integer.toString(today.getMonth().getValue()))
-                .replace("{day}", Integer.toString(today.getDayOfMonth()));
+                .replace("{day}", Integer.toString(day));
     }
 
     public String generateContent(String content, String reason, String writer, CamApiResponse response) throws JsonProcessingException {

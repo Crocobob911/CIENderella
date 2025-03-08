@@ -23,7 +23,7 @@ public class CienderellaService {
     private final ReasonRepository reasonRepo;
     private final WriterRepository writerRepo;
 
-    private String postTimeOfToday = "";
+    private String postTimeOfToday = "22:00";
 
     private Random rand = new Random();
 
@@ -50,7 +50,6 @@ public class CienderellaService {
                         camApiService.getCamApiResponse()
                 ));
     }
-
 
     @Scheduled(cron = "0 0 6 * * ?")
     public void generatePostTimeOfToday() {
