@@ -7,6 +7,7 @@ import crocobob.CIENderella.repository.Content.ContentRepository;
 import crocobob.CIENderella.repository.Reason.ReasonRepository;
 import crocobob.CIENderella.repository.Writer.WriterRepository;
 import crocobob.CIENderella.domain.*;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 
@@ -22,6 +23,8 @@ public class CienderellaService {
     private final ReasonRepository reasonRepo;
     private final WriterRepository writerRepo;
 
+    private String postTimeOfToday = "";
+
     private Random rand = new Random();
 
     public CienderellaService(WriterRepository writerRepo, ReasonRepository reasonRepo, ContentRepository contentRepo, CamApiService camApiService, TextGenerator textGenerator) {
@@ -36,15 +39,41 @@ public class CienderellaService {
         var todayContent = getContent();
         var tmpWriter = findAnyWriter().getText();
 
-        return new Form(textGenerator.generateTitle(todayContent.getTitle()),
+        return new Form(postTimeOfToday,
+                textGenerator.generateTitle(todayContent.getTitle()),
+                tmpWriter,
+                todayContent.getPassword(),
+                textGenerator.generateContent(
+                        todayContent.getText(),
+                        findAnyReason().getText(),
                         tmpWriter,
-                        todayContent.getPassword(),
-                        textGenerator.generateContent(
-                                todayContent.getText(),
-                                findAnyReason().getText(),
-                                tmpWriter,
-                                camApiService.getCamApiResponse()
-                                ));
+                        camApiService.getCamApiResponse()
+                ));
+    }
+
+
+    @Scheduled(cron = "0 0 6 * * ?")
+    public void generatePostTimeOfToday() {
+        var content = getContent();
+        postTimeOfToday = generateRandomPostTime(content.getStartTime(), content.getEndTime());
+    }
+
+    private String generateRandomPostTime(int startTime, int endTime) {
+        Random rand = new Random();
+        int randomHour;
+
+        if(startTime <= endTime) {
+            randomHour = rand.nextInt(endTime - startTime) + startTime;
+        }else{
+            if(endTime == 0 || rand.nextBoolean()) {
+                randomHour = rand.nextInt(24-startTime) + startTime;
+            }else{
+                randomHour = rand.nextInt(endTime);
+            }
+        }
+        int randomMinute = rand.nextInt(6)*10;
+
+        return String.format("%02d:%02d", randomHour, randomMinute);
     }
 
     public Reason saveReason(ReasonDTO dto) {
