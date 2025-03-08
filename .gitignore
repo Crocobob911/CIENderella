@@ -64,4 +64,5 @@ out/
 compose.yml
 
 ### application properties
+**/resources/application.properties
 **/resources/application-*.properties
