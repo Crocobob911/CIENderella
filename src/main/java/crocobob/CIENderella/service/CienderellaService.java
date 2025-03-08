@@ -40,6 +40,7 @@ public class CienderellaService {
         var tmpWriter = findAnyWriter().getText();
 
         return new Form(postTimeOfToday,
+                todayContent.getStatus(),
                 textGenerator.generateTitle(todayContent.getTitle()),
                 tmpWriter,
                 todayContent.getPassword(),
