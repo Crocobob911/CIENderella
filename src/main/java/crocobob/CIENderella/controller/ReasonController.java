@@ -51,7 +51,7 @@ public class ReasonController {
             responseCode = "200",
             description = "성공"
     )
-    public Reason getReason(@PathVariable long id) throws DBEntityNotFoundException {
+    public Reason getReason(@PathVariable("id") long id) throws DBEntityNotFoundException {
             return service.getReason(id);
     }
 
@@ -84,8 +84,21 @@ public class ReasonController {
             responseCode = "200",
             description = "성공"
     )
-    public void updateReason(@PathVariable long id, @RequestBody Reason reason) {
+    public void updateReason(@PathVariable("id") long id, @RequestBody Reason reason) {
         service.patchUpdateReason(id, reason);
+    }
+
+    @DeleteMapping(path = "/reasons/{id}")
+    @Operation(
+            summary = "사유 삭제",
+            description = "그 id의 reason을 삭제할게요."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "성공"
+    )
+    public void deleteReason(@PathVariable("id") long id) {
+        service.deleteReason(id);
     }
 
 }

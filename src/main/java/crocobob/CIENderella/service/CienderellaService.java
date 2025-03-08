@@ -2,6 +2,7 @@ package crocobob.CIENderella.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import crocobob.CIENderella.Exception.DBEntityNotFoundException;
+import crocobob.CIENderella.Exception.InvalidContentTimeDomainException;
 import crocobob.CIENderella.repository.Content.ContentRepository;
 import crocobob.CIENderella.repository.Reason.ReasonRepository;
 import crocobob.CIENderella.repository.Writer.WriterRepository;
@@ -89,6 +90,8 @@ public class CienderellaService {
     public void patchUpdateContent(ContentDTO newContent) {
         Content oldContent = getContent();
 
+        if(newContent.getStartTime() != null) oldContent.setStartTime(newContent.getStartTime());
+        if(newContent.getEndTime() != null) oldContent.setEndTime(newContent.getEndTime());
         if(newContent.getPassword() != null) oldContent.setPassword(newContent.getPassword());
         if(newContent.getStatus() != null) oldContent.setStatus(newContent.getStatus());
         if(newContent.getTitle() != null) oldContent.setTitle(newContent.getTitle());
@@ -131,5 +134,13 @@ public class CienderellaService {
 
     private int generateRandIndex(int num){
         return rand.nextInt(num);
+    }
+
+    public void deleteWriter(Long id) {
+        writerRepo.delete(writerRepo.findById(id).orElseThrow(() -> new DBEntityNotFoundException("<< No Writer found >>")));
+    }
+
+    public void deleteReason(Long id) {
+        reasonRepo.delete(reasonRepo.findById(id).orElseThrow(() -> new DBEntityNotFoundException("<< No Reason found >>")));
     }
 }
