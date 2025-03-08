@@ -11,6 +11,7 @@ import java.time.LocalTime;
 @Getter @Setter
 @AllArgsConstructor
 public class Form {
+    String time;
     String title;
     String writer;
     String password;
