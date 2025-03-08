@@ -12,6 +12,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 public class Form {
     String time;
+    Boolean status;
     String title;
     String writer;
     String password;
