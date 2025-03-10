@@ -1,7 +1,7 @@
 package crocobob.CIENderella.service;
 
-import crocobob.CIENderella.domain.Notice;
-import crocobob.CIENderella.domain.NoticeDTO;
+import crocobob.CIENderella.domain.Kiosk.Notice;
+import crocobob.CIENderella.domain.Kiosk.NoticeDTO;
 import crocobob.CIENderella.repository.Notice.NoticeRepository;
 import org.springframework.stereotype.Service;
 

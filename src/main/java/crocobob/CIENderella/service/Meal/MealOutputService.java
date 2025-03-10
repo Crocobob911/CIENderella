@@ -1,6 +1,6 @@
 package crocobob.CIENderella.service.Meal;
 
-import crocobob.CIENderella.domain.MealInfo_AfterProcess;
+import crocobob.CIENderella.domain.Kiosk.MealInfo_AfterProcess;
 import crocobob.CIENderella.repository.Meal.MealRepository;
 import org.springframework.stereotype.Service;
 

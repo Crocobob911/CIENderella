@@ -1,12 +1,8 @@
-package crocobob.CIENderella.domain;
+package crocobob.CIENderella.domain.cienderella;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Getter @Setter
 @AllArgsConstructor

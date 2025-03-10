@@ -1,6 +1,6 @@
 package crocobob.CIENderella.repository.Writer;
 
-import crocobob.CIENderella.domain.Writer;
+import crocobob.CIENderella.domain.cienderella.Writer;
 
 import java.util.List;
 import java.util.Optional;

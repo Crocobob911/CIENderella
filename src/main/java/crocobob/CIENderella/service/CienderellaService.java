@@ -2,11 +2,10 @@ package crocobob.CIENderella.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import crocobob.CIENderella.Exception.DBEntityNotFoundException;
-import crocobob.CIENderella.Exception.InvalidContentTimeDomainException;
+import crocobob.CIENderella.domain.cienderella.*;
 import crocobob.CIENderella.repository.Content.ContentRepository;
 import crocobob.CIENderella.repository.Reason.ReasonRepository;
 import crocobob.CIENderella.repository.Writer.WriterRepository;
-import crocobob.CIENderella.domain.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 

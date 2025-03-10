@@ -1,7 +1,7 @@
 package crocobob.CIENderella.controller;
 
-import crocobob.CIENderella.domain.Writer;
-import crocobob.CIENderella.domain.WriterDTO;
+import crocobob.CIENderella.domain.cienderella.Writer;
+import crocobob.CIENderella.domain.cienderella.WriterDTO;
 import crocobob.CIENderella.service.CienderellaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

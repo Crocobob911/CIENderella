@@ -1,8 +1,8 @@
 package crocobob.CIENderella.controller;
 
 
-import crocobob.CIENderella.domain.Notice;
-import crocobob.CIENderella.domain.NoticeDTO;
+import crocobob.CIENderella.domain.Kiosk.Notice;
+import crocobob.CIENderella.domain.Kiosk.NoticeDTO;
 import crocobob.CIENderella.service.NoticeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

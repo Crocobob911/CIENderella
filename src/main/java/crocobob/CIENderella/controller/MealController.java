@@ -1,7 +1,7 @@
 package crocobob.CIENderella.controller;
 
 import crocobob.CIENderella.Exception.InvalidMealParameterException;
-import crocobob.CIENderella.domain.MealInfo_AfterProcess;
+import crocobob.CIENderella.domain.Kiosk.MealInfo_AfterProcess;
 import crocobob.CIENderella.service.Meal.MealOutputService;
 import crocobob.CIENderella.service.Meal.MealParseService;
 import io.swagger.v3.oas.annotations.Operation;

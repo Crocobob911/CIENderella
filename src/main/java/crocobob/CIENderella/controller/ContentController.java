@@ -1,8 +1,8 @@
 package crocobob.CIENderella.controller;
 
 import crocobob.CIENderella.Exception.DBEntityNotFoundException;
-import crocobob.CIENderella.domain.Content;
-import crocobob.CIENderella.domain.ContentDTO;
+import crocobob.CIENderella.domain.cienderella.Content;
+import crocobob.CIENderella.domain.cienderella.ContentDTO;
 import crocobob.CIENderella.service.CienderellaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

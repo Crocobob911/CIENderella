@@ -1,4 +1,4 @@
-package crocobob.CIENderella.domain;
+package crocobob.CIENderella.domain.Kiosk;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

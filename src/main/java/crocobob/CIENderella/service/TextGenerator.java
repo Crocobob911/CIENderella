@@ -1,7 +1,7 @@
 package crocobob.CIENderella.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import crocobob.CIENderella.domain.CamApiResponse;
+import crocobob.CIENderella.domain.cienderella.CamApiResponse;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;

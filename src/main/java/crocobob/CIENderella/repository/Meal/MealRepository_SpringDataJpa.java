@@ -1,6 +1,6 @@
 package crocobob.CIENderella.repository.Meal;
 
-import crocobob.CIENderella.domain.MealInfo_AfterProcess;
+import crocobob.CIENderella.domain.Kiosk.MealInfo_AfterProcess;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,6 @@
 package crocobob.CIENderella.repository.Notice;
 
-import crocobob.CIENderella.domain.Notice;
-import crocobob.CIENderella.domain.NoticeDTO;
+import crocobob.CIENderella.domain.Kiosk.Notice;
 
 import java.util.List;
 import java.util.Optional;

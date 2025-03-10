@@ -1,6 +1,6 @@
 package crocobob.CIENderella.repository.Reason;
 
-import crocobob.CIENderella.domain.Reason;
+import crocobob.CIENderella.domain.cienderella.Reason;
 
 import java.util.List;
 import java.util.Optional;

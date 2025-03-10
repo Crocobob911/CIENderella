@@ -1,7 +1,7 @@
 package crocobob.CIENderella.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import crocobob.CIENderella.domain.Form;
+import crocobob.CIENderella.domain.cienderella.Form;
 import crocobob.CIENderella.service.CienderellaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

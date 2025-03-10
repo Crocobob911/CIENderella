@@ -1,7 +1,7 @@
 package crocobob.CIENderella;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import crocobob.CIENderella.domain.CamApiResponse;
+import crocobob.CIENderella.domain.cienderella.CamApiResponse;
 import crocobob.CIENderella.service.TextGenerator;
 import org.junit.jupiter.api.Test;
 

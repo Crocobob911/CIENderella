@@ -1,4 +1,4 @@
-package crocobob.CIENderella.domain;
+package crocobob.CIENderella.domain.cienderella;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,6 +1,6 @@
 package crocobob.CIENderella.repository.Content;
 
-import crocobob.CIENderella.domain.Content;
+import crocobob.CIENderella.domain.cienderella.Content;
 
 import java.util.Optional;
 
