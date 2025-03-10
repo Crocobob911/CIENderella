@@ -5,11 +5,13 @@ import crocobob.SISO.Kiosk.Domain.Gallery.GalleryInfoDTO;
 import crocobob.SISO.Kiosk.Service.GalleryInfoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Gallery Config", description = "갤러리 설정")
 @RestController
 public class GalleryInfoController {
     private final GalleryInfoService service;
@@ -28,11 +30,7 @@ public class GalleryInfoController {
             description = "성공"
     )
     public GalleryInfoDTO getGalleryInfo() {
-        try {
-            return service.getGalleryInfo();
-        } catch (DBEntityNotFoundException e) {
-            throw e;
-        }
+        return service.getGalleryInfo();
     }
 
     @PatchMapping("/gallery/config")

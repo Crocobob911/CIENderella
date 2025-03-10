@@ -6,6 +6,7 @@ import crocobob.SISO.Kiosk.Repository.Notice.NoticeRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -18,9 +19,12 @@ public class NoticeService {
     }
 
     public Notice save(NoticeDTO dto) {
-        var notice = repo.findByNotice(dto.getNotice());
+        String[] dtoStringParts = dto.getNotice().split(" \\| ");
 
-        return notice.orElseGet(() -> repo.save(new Notice(dto.getNotice(), LocalDate.now())));
+        var notice = repo.findByNotice(dtoStringParts[0]);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        return notice.orElseGet(() -> repo.save(new Notice(dtoStringParts[0], LocalDate.parse(dtoStringParts[1], formatter))));
     }
 
     public List<Notice> getNotices(){
