@@ -32,11 +32,7 @@ public class ContentController {
             description = "성공"
     )
     public Content getContent() {
-        try {
-            return service.getContent();
-        } catch (DBEntityNotFoundException e) {
-            throw e;
-        }
+        return service.getContent();
     }
 
     @PatchMapping("/content")

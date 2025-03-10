@@ -35,11 +35,7 @@ public class ReasonController {
     )
     public List<Reason> getReasonList() {
         // 여기서 reason(사유)들 리스트 갖다주기
-        try {
-            return service.getAllReasons();
-        } catch (DBEntityNotFoundException e) {
-            throw e;
-        }
+        return service.getAllReasons();
     }
 
     @GetMapping(path = "/reasons/{id}")
