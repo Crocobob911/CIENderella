@@ -9,7 +9,6 @@ import crocobob.CIENderella.repository.GalleryInfo.GalleryInfoRepository;
 import crocobob.CIENderella.repository.Notice.NoticeRepository;
 import crocobob.CIENderella.repository.Reason.ReasonRepository;
 import crocobob.CIENderella.repository.Writer.WriterRepository;
-import crocobob.CIENderella.service.GalleryInfoService;
 import crocobob.CIENderella.service.Meal.MealParseService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

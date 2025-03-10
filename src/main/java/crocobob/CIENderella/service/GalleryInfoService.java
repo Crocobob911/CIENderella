@@ -16,18 +16,28 @@ public class GalleryInfoService {
         this.repo = repository;
     }
 
-    public GalleryInfo getGalleryInfo() {
-        return repo.findTopByOrderByIdDesc()
-                .orElseThrow(() -> new DBEntityNotFoundException("GalleryInfo not found"));
+    public GalleryInfoDTO getGalleryInfo() {
+        var info = getGalleryInfoFromRepo();
+        GalleryInfoDTO dto = new GalleryInfoDTO(
+                info.getPhotoDisplayTime(),
+                info.getVideoMaxDisplayTime(),
+                info.getDiscordLikeThreshold()
+        );
+        return dto;
     }
 
     public void patchUpdateGalleryInfo(GalleryInfoDTO newDto) {
-        GalleryInfo info = getGalleryInfo();
+        GalleryInfo info = getGalleryInfoFromRepo();
 
         if(newDto.getPhotoDisplayTime() != null) info.setPhotoDisplayTime(newDto.getPhotoDisplayTime());
         if(newDto.getVideoMaxDisplayTime() != null) info.setVideoMaxDisplayTime(newDto.getVideoMaxDisplayTime());
         if(newDto.getDiscordLikeThreshold() != null) info.setDiscordLikeThreshold(newDto.getDiscordLikeThreshold());
 
         repo.save(info);
+    }
+
+    private GalleryInfo getGalleryInfoFromRepo(){
+        return repo.findTopByOrderByIdDesc()
+                .orElseThrow(() -> new DBEntityNotFoundException("GalleryInfo not found"));
     }
 }

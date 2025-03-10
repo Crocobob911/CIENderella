@@ -1,4 +1,4 @@
-package crocobob.CIENderella.domain.cienderella;
+package crocobob.CIENderella.controller;
 
 import crocobob.CIENderella.Exception.DBEntityNotFoundException;
 import crocobob.CIENderella.domain.GalleryInfo;
@@ -28,7 +28,7 @@ public class GalleryInfoController {
             responseCode = "200",
             description = "성공"
     )
-    public GalleryInfo getGalleryInfo() {
+    public GalleryInfoDTO getGalleryInfo() {
         try {
             return service.getGalleryInfo();
         } catch (DBEntityNotFoundException e) {

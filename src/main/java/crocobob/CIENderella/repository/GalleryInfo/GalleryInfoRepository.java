@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface GalleryInfoRepository {
     GalleryInfo save(GalleryInfo galleryInfo);
     Optional<GalleryInfo> findTopByOrderByIdDesc();
-    void delete(Content content);
+    void delete(GalleryInfo galleryInfo);
 }
