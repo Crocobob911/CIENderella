@@ -2,7 +2,7 @@ package crocobob.SISO.Cienderella.Controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import crocobob.SISO.Cienderella.Domain.Form;
-import crocobob.SISO.Cienderella.Service.CienderellaService;
+import crocobob.SISO.Cienderella.Service.FormService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Form", description = "최종 본문")
 public class FormController {
 
-    private final CienderellaService service;
+    private final FormService service;
 
-    public FormController(CienderellaService service) {
+    public FormController(FormService service) {
         this.service = service;
     }
 

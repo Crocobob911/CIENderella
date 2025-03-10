@@ -2,7 +2,7 @@ package crocobob.SISO.Cienderella.Controller;
 
 import crocobob.SISO.Cienderella.Domain.Writer;
 import crocobob.SISO.Cienderella.Domain.WriterDTO;
-import crocobob.SISO.Cienderella.Service.CienderellaService;
+import crocobob.SISO.Cienderella.Service.WriterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,9 +17,9 @@ import java.util.List;
 @Tag(name = "Writer", description = "작성자")
 public class WriterController {
 
-    private final CienderellaService service;
+    private final WriterService service;
 
-    public WriterController(CienderellaService service) {
+    public WriterController(WriterService service) {
         this.service = service;
     }
 

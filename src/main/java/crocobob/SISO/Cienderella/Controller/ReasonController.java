@@ -1,9 +1,9 @@
 package crocobob.SISO.Cienderella.Controller;
 
+import crocobob.SISO.Cienderella.Service.ReasonService;
 import crocobob.SISO.Exception.DBEntityNotFoundException;
 import crocobob.SISO.Cienderella.Domain.Reason;
 import crocobob.SISO.Cienderella.Domain.ReasonDTO;
-import crocobob.SISO.Cienderella.Service.CienderellaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,9 +18,9 @@ import java.util.List;
 @Tag(name = "Reason", description = "사유")
 public class ReasonController {
 
-    private final CienderellaService service;
+    private final ReasonService service;
 
-    public ReasonController(CienderellaService service) {
+    public ReasonController(ReasonService service) {
         this.service = service;
     }
 

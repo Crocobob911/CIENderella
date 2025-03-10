@@ -1,9 +1,9 @@
 package crocobob.SISO.Cienderella.Controller;
 
+import crocobob.SISO.Cienderella.Service.ContentService;
 import crocobob.SISO.Exception.DBEntityNotFoundException;
 import crocobob.SISO.Cienderella.Domain.Content;
 import crocobob.SISO.Cienderella.Domain.ContentDTO;
-import crocobob.SISO.Cienderella.Service.CienderellaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Content", description = "본문 양식")
 public class ContentController {
 
-    private final CienderellaService service;
+    private final ContentService service;
 
-    public ContentController(CienderellaService service) {
+    public ContentController(ContentService service) {
         this.service = service;
     }
 
