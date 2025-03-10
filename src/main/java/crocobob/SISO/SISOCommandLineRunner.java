@@ -44,8 +44,13 @@ public class SISOCommandLineRunner implements CommandLineRunner {
                         "사유 : {reason}"));
 
         reasonRepo.save(new Reason("게임 개발 회의", true));
+        reasonRepo.save(new Reason("신입생 면접 준비", true));
 
         writerRepo.save(new Writer("이유정", true));
+        writerRepo.save(new Writer("김현우", true));
+        writerRepo.save(new Writer("노영욱", true));
+        writerRepo.save(new Writer("석재혁", true));
+        writerRepo.save(new Writer("김준", true));
 
         mealService.createWeeklyMealData();
 
