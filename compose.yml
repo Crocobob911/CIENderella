@@ -1,0 +1,20 @@
+services:
+  db:
+    image: mysql:8.4.4
+    restart: always
+    secrets:
+      - source: db-password
+        target: /run/secrets/db-password
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=cienderella
+      - MYSQL_HOST=%
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db-password
+    ports:
+      - "9000:3306"
+volumes:
+  db-data:
+secrets:
+  db-password:
+    file: db/password.txt

@@ -2,6 +2,7 @@
 **/build/
 !src/**/build/
 
+
 # Ignore Gradle GUI config
 gradle-app.setting
 
@@ -54,3 +55,17 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Docker Compose Password ###
+/db/password.txt
+
+### Docker compose yml ###
+compose.yml
+
+### application properties
+**/resources/application.properties
+**/resources/application.properties
+**/resources/application-*.properties
+
+src/main/resources/file/
+
