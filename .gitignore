@@ -1,7 +1,6 @@
 .gradle
 **/build/
 !src/**/build/
-compose.yml
 
 
 # Ignore Gradle GUI config
@@ -65,8 +64,8 @@ compose.yml
 
 ### application properties
 **/resources/application.properties
+**/resources/application.properties
 **/resources/application-*.properties
 
-src/main/resources/application.properties
-
 src/main/resources/file/
+
