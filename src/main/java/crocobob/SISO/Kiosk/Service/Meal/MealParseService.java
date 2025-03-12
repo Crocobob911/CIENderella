@@ -59,7 +59,15 @@ public class MealParseService {
             return "Failed to read the Json File. Please Check the File Path.";
         }
 
-        var resultNode = getJsonNode(jsonString, "results");
+        try{
+            convertJsonNodeToMealInfos(getJsonNode(jsonString, "results"));
+            return "Server : Update Meals Successfully.";
+        }catch(JSONException e){
+            return "Failed to Update Meals. \n" + e.getMessage();
+        }
+    }
+
+    private void convertJsonNodeToMealInfos(JsonNode resultNode) {
         for (JsonNode result : resultNode) { // result = date, cafeterias
             var cafeteriaNode = result.get("cafeterias");
             for (JsonNode cafeteria : cafeteriaNode) { // cafeteria = cafeteriaName, meals
