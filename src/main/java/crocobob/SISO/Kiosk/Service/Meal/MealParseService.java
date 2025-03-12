@@ -48,7 +48,7 @@ public class MealParseService {
         }
 
         try{
-            convertJsonNodeToMealInfos(getJsonNode(jsonString, "results"););
+            convertJsonNodeToMealInfos(getJsonNode(jsonString, "results"));
             return "Server : Update Meals Successfully.";
         }catch(JSONException e){
             return "Failed to Update Meals. \n" + e.getMessage();
