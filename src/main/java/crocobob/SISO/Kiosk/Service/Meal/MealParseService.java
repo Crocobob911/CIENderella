@@ -5,11 +5,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import crocobob.SISO.Kiosk.Domain.MealInfo_AfterProcess;
 import crocobob.SISO.Kiosk.Repository.Meal.MealRepository;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -26,11 +28,21 @@ public class MealParseService {
 
     public String createWeeklyMealData(){
         DeleteAllMealsInDatabase();
-        return createMealInfos(readMealJsonFile("/home/crocobob/cau-meal-crawler/Doc/WeeklyMealData.json"));
+        return createMealInfos(readMealJsonFile(readMealJsonFilePath()));
     }
 
     private void DeleteAllMealsInDatabase(){
         repo.deleteAll();
+    }
+
+    private String readMealJsonFilePath(){
+        try{
+            ClassPathResource resource = new ClassPathResource("mealJsonPath.txt");
+            return new String(Files.readAllBytes(Paths.get(resource.getURI())));
+        }catch (IOException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private String readMealJsonFile(String path){
