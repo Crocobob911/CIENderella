@@ -82,7 +82,7 @@ public class MealParseService {
     private void divideInMeal(JsonNode mealNode, String date, String cafeteriaName) {
         if(cafeteriaName.equals("University Club(102관11층)")){
             for (JsonNode meal : mealNode) { // meal = mealType, menus
-                divideInMenu(
+                divideInMenu_102(
                         meal.get("menus"),
                         date,
                         meal.get("startTime").toString(),
@@ -92,7 +92,7 @@ public class MealParseService {
             }
         }else{
             for (JsonNode meal : mealNode) { // meal = mealType, menus
-                divideInMenu_102(
+                divideInMenu(
                         meal.get("menus"),
                         date,
                         meal.get("startTime").toString(),
