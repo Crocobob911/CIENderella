@@ -67,4 +67,4 @@ compose.yml
 src/main/resources/application-*.properties
 
 src/main/resources/file/
-
+src/main/resources/mealJsonPath.txt
