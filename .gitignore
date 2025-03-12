@@ -68,3 +68,5 @@ src/main/resources/application-*.properties
 
 src/main/resources/file/
 src/main/resources/mealJsonPath.txt
+
+logs/application.log
