@@ -84,18 +84,20 @@ public class MealParseService {
             for (JsonNode meal : mealNode) { // meal = mealType, menus
                 divideInMenu(
                         meal.get("menus"),
+                        date,
                         meal.get("startTime").toString(),
                         meal.get("endTime").toString(),
-                        date, cafeteriaName,
+                        cafeteriaName,
                         meal.get("mealType").toString());
             }
         }else{
             for (JsonNode meal : mealNode) { // meal = mealType, menus
                 divideInMenu_102(
                         meal.get("menus"),
+                        date,
                         meal.get("startTime").toString(),
                         meal.get("endTime").toString(),
-                        date, cafeteriaName,
+                        cafeteriaName,
                         meal.get("mealType").toString());
             }
         }
