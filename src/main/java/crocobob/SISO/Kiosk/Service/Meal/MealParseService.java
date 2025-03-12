@@ -47,74 +47,93 @@ public class MealParseService {
             return "Failed to read the Json File. Please Check the File Path.";
         }
 
-        var resultNode = getJsonNode(jsonString, "results");
+        try{
+            convertJsonNodeToMealInfos(getJsonNode(jsonString, "results"););
+            return "Server : Update Meals Successfully.";
+        }catch(JSONException e){
+            return "Failed to Update Meals. \n" + e.getMessage();
+        }
+    }
+
+    private void convertJsonNodeToMealInfos(JsonNode resultNode) {
         for (JsonNode result : resultNode) { // result = date, cafeterias
-            var cafeteriaNode = result.get("cafeterias");
-            for (JsonNode cafeteria : cafeteriaNode) { // cafeteria = cafeteriaName, meals
-                var mealNode = cafeteria.get("meals");
-                if(cafeteria.get("cafeteriaName").asText().equals("University Club(102관11층)")){
-                    for (JsonNode meal : mealNode) {
-                        var menuNode = meal.get("menus");
-                        List<String> menuStringList = new ArrayList<>();
-                        for (JsonNode menu : menuNode) {
-                            JSONObject menuObject = new JSONObject(menu.toString());
-                            JSONArray menuList = menuObject.getJSONArray("menu");
+            divideInCafeteria(result.get("cafeterias"), result.get("date").asText());
+        }
+    }
 
-                            for (int i = 0; i < menuList.length(); i++) {
-                                menuStringList.add(menuList.get(i).toString());
-                            }
-                        }
-                        String menuString = String.join(",", convertListToArray(menuStringList));
+    private void divideInCafeteria(JsonNode cafeteriaNode, String date) {
+        for (JsonNode cafeteria : cafeteriaNode) { // cafeteria = cafeteriaName, meals
+            divideInMeal(cafeteria.get("meals"), date, cafeteria.get("cafeteriaName").asText());
+        }
+    }
 
-                        MealInfo_AfterProcess mealInfo = new MealInfo_AfterProcess(
-                                result.get("date").asText(),
-                                makeDueTime(
-                                        cleaningStringToOnlyTime(meal.get("startTime").toString()),
-                                        cleaningStringToOnlyTime(meal.get("endTime").toString())),
-                                reduceCafeteriaName(cafeteria.get("cafeteriaName").asText()),
-                                cleaningStringToOnlyKorean(meal.get("mealType").toString()),
-                                eraseStarCharToComma(menuString)
-                        );
-                        repo.save(mealInfo);
-                    }
-                }else{
-                    for (JsonNode meal : mealNode) { // meal = mealType, menus
-                        var menuNode = meal.get("menus");
-                        for (JsonNode menu : menuNode) { // menu = menu(menuStringList)
-                            try {
-                                JSONObject menuObject = new JSONObject(menu.toString());
-                                JSONArray menuList = menuObject.getJSONArray("menu");
-
-                                String[] menuStringList = new String[menuList.length()];
-                                for (int i = 0; i < menuList.length(); i++) {
-                                    menuStringList[i] = menuList.get(i).toString();
-                                }
-                                String menuString = String.join(",", menuStringList);
-
-                                if(cafeteria.get("cafeteriaName").asText().equals("학생식당(303관B1층)") && menuString.length() < 15)
-                                    continue; // 303관 단품 컷
-
-                                MealInfo_AfterProcess mealInfo = new MealInfo_AfterProcess(
-                                        result.get("date").asText(),
-                                        makeDueTime(
-                                                cleaningStringToOnlyTime(meal.get("startTime").toString()),
-                                                cleaningStringToOnlyTime(meal.get("endTime").toString())),
-                                        reduceCafeteriaName(cafeteria.get("cafeteriaName").asText()),
-                                        cleaningStringToOnlyKorean(meal.get("mealType").toString()),
-                                        eraseStarCharToComma(menuString)
-                                );
-                                repo.save(mealInfo);
-
-                            }catch (JSONException e){
-                                return "Failed to Update Meals. \n" + e.getMessage();
-                                // 500으로 보내면 좋을텐데.
-                            }
-                        }
-                    }
-                }
+    private void divideInMeal(JsonNode mealNode, String date, String cafeteriaName) {
+        if(cafeteriaName.equals("University Club(102관11층)")){
+            for (JsonNode meal : mealNode) { // meal = mealType, menus
+                divideInMenu(
+                        meal.get("menus"),
+                        meal.get("startTime").toString(),
+                        meal.get("endTime").toString(),
+                        date, cafeteriaName,
+                        meal.get("mealType").toString());
+            }
+        }else{
+            for (JsonNode meal : mealNode) { // meal = mealType, menus
+                divideInMenu_102(
+                        meal.get("menus"),
+                        meal.get("startTime").toString(),
+                        meal.get("endTime").toString(),
+                        date, cafeteriaName,
+                        meal.get("mealType").toString());
             }
         }
-        return "Server : Update Meals Successfully.";
+
+    }
+
+    private void divideInMenu(JsonNode menuNode, String date, String startTime, String endTime, String cafeteriaName, String mealType) {
+        for (JsonNode menu : menuNode) {
+            JSONObject menuObject = new JSONObject(menu.toString());
+            JSONArray menuList = menuObject.getJSONArray("menu");
+
+            String[] menuStringList = new String[menuList.length()];
+            for (int i = 0; i < menuList.length(); i++) {
+                menuStringList[i] = menuList.get(i).toString();
+            }
+            String menuString = String.join(",", menuStringList);
+
+            // 303관 단품 컷
+            if(cafeteriaName.equals("학생식당(303관B1층)") && menuString.length() < 15) continue;
+
+            makeMealInfoObjectAndSaveInDB(date, startTime, endTime, cafeteriaName, mealType, menuString);
+        }
+    }
+
+    private void divideInMenu_102(JsonNode menuNode, String date, String startTime, String endTime, String cafeteriaName, String mealType){
+        List<String> menuStringList = new ArrayList<>();
+        for (JsonNode menu : menuNode) {
+            JSONObject menuObject = new JSONObject(menu.toString());
+            JSONArray menuList = menuObject.getJSONArray("menu");
+
+            for (int i = 0; i < menuList.length(); i++) {
+                menuStringList.add(menuList.get(i).toString());
+            }
+        }
+        String menuString = String.join(",", convertListToArray(menuStringList));
+
+        makeMealInfoObjectAndSaveInDB(date, startTime, endTime, cafeteriaName, mealType, menuString);
+    }
+
+    private void makeMealInfoObjectAndSaveInDB(String date, String startTime, String endTime, String cafeteriaName, String mealType, String menuString) {
+        MealInfo_AfterProcess mealInfo = new MealInfo_AfterProcess(
+                date,
+                makeDueTime(
+                        cleaningStringToOnlyTime(startTime),
+                        cleaningStringToOnlyTime(endTime)),
+                reduceCafeteriaName(cafeteriaName),
+                cleaningStringToOnlyKorean(mealType),
+                eraseStarCharToComma(menuString)
+        );
+        repo.save(mealInfo);
     }
 
 
