@@ -5,6 +5,7 @@ import crocobob.SISO.Kiosk.Repository.MediaInfo.MediaInfoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 
 @Service
@@ -21,7 +22,7 @@ public class MediaInfoService {
                 file.getOriginalFilename(),
                 file.getContentType(),
                 "default-uploader",
-                file.getSize(),
+                convertBytesToMB(file.getSize()),
                 LocalDateTime.now(),
                 LocalDateTime.now().plusDays(7)
         );
@@ -36,5 +37,11 @@ public class MediaInfoService {
 
     private long calculateOrderNum() {
         return 1; // 일단 1을 뱉어.
+    }
+
+    private double convertBytesToMB(long bytes) {
+        double mbSize = (double) bytes / (1024 * 1024);
+        DecimalFormat df = new DecimalFormat("#.#");
+        return Double.parseDouble(df.format(mbSize));
     }
 }

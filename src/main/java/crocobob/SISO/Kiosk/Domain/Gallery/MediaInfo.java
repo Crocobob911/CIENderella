@@ -22,16 +22,16 @@ public class MediaInfo {
     String fileName;
     String mediaType;
     String uploader;
-    Long fileSize;
+    Double fileSizeMB;
     LocalDateTime uploadDateTime;
     LocalDateTime dueDateTime;
 
-    public MediaInfo(Long orderNum, String fileName, String mediaType, String uploader, Long fileSize, LocalDateTime uploadDateTime, LocalDateTime dueDateTime) {
+    public MediaInfo(Long orderNum, String fileName, String mediaType, String uploader, Double fileSizeMB, LocalDateTime uploadDateTime, LocalDateTime dueDateTime) {
         this.orderNum = orderNum;
         this.fileName = fileName;
         this.mediaType = mediaType;
         this.uploader = uploader;
-        this.fileSize = fileSize;
+        this.fileSizeMB = fileSizeMB;
         this.uploadDateTime = uploadDateTime;
         this.dueDateTime = dueDateTime;
     }
