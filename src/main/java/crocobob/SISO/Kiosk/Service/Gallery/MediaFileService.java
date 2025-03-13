@@ -1,6 +1,7 @@
 package crocobob.SISO.Kiosk.Service.Gallery;
 
 import crocobob.SISO.Kiosk.Domain.Gallery.MediaInfo;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
@@ -18,11 +19,13 @@ import java.nio.file.Paths;
 @Service
 public class MediaFileService {
 
-    private final String fileDirPath = "E:\\Coding\\CIenderella_Media\\";
+    private final String fileDirPath;
     private final MediaInfoService infoService;
 
     public MediaFileService(MediaInfoService infoService) {
         this.infoService = infoService;
+
+        fileDirPath = readMediaFilePath();
     }
 
     public ResponseEntity<Resource> getFile(String fileName) {
@@ -74,5 +77,15 @@ public class MediaFileService {
 
         File destination = new File(fileDirPath + file.getOriginalFilename());
         file.transferTo(destination);
+    }
+
+    private String readMediaFilePath(){
+        try{
+            ClassPathResource resource = new ClassPathResource("mediaFilePath.txt");
+            return new String(Files.readAllBytes(Paths.get(resource.getURI())));
+        }catch (IOException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 }
