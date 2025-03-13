@@ -25,7 +25,7 @@ public class MediaFileService {
     public MediaFileService(MediaInfoService infoService) {
         this.infoService = infoService;
 
-        fileDirPath = readMediaFilePath();
+        fileDirPath = "/home/crocobob/CIENderella_Media/";
     }
 
     public ResponseEntity<Resource> getFile(String fileName) {
