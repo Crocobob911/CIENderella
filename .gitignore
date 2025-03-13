@@ -1,3 +1,6 @@
+src/main/resources/mealJsonPath.txt
+src/main/resources/mediaFilePath.txt
+
 .gradle
 **/build/
 !src/**/build/
