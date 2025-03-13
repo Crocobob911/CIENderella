@@ -1,8 +1,7 @@
 package crocobob.SISO.Kiosk.Controller;
 
-import crocobob.SISO.Exception.DBEntityNotFoundException;
 import crocobob.SISO.Kiosk.Domain.Gallery.GalleryInfoDTO;
-import crocobob.SISO.Kiosk.Service.GalleryInfoService;
+import crocobob.SISO.Kiosk.Service.Gallery.GalleryInfoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

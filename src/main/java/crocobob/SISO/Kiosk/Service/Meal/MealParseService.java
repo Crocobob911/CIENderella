@@ -20,15 +20,18 @@ import java.util.List;
 @Service
 public class MealParseService {
 
-    private MealRepository repo;
+    private final MealRepository repo;
+    private final String jsonPath;
 
     public MealParseService(MealRepository mealRepo) {
         this.repo = mealRepo;
+        jsonPath = readMealJsonFilePath();
+
     }
 
     public String createWeeklyMealData(){
         DeleteAllMealsInDatabase();
-        return createMealInfos(readMealJsonFile(readMealJsonFilePath()));
+        return createMealInfos(readMealJsonFile(jsonPath));
     }
 
     private void DeleteAllMealsInDatabase(){
