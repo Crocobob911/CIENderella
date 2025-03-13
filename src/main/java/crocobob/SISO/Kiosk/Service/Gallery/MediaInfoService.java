@@ -15,10 +15,10 @@ public class MediaInfoService {
         this.repo = mediaInfoRepository;
     }
 
-    public MediaInfo processFile(MultipartFile file){
+    public MediaInfo processFile(MultipartFile file, String fileName) {
         MediaInfo mediaInfo = new MediaInfo(
                 calculateOrderNum(),
-                file.getOriginalFilename(),
+                fileName,
                 file.getContentType(),
                 "default-uploader",
                 file.getSize(),

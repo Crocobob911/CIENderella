@@ -55,10 +55,11 @@ public class MediaFileService {
     }
 
     public MediaInfo processFile(MultipartFile file) {
-        var mediaInfoOfFile = infoService.processFile(file);
+        String fileName = changeNameForAvoidingDuplicate(file.getOriginalFilename());
 
+        var mediaInfoOfFile = infoService.processFile(file, fileName);
         try {
-            saveFileInLocalDirectory(file);
+            saveFileInLocalDirectory(file, fileName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -66,13 +67,20 @@ public class MediaFileService {
         return mediaInfoOfFile;
     }
 
-    private void saveFileInLocalDirectory(MultipartFile file) throws IOException {
+    private void saveFileInLocalDirectory(MultipartFile file, String fileName) throws IOException {
         File uploadDir = new File(fileDirPath);
         if(!uploadDir.exists()){
             uploadDir.mkdir();
         }
 
-        File destination = new File(fileDirPath + file.getOriginalFilename());
+        File destination = new File(fileDirPath + fileName);
         file.transferTo(destination);
+    }
+
+    private String changeNameForAvoidingDuplicate(String fileName) {
+        while(infoService.IsFileNameDuplicate(fileName)){
+            fileName = "_" + fileName;
+        }
+        return fileName;
     }
 }
