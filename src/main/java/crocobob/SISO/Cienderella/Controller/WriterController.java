@@ -6,6 +6,8 @@ import crocobob.SISO.Cienderella.Service.WriterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -16,7 +18,7 @@ import java.util.List;
 @RestController
 @Tag(name = "Writer", description = "작성자")
 public class WriterController {
-
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final WriterService service;
 
     public WriterController(WriterService service) {
@@ -33,7 +35,7 @@ public class WriterController {
             description = "성공"
     )
     public List<Writer> getWriterList() {
-        // 여기서 writers(작성자)들 리스트 갖다주기
+        logger.info("GET /writers request received.");
         return service.getAllWriters();
     }
 
@@ -47,7 +49,7 @@ public class WriterController {
             description = "성공"
     )
     public Writer getWriter(@PathVariable("id") long id) {
-        // 여기서 writers(작성자)들 리스트 갖다주기
+        logger.info("GET /writers/" + id + " request received.");
         return service.getWriter(id);
     }
 
@@ -61,6 +63,8 @@ public class WriterController {
             description = "성공"
     )
     public ResponseEntity<Object> createWriter(@RequestBody WriterDTO dto) {
+        logger.info("POST /writers request received.");
+
         Writer writer = service.saveWriter(dto);
 
         URI location = ServletUriComponentsBuilder
@@ -81,6 +85,7 @@ public class WriterController {
             description = "성공"
     )
     public void updateWriter(@PathVariable("id") long id, @RequestBody Writer writer) {
+        logger.info("PATCH /writers/" + id + " request received.");
         service.patchUpdateWriter(id, writer);
     }
 
@@ -95,6 +100,7 @@ public class WriterController {
             description = "성공"
     )
     public void deleteWriter(@PathVariable("id") long id) {
+        logger.info("DELETE /writers/" + id + " request received.");
         service.deleteWriter(id);
     }
 }
