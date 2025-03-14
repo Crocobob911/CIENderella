@@ -15,6 +15,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Service
 public class MediaFileService {
@@ -57,6 +58,14 @@ public class MediaFileService {
         }
     }
 
+    public ResponseEntity<List<Resource>> getAllFile() {
+
+    }
+
+    private List<String> getAllFileNames(){
+        infoService.getAllValidFileNames(); // file name을 모두 뱉어낼거야. 이걸 토대로 파일들을 로컬에서 읽어와야해!
+    }
+
     public MediaInfo processFile(MultipartFile file) {
         String fileName = file.getOriginalFilename();
         while(infoService.IsFileNameDuplicate(fileName)) {
@@ -93,4 +102,5 @@ public class MediaFileService {
             return null;
         }
     }
+
 }
