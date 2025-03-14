@@ -15,6 +15,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Service
 public class MediaFileService {
@@ -25,7 +26,7 @@ public class MediaFileService {
     public MediaFileService(MediaInfoService infoService) {
         this.infoService = infoService;
 
-        fileDirPath = readMediaFilePath();
+        fileDirPath = "/home/crocobob/CIENderella_Media/";
     }
 
     public ResponseEntity<Resource> getFile(String fileName) {
@@ -57,11 +58,24 @@ public class MediaFileService {
         }
     }
 
+    public ResponseEntity<List<Resource>> getAllFile() {
+
+    }
+
+    private List<String> getAllFileNames(){
+        infoService.getAllValidFileNames(); // file name을 모두 뱉어낼거야. 이걸 토대로 파일들을 로컬에서 읽어와야해!
+    }
+
     public MediaInfo processFile(MultipartFile file) {
-        var mediaInfoOfFile = infoService.processFile(file);
+        String fileName = file.getOriginalFilename();
+        while(infoService.IsFileNameDuplicate(fileName)) {
+            fileName = "_" + fileName;
+        }
+
+        var mediaInfoOfFile = infoService.processFile(file, fileName);
 
         try {
-            saveFileInLocalDirectory(file);
+            saveFileInLocalDirectory(file, fileName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -69,13 +83,13 @@ public class MediaFileService {
         return mediaInfoOfFile;
     }
 
-    private void saveFileInLocalDirectory(MultipartFile file) throws IOException {
+    private void saveFileInLocalDirectory(MultipartFile file, String fileName) throws IOException {
         File uploadDir = new File(fileDirPath);
         if(!uploadDir.exists()){
             uploadDir.mkdir();
         }
 
-        File destination = new File(fileDirPath + file.getOriginalFilename());
+        File destination = new File(fileDirPath + fileName);
         file.transferTo(destination);
     }
 
@@ -88,4 +102,5 @@ public class MediaFileService {
             return null;
         }
     }
+
 }

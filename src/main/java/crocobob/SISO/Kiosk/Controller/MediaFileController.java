@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 public class MediaFileController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -16,6 +18,12 @@ public class MediaFileController {
 
     public MediaFileController(MediaFileService service) {
         this.service = service;
+    }
+
+    @GetMapping (path="/medias/all")
+    public ResponseEntity<List<Resource>> getAllMedia(){
+        logger.info("GET /medias/all request received.");
+        return service.getAllFile();
     }
 
     @GetMapping(path="/medias/{fileName}")

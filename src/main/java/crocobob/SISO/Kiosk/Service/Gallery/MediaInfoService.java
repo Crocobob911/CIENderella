@@ -7,6 +7,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class MediaInfoService {
@@ -16,10 +18,10 @@ public class MediaInfoService {
         this.repo = mediaInfoRepository;
     }
 
-    public MediaInfo processFile(MultipartFile file){
+    public MediaInfo processFile(MultipartFile file, String fileName){
         MediaInfo mediaInfo = new MediaInfo(
                 calculateOrderNum(),
-                file.getOriginalFilename(),
+                fileName,
                 file.getContentType(),
                 "default-uploader",
                 convertBytesToMB(file.getSize()),
@@ -43,5 +45,14 @@ public class MediaInfoService {
         double mbSize = (double) bytes / (1024 * 1024);
         DecimalFormat df = new DecimalFormat("#.#");
         return Double.parseDouble(df.format(mbSize));
+    }
+
+    public List<String> getAllValidFileNames() {
+        var list = repo.findAllByOrderByOrderNumAsc();
+        var nameList = new ArrayList<String>();
+        for(MediaInfo mediaInfo : list){
+            nameList.add(mediaInfo.getFileName());
+        }
+        return nameList;
     }
 }

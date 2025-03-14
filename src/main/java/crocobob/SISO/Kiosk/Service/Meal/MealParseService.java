@@ -25,7 +25,7 @@ public class MealParseService {
 
     public MealParseService(MealRepository mealRepo) {
         this.repo = mealRepo;
-        jsonPath = readMealJsonFilePath();
+        jsonPath = "/home/crocobob/cau-meal-crawler/Doc/WeeklyMealData.json";
 
     }
 
@@ -36,16 +36,6 @@ public class MealParseService {
 
     private void DeleteAllMealsInDatabase(){
         repo.deleteAll();
-    }
-
-    private String readMealJsonFilePath(){
-        try{
-            ClassPathResource resource = new ClassPathResource("mealJsonPath.txt");
-            return new String(Files.readAllBytes(Paths.get(resource.getURI())));
-        }catch (IOException e){
-            e.printStackTrace();
-            return null;
-        }
     }
 
     private String readMealJsonFile(String path){
