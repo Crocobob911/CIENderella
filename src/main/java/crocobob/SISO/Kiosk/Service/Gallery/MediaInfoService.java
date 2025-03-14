@@ -3,13 +3,11 @@ package crocobob.SISO.Kiosk.Service.Gallery;
 import crocobob.SISO.Exception.DBEntityNotFoundException;
 import crocobob.SISO.Kiosk.Domain.Gallery.MediaInfo;
 import crocobob.SISO.Kiosk.Repository.MediaInfo.MediaInfoRepository;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -57,11 +55,18 @@ public class MediaInfoService {
         return Double.parseDouble(df.format(mbSize));
     }
 
-    public List<MediaInfo> getAllMediaInfo() {
+    public List<MediaInfo> getAllMediaInfo(){
+        return repo.findAll();
+    }
+
+    public List<MediaInfo> getAllValidMediaInfo() {
         List<MediaInfo> infoList = repo.findAllByOrderByOrderNumAsc();
         infoList.removeIf(info -> info.getDueDateTime().isBefore(LocalDateTime.now()));
 
         return infoList;
     }
 
+    public void deleteMediaInfo(Long id) {
+        repo.delete(repo.findById(id).isPresent() ? repo.findById(id).get() : null);
+    }
 }

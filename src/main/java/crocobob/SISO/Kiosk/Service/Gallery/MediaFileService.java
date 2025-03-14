@@ -100,4 +100,10 @@ public class MediaFileService {
         }
     }
 
+    public Boolean deleteFile(Long id){
+        MediaInfo info = infoService.getMediaInfo(id);
+        infoService.deleteMediaInfo(id);
+        File file = new File(fileDirPath + info.getFileName());
+        return file.delete();
+    }
 }

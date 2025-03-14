@@ -24,9 +24,15 @@ public class MediaController {
     }
 
     @GetMapping(path="/medias/all")
-    public ResponseEntity<List<MediaInfo>> getAllValidMedia(){
+    public ResponseEntity<List<MediaInfo>> getAllMediaInfo(){
         logger.info("GET /medias/all request received.");
         return ResponseEntity.ok().body(infoService.getAllMediaInfo());
+    }
+
+    @GetMapping(path="/medias/all/valid")
+    public ResponseEntity<List<MediaInfo>> getAllValidMedia(){
+        logger.info("GET /medias/all/valid request received.");
+        return ResponseEntity.ok().body(infoService.getAllValidMediaInfo());
     }
 
     @GetMapping(path="/medias/id/{id}")
@@ -47,5 +53,11 @@ public class MediaController {
 
         MediaInfo mediaInfo = fileService.processFile(file);
         return ResponseEntity.ok().body(mediaInfo);
+    }
+
+    @DeleteMapping(path="/medias/id/{id}")
+    public ResponseEntity<Boolean> deleteFile(@PathVariable("id") Long id) {
+        logger.info("DELETE /medias/" + id + " request received.");
+        return ResponseEntity.ok().body(fileService.deleteFile(id));
     }
 }
