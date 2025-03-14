@@ -28,7 +28,7 @@ public class MediaInfoService {
                 "default-uploader",
                 convertBytesToMB(file.getSize()),
                 LocalDateTime.now(),
-                LocalDateTime.now().plusDays(7)
+                LocalDateTime.now()
         );
 
         repo.save(mediaInfo);
@@ -57,13 +57,11 @@ public class MediaInfoService {
         return Double.parseDouble(df.format(mbSize));
     }
 
-    public List<String> getAllFileNames() {
-        var list = repo.findAll();
-        var nameList = new ArrayList<String>();
-        for(MediaInfo mediaInfo : list){
-            nameList.add(mediaInfo.getFileName());
-        }
-        return nameList;
+    public List<MediaInfo> getAllMediaInfo() {
+        List<MediaInfo> infoList = repo.findAllByOrderByOrderNumAsc();
+        infoList.removeIf(info -> info.getDueDateTime().isBefore(LocalDateTime.now()));
+
+        return infoList;
     }
 
 }

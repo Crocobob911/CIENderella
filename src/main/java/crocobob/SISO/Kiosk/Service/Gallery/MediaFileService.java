@@ -31,17 +31,6 @@ public class MediaFileService {
         fileDirPath = readMediaFilePath();
     }
 
-    public ResponseEntity<List<Resource>> getAllFile() {
-        var fileNameList = infoService.getAllFileNames();
-        List<Resource> rspnsList = new ArrayList<>();
-
-        for (String fileName : fileNameList) {
-            rspnsList.add(getResource(fileName));
-        }
-
-        return ResponseEntity.ok().body(rspnsList);
-    }
-
     public ResponseEntity<Resource> getResponseEntityWithResource(long id){
         return makeResponseEntity(infoService.getMediaInfo(id));
     }
