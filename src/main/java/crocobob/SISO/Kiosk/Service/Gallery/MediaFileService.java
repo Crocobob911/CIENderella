@@ -1,5 +1,6 @@
 package crocobob.SISO.Kiosk.Service.Gallery;
 
+import crocobob.SISO.Exception.NoFileNameInLocalException;
 import crocobob.SISO.Kiosk.Domain.Gallery.MediaInfo;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -15,6 +16,8 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class MediaFileService {
@@ -25,43 +28,51 @@ public class MediaFileService {
     public MediaFileService(MediaInfoService infoService) {
         this.infoService = infoService;
 
-        fileDirPath = "/home/crocobob/CIENderella_Media/";
+        fileDirPath = readMediaFilePath();
     }
 
-    public ResponseEntity<Resource> getFile(String fileName) {
-        try {
-            Path filePath = Paths.get(fileDirPath).resolve(fileName).normalize();
-            Resource resource = new UrlResource(filePath.toUri());
+    public ResponseEntity<Resource> getResponseEntityWithResource(long id){
+        return makeResponseEntity(infoService.getMediaInfo(id));
+    }
 
-            if (resource.exists()) {
-                return ResponseEntity.ok()
-                        .contentType(getMediaType(filePath))
-                        .body(resource);
-            }else{
-                return ResponseEntity.notFound().build();
-            }
-        } catch (MalformedURLException e) {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<Resource> getResponseEntityWithResource(String fileName){
+        return makeResponseEntity(infoService.getMediaInfo(fileName));
+    }
+
+    private ResponseEntity<Resource> makeResponseEntity(MediaInfo mediaInfo) {
+        Resource resource = getResource(mediaInfo.getFileName());
+        if(resource.exists()){
+            return ResponseEntity.ok()
+                    .contentType(MediaType.valueOf(mediaInfo.getMediaType()))
+                    .body(resource);
+        }else{
+            return ResponseEntity.notFound().build();
         }
     }
 
-    private MediaType getMediaType(Path fileName) {
+    private Resource getResource(String fileName) {
+        Path filePath = Paths.get(fileDirPath).resolve(fileName).normalize();
+        return getFileFromStorage(filePath);
+    }
+
+    private Resource getFileFromStorage(Path filePath) {
         try{
-            return MediaType.parseMediaType(
-                    Files.probeContentType(
-                            Paths.get(fileName.toUri())
-                    )
-            );
-        }catch (IOException e){
-            throw new IllegalArgumentException();
+            return new UrlResource(filePath.toUri());
+        } catch (MalformedURLException e) {
+            throw new NoFileNameInLocalException("Invalid file path OR Invalid Name of file. : " + filePath);
         }
     }
 
     public MediaInfo processFile(MultipartFile file) {
-        var mediaInfoOfFile = infoService.processFile(file);
+        String fileName = file.getOriginalFilename();
+        while(infoService.IsFileNameDuplicate(fileName)) {
+            fileName = "_" + fileName;
+        }
+
+        var mediaInfoOfFile = infoService.processFile(file, fileName);
 
         try {
-            saveFileInLocalDirectory(file);
+            saveFileInLocalDirectory(file, fileName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -69,13 +80,13 @@ public class MediaFileService {
         return mediaInfoOfFile;
     }
 
-    private void saveFileInLocalDirectory(MultipartFile file) throws IOException {
+    private void saveFileInLocalDirectory(MultipartFile file, String fileName) throws IOException {
         File uploadDir = new File(fileDirPath);
         if(!uploadDir.exists()){
             uploadDir.mkdir();
         }
 
-        File destination = new File(fileDirPath + file.getOriginalFilename());
+        File destination = new File(fileDirPath + fileName);
         file.transferTo(destination);
     }
 
@@ -87,5 +98,12 @@ public class MediaFileService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public Boolean deleteFile(Long id){
+        MediaInfo info = infoService.getMediaInfo(id);
+        infoService.deleteMediaInfo(id);
+        File file = new File(fileDirPath + info.getFileName());
+        return file.delete();
     }
 }

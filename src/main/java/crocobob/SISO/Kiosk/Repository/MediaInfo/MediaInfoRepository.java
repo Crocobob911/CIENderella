@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface MediaInfoRepository {
     MediaInfo save(MediaInfo mediaInfo);
+    List<MediaInfo> findAll();
     List<MediaInfo> findAllByOrderByOrderNumAsc();
     Optional<MediaInfo> findById(Long id);
     Optional<MediaInfo> findByFileName(String fileName);
