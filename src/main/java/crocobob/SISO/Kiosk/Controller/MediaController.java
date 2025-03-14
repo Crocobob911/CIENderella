@@ -3,6 +3,7 @@ package crocobob.SISO.Kiosk.Controller;
 import crocobob.SISO.Kiosk.Domain.Gallery.MediaInfo;
 import crocobob.SISO.Kiosk.Service.Gallery.MediaFileService;
 import crocobob.SISO.Kiosk.Service.Gallery.MediaInfoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@Tag(name = "Gallery Media", description = "갤러리에 띄울 영상, 이미지")
 @RestController
 public class MediaController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
