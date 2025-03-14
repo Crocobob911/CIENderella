@@ -6,6 +6,8 @@ import crocobob.SISO.Cienderella.Service.FormService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Tag(name = "Form", description = "최종 본문")
 public class FormController {
-
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final FormService service;
 
     public FormController(FormService service) {
@@ -30,7 +32,7 @@ public class FormController {
             description = "성공"
     )
     public Form generateNewForm(Model model) throws JsonProcessingException {
-        // 여기서 form 만들어 갖다주기
+        logger.info("GET /form request received.");
         return service.getForm();
     }
 }
