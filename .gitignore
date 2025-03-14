@@ -74,3 +74,5 @@ src/main/resources/file/
 src/main/resources/mealJsonPath.txt
 
 logs/application.log
+
+logs/
