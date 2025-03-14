@@ -8,6 +8,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +20,7 @@ import java.util.List;
 @RestController
 @Tag(name = "Meal", description = "학식 정보")
 public class MealController {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public MealController(MealParseService saveService, MealOutputService readService) {
         this.saveService = saveService;
@@ -37,6 +41,7 @@ public class MealController {
     )
     @GetMapping(path="/meals/all")
     public List<MealInfo_AfterProcess> getMealOfNow() {
+        logger.info("GET /meals/all request received.");
         return readService.findAllMeals();
     }
 
@@ -56,6 +61,8 @@ public class MealController {
     public List<MealInfo_AfterProcess> getMeal(
             @Parameter(description = "today, tomorrow") @PathVariable("day") String day,
             @Parameter(description = "morning, lunch, dinner") @PathVariable("mealType") String mealType) {
+        logger.info("GET /meals/" + day + "/" + mealType + " request received.");
+
         if(!day.equals("today") && !day.equals("tomorrow")) throw new InvalidMealParameterException("<<Invalid Day Parameter.>>");
         if(!mealType.equals("morning") && !mealType.equals("lunch") && !mealType.equals("dinner")) throw new InvalidMealParameterException("<<Invalid MealType Parameter.>>");
 
@@ -71,7 +78,8 @@ public class MealController {
             description = "성공"
     )
     @GetMapping(path="/meals/parse")
-    public String parseWeeklyMealData(){
-        return saveService.createWeeklyMealData();
+    public ResponseEntity<String> parseWeeklyMealData(){
+        logger.info("GET /meals/parse request received.");
+        return ResponseEntity.ok().body(saveService.createWeeklyMealData());
     }
 }

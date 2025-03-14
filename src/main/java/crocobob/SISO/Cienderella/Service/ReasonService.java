@@ -37,13 +37,13 @@ public class ReasonService {
         else return reasons;
     }
 
-    public void patchUpdateReason(long reasonId, Reason newReason) {
+    public Reason patchUpdateReason(long reasonId, Reason newReason) {
         Reason oldReason = getReason(reasonId);
 
         if(newReason.getText() != null) oldReason.setText(newReason.getText());
         if(newReason.getValid() != null) oldReason.setValid(newReason.getValid());
 
-        reasonRepo.save(oldReason);
+        return reasonRepo.save(oldReason);
     }
 
     public void deleteReason(Long id) {

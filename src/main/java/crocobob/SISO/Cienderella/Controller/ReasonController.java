@@ -7,6 +7,8 @@ import crocobob.SISO.Cienderella.Domain.ReasonDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -17,7 +19,7 @@ import java.util.List;
 @RestController
 @Tag(name = "Reason", description = "사유")
 public class ReasonController {
-
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final ReasonService service;
 
     public ReasonController(ReasonService service) {
@@ -34,7 +36,7 @@ public class ReasonController {
             description = "성공"
     )
     public List<Reason> getReasonList() {
-        // 여기서 reason(사유)들 리스트 갖다주기
+        logger.info("GET /reasons request received.");
         return service.getAllReasons();
     }
 
@@ -48,7 +50,8 @@ public class ReasonController {
             description = "성공"
     )
     public Reason getReason(@PathVariable("id") long id) throws DBEntityNotFoundException {
-            return service.getReason(id);
+        logger.info("GET /reasons/" + id + " request received.");
+        return service.getReason(id);
     }
 
     @PostMapping("/reasons")
@@ -60,15 +63,10 @@ public class ReasonController {
             responseCode = "200",
             description = "성공"
     )
-    public ResponseEntity<Object> createReason(@RequestBody ReasonDTO dto) {
-        Reason reason = service.saveReason(dto);
+    public ResponseEntity<Reason> createReason(@RequestBody ReasonDTO dto) {
+        logger.info("POST /reasons request received.");
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(reason.getId())
-                .toUri();
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.ok().body(service.saveReason(dto));
     }
 
     @PatchMapping("/reasons/{id}")
@@ -80,8 +78,9 @@ public class ReasonController {
             responseCode = "200",
             description = "성공"
     )
-    public void updateReason(@PathVariable("id") long id, @RequestBody Reason reason) {
-        service.patchUpdateReason(id, reason);
+    public ResponseEntity<Reason> updateReason(@PathVariable("id") long id, @RequestBody Reason reason) {
+        logger.info("PATCH /reasons/" + id + " request received.");
+        return ResponseEntity.ok().body(service.patchUpdateReason(id, reason));
     }
 
     @DeleteMapping(path = "/reasons/{id}")
@@ -94,7 +93,7 @@ public class ReasonController {
             description = "성공"
     )
     public void deleteReason(@PathVariable("id") long id) {
+        logger.info("DELETE /reasons/" + id + " request received.");
         service.deleteReason(id);
     }
-
 }
