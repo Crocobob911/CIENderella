@@ -39,6 +39,10 @@ public class MediaInfoService {
         return repo.findById(id).orElseThrow(()-> new DBEntityNotFoundException("No media with id : " + id));
     }
 
+    public MediaInfo getMediaInfo(String fileName) {
+        return repo.findByFileName(fileName).orElseThrow(()-> new DBEntityNotFoundException("No media with fileName : " + fileName));
+    }
+
     public Boolean IsFileNameDuplicate(String fileName){
         return repo.findByFileName(fileName).isPresent();
     }
@@ -53,8 +57,8 @@ public class MediaInfoService {
         return Double.parseDouble(df.format(mbSize));
     }
 
-    public List<String> getAllValidFileNames() {
-        var list = repo.findAllByOrderByOrderNumAsc();
+    public List<String> getAllFileNames() {
+        var list = repo.findAll();
         var nameList = new ArrayList<String>();
         for(MediaInfo mediaInfo : list){
             nameList.add(mediaInfo.getFileName());

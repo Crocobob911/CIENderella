@@ -16,6 +16,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,36 +31,48 @@ public class MediaFileService {
         fileDirPath = readMediaFilePath();
     }
 
-    public ResponseEntity<Resource> getFile(long id){
-        MediaInfo mediaToFind = infoService.getMediaInfo(id);
-        Path filePath = Paths.get(fileDirPath).resolve(mediaToFind.getFileName()).normalize();
+    public ResponseEntity<List<Resource>> getAllFile() {
+        var fileNameList = infoService.getAllFileNames();
+        List<Resource> rspnsList = new ArrayList<>();
 
-        Resource resource = getFileResource(filePath);
+        for (String fileName : fileNameList) {
+            rspnsList.add(getResource(fileName));
+        }
+
+        return ResponseEntity.ok().body(rspnsList);
+    }
+
+    public ResponseEntity<Resource> getResponseEntityWithResource(long id){
+        return makeResponseEntity(infoService.getMediaInfo(id));
+    }
+
+    public ResponseEntity<Resource> getResponseEntityWithResource(String fileName){
+        return makeResponseEntity(infoService.getMediaInfo(fileName));
+    }
+
+    private ResponseEntity<Resource> makeResponseEntity(MediaInfo mediaInfo) {
+        Resource resource = getResource(mediaInfo.getFileName());
         if(resource.exists()){
             return ResponseEntity.ok()
-                    .contentType(MediaType.valueOf(mediaToFind.getMediaType()))
+                    .contentType(MediaType.valueOf(mediaInfo.getMediaType()))
                     .body(resource);
         }else{
             return ResponseEntity.notFound().build();
         }
     }
 
-    private Resource getFileResource(Path filePath) {
+    private Resource getResource(String fileName) {
+        Path filePath = Paths.get(fileDirPath).resolve(fileName).normalize();
+        return getFileFromStorage(filePath);
+    }
+
+    private Resource getFileFromStorage(Path filePath) {
         try{
             return new UrlResource(filePath.toUri());
         } catch (MalformedURLException e) {
             throw new NoFileNameInLocalException("Invalid file path OR Invalid Name of file. : " + filePath);
         }
     }
-
-    public ResponseEntity<List<Resource>> getAllFile() {
-        return null;
-    }
-
-//    private List<String> getAllFileNames(){
-//        var fileNameList = infoService.getAllValidFileNames(); // file name을 모두 뱉어낼거야. 이걸 토대로 파일들을 로컬에서 읽어와야해!
-//        List<Strin>
-//    }
 
     public MediaInfo processFile(MultipartFile file) {
         String fileName = file.getOriginalFilename();
