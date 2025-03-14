@@ -1,5 +1,6 @@
 package crocobob.SISO.Kiosk.Service.Gallery;
 
+import crocobob.SISO.Exception.NoFileNameInLocalException;
 import crocobob.SISO.Kiosk.Domain.Gallery.MediaInfo;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -26,45 +27,39 @@ public class MediaFileService {
     public MediaFileService(MediaInfoService infoService) {
         this.infoService = infoService;
 
-        fileDirPath = "/home/crocobob/CIENderella_Media/";
+        fileDirPath = readMediaFilePath();
     }
 
-    public ResponseEntity<Resource> getFile(String fileName) {
-        try {
-            Path filePath = Paths.get(fileDirPath).resolve(fileName).normalize();
-            Resource resource = new UrlResource(filePath.toUri());
+    public ResponseEntity<Resource> getFile(long id){
+        MediaInfo mediaToFind = infoService.getMediaInfo(id);
+        Path filePath = Paths.get(fileDirPath).resolve(mediaToFind.getFileName()).normalize();
 
-            if (resource.exists()) {
-                return ResponseEntity.ok()
-                        .contentType(getMediaType(filePath))
-                        .body(resource);
-            }else{
-                return ResponseEntity.notFound().build();
-            }
-        } catch (MalformedURLException e) {
-            return ResponseEntity.badRequest().build();
+        Resource resource = getFileResource(filePath);
+        if(resource.exists()){
+            return ResponseEntity.ok()
+                    .contentType(MediaType.valueOf(mediaToFind.getMediaType()))
+                    .body(resource);
+        }else{
+            return ResponseEntity.notFound().build();
         }
     }
 
-    private MediaType getMediaType(Path fileName) {
+    private Resource getFileResource(Path filePath) {
         try{
-            return MediaType.parseMediaType(
-                    Files.probeContentType(
-                            Paths.get(fileName.toUri())
-                    )
-            );
-        }catch (IOException e){
-            throw new IllegalArgumentException();
+            return new UrlResource(filePath.toUri());
+        } catch (MalformedURLException e) {
+            throw new NoFileNameInLocalException("Invalid file path OR Invalid Name of file. : " + filePath);
         }
     }
 
     public ResponseEntity<List<Resource>> getAllFile() {
-
+        return null;
     }
 
-    private List<String> getAllFileNames(){
-        infoService.getAllValidFileNames(); // file name을 모두 뱉어낼거야. 이걸 토대로 파일들을 로컬에서 읽어와야해!
-    }
+//    private List<String> getAllFileNames(){
+//        var fileNameList = infoService.getAllValidFileNames(); // file name을 모두 뱉어낼거야. 이걸 토대로 파일들을 로컬에서 읽어와야해!
+//        List<Strin>
+//    }
 
     public MediaInfo processFile(MultipartFile file) {
         String fileName = file.getOriginalFilename();

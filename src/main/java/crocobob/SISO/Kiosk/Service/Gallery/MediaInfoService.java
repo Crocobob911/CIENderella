@@ -1,7 +1,9 @@
 package crocobob.SISO.Kiosk.Service.Gallery;
 
+import crocobob.SISO.Exception.DBEntityNotFoundException;
 import crocobob.SISO.Kiosk.Domain.Gallery.MediaInfo;
 import crocobob.SISO.Kiosk.Repository.MediaInfo.MediaInfoRepository;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +35,10 @@ public class MediaInfoService {
         return mediaInfo;
     }
 
+    public MediaInfo getMediaInfo(long id) {
+        return repo.findById(id).orElseThrow(()-> new DBEntityNotFoundException("No media with id : " + id));
+    }
+
     public Boolean IsFileNameDuplicate(String fileName){
         return repo.findByFileName(fileName).isPresent();
     }
@@ -55,4 +61,5 @@ public class MediaInfoService {
         }
         return nameList;
     }
+
 }

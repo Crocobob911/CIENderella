@@ -26,10 +26,10 @@ public class MediaFileController {
         return service.getAllFile();
     }
 
-    @GetMapping(path="/medias/{fileName}")
-    public ResponseEntity<Resource> getMedia(@PathVariable("fileName") String fileName) {
-        logger.info("GET /medias/" + fileName + " request received.");
-        return service.getFile(fileName);
+    @GetMapping(path="/medias/{id}")
+    public ResponseEntity<Resource> getMedia(@PathVariable("id") Long id) {
+        logger.info("GET /medias/" + id + " request received.");
+        return service.getFile(id);
     }
 
     @PostMapping(path="/medias/upload")
