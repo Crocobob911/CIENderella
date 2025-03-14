@@ -53,17 +53,9 @@ public class NoticeController {
             responseCode = "200",
             description = "성공"
     )
-    public ResponseEntity createNotice(@RequestBody NoticeDTO dto) {
+    public ResponseEntity<Notice> createNotice(@RequestBody NoticeDTO dto) {
         logger.info("POST /notices request received.");
 
-        var notice = service.save(dto);
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("{id}")
-                .buildAndExpand(notice.getId())
-                .toUri();
-
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.ok().body(service.save(dto));
     }
 }

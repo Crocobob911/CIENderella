@@ -1,5 +1,6 @@
 package crocobob.SISO.Kiosk.Controller;
 
+import crocobob.SISO.Kiosk.Domain.Gallery.GalleryInfo;
 import crocobob.SISO.Kiosk.Domain.Gallery.GalleryInfoDTO;
 import crocobob.SISO.Kiosk.Service.Gallery.GalleryInfoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -7,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,9 +47,9 @@ public class GalleryInfoController {
             responseCode = "200",
             description = "성공"
     )
-    public void updateContent(@RequestBody GalleryInfoDTO dto) {
+    public ResponseEntity<GalleryInfo> updateContent(@RequestBody GalleryInfoDTO dto) {
         logger.info("UPDATE /gallery/config request received.");
-        service.patchUpdateGalleryInfo(dto);
+        return ResponseEntity.ok().body(service.patchUpdateGalleryInfo(dto));
     }
 
 }

@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -77,8 +78,8 @@ public class MealController {
             description = "성공"
     )
     @GetMapping(path="/meals/parse")
-    public String parseWeeklyMealData(){
+    public ResponseEntity<String> parseWeeklyMealData(){
         logger.info("GET /meals/parse request received.");
-        return saveService.createWeeklyMealData();
+        return ResponseEntity.ok().body(saveService.createWeeklyMealData());
     }
 }

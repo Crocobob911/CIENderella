@@ -24,14 +24,14 @@ public class GalleryInfoService {
         return dto;
     }
 
-    public void patchUpdateGalleryInfo(GalleryInfoDTO newDto) {
+    public GalleryInfo patchUpdateGalleryInfo(GalleryInfoDTO newDto) {
         GalleryInfo info = getGalleryInfoFromRepo();
 
         if(newDto.getPhotoDisplayTime() != null) info.setPhotoDisplayTime(newDto.getPhotoDisplayTime());
         if(newDto.getVideoMaxDisplayTime() != null) info.setVideoMaxDisplayTime(newDto.getVideoMaxDisplayTime());
         if(newDto.getDiscordLikeThreshold() != null) info.setDiscordLikeThreshold(newDto.getDiscordLikeThreshold());
 
-        repo.save(info);
+        return repo.save(info);
     }
 
     private GalleryInfo getGalleryInfoFromRepo(){
