@@ -62,17 +62,10 @@ public class WriterController {
             responseCode = "200",
             description = "성공"
     )
-    public ResponseEntity<Object> createWriter(@RequestBody WriterDTO dto) {
+    public ResponseEntity<Writer> createWriter(@RequestBody WriterDTO dto) {
         logger.info("POST /writers request received.");
 
-        Writer writer = service.saveWriter(dto);
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(writer.getId())
-                .toUri();
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.ok().body(service.saveWriter(dto));
     }
 
     @PatchMapping("/writers/{id}")
@@ -84,9 +77,9 @@ public class WriterController {
             responseCode = "200",
             description = "성공"
     )
-    public void updateWriter(@PathVariable("id") long id, @RequestBody Writer writer) {
+    public ResponseEntity<Writer> updateWriter(@PathVariable("id") long id, @RequestBody Writer writer) {
         logger.info("PATCH /writers/" + id + " request received.");
-        service.patchUpdateWriter(id, writer);
+        return ResponseEntity.ok().body(service.patchUpdateWriter(id, writer));
     }
 
 

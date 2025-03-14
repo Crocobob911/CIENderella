@@ -63,17 +63,10 @@ public class ReasonController {
             responseCode = "200",
             description = "성공"
     )
-    public ResponseEntity<Object> createReason(@RequestBody ReasonDTO dto) {
+    public ResponseEntity<Reason> createReason(@RequestBody ReasonDTO dto) {
         logger.info("POST /reasons request received.");
 
-        Reason reason = service.saveReason(dto);
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(reason.getId())
-                .toUri();
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.ok().body(service.saveReason(dto));
     }
 
     @PatchMapping("/reasons/{id}")
@@ -85,9 +78,9 @@ public class ReasonController {
             responseCode = "200",
             description = "성공"
     )
-    public void updateReason(@PathVariable("id") long id, @RequestBody Reason reason) {
+    public ResponseEntity<Reason> updateReason(@PathVariable("id") long id, @RequestBody Reason reason) {
         logger.info("PATCH /reasons/" + id + " request received.");
-        service.patchUpdateReason(id, reason);
+        return ResponseEntity.ok().body(service.patchUpdateReason(id, reason));
     }
 
     @DeleteMapping(path = "/reasons/{id}")
@@ -103,5 +96,4 @@ public class ReasonController {
         logger.info("DELETE /reasons/" + id + " request received.");
         service.deleteReason(id);
     }
-
 }

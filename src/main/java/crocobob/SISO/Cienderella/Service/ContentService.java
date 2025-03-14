@@ -19,7 +19,7 @@ public class ContentService {
                 .orElseThrow(() -> new DBEntityNotFoundException("<< Content not found >>"));
     }
 
-    public void patchUpdateContent(ContentDTO newContent) {
+    public Content patchUpdateContent(ContentDTO newContent) {
         Content oldContent = getContent();
 
         if(newContent.getStartTime() != null) oldContent.setStartTime(newContent.getStartTime());
@@ -29,6 +29,6 @@ public class ContentService {
         if(newContent.getTitle() != null) oldContent.setTitle(newContent.getTitle());
         if(newContent.getText() != null) oldContent.setText(newContent.getText());
 
-        contentRepo.save(oldContent);
+        return contentRepo.save(oldContent);
     }
 }

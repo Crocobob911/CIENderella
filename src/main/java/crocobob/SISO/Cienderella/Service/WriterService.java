@@ -38,13 +38,13 @@ public class WriterService {
         else return writers;
     }
 
-    public void patchUpdateWriter(long writerId, Writer newWriter) {
+    public Writer patchUpdateWriter(long writerId, Writer newWriter) {
         Writer oldWriter = getWriter(writerId);
 
         if(newWriter.getText() != null) oldWriter.setText(newWriter.getText());
         if(newWriter.getValid() != null) oldWriter.setValid(newWriter.getValid());
 
-        writerRepo.save(oldWriter);
+        return writerRepo.save(oldWriter);
     }
 
     public void deleteWriter(Long id) {
