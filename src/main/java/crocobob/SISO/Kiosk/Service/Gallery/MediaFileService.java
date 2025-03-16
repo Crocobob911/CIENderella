@@ -7,8 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,11 +14,8 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class MediaFileService {
@@ -35,26 +30,7 @@ public class MediaFileService {
         fileDirPath = readMediaFilePath();
     }
 
-    public ResponseEntity<Resource> getResponseEntityWithResource(long id){
-        return makeResponseEntity(infoService.getMediaInfo(id));
-    }
-
-    public ResponseEntity<Resource> getResponseEntityWithResource(String fileName){
-        return makeResponseEntity(infoService.getMediaInfo(fileName));
-    }
-
-    private ResponseEntity<Resource> makeResponseEntity(MediaInfo mediaInfo) {
-        Resource resource = getResource(mediaInfo.getFileName());
-        if(resource.exists()){
-            return ResponseEntity.ok()
-                    .contentType(MediaType.valueOf(mediaInfo.getMediaType()))
-                    .body(resource);
-        }else{
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    private Resource getResource(String fileName) {
+    public Resource getResource(String fileName) {
         Path filePath = Paths.get(fileDirPath).resolve(fileName).normalize();
         return getFileFromStorage(filePath);
     }
@@ -68,11 +44,7 @@ public class MediaFileService {
     }
 
     public MediaInfo processFile(MultipartFile file) {
-        String fileName = file.getOriginalFilename();
-        while(infoService.IsFileNameDuplicate(fileName)) {
-            fileName = fileName + "1";
-        }
-
+        String fileName = makeFileNameDoesntDuplicate(file.getOriginalFilename());
         var mediaInfoOfFile = infoService.processFile(file, fileName);
 
         try {
@@ -82,6 +54,13 @@ public class MediaFileService {
         }
 
         return mediaInfoOfFile;
+    }
+
+    private String makeFileNameDoesntDuplicate(String fileName) {
+        while(infoService.IsFileNameDuplicate(fileName)) {
+            fileName = "_" + fileName;
+        }
+        return fileName;
     }
 
     private void saveFileInLocalDirectory(MultipartFile file, String fileName) throws IOException {
@@ -100,7 +79,8 @@ public class MediaFileService {
     }
 
     private String readMediaFilePath(){
-        try (BufferedReader reader = new BufferedReader(new FileReader("/home/crocobob/CIENderella/src/main/resources/mediaFilePath.txt"))) {
+        ClassPathResource resource = new ClassPathResource("mediaFilePath.txt");
+        try (BufferedReader reader = new BufferedReader(new FileReader(resource.getFile()))) {
             return reader.readLine().trim();
         } catch (IOException e){
             throw new RuntimeException(e);
@@ -109,7 +89,7 @@ public class MediaFileService {
 
     public Boolean deleteFile(Long id){
         MediaInfo info = infoService.getMediaInfo(id);
-        infoService.deleteMediaInfo(id);
+        infoService.deleteMediaInfoById(id);
         File file = new File(fileDirPath + info.getFileName());
         return file.delete();
     }

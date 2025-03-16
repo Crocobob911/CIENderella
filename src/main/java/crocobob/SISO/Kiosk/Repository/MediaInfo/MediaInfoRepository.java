@@ -11,6 +11,7 @@ public interface MediaInfoRepository {
     List<MediaInfo> findAllByOrderByOrderNumAsc();
     Optional<MediaInfo> findById(Long id);
     Optional<MediaInfo> findByFileName(String fileName);
-    Optional<MediaInfo> findByOrderNum(Long orderNum);
+    Optional<MediaInfo> findByOrderNum(Integer orderNum);
+    Optional<MediaInfo> findTopByOrderByOrderNumDesc();
     void delete(MediaInfo mediaInfo);
 }

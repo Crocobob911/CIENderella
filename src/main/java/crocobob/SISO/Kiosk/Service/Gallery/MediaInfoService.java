@@ -20,13 +20,13 @@ public class MediaInfoService {
 
     public MediaInfo processFile(MultipartFile file, String fileName){
         MediaInfo mediaInfo = new MediaInfo(
-                calculateOrderNum(),
+                createOrderNum(),
                 fileName,
                 file.getContentType(),
                 "default-uploader",
                 convertBytesToMB(file.getSize()),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now().plusDays(7)
         );
 
         repo.save(mediaInfo);
@@ -37,16 +37,13 @@ public class MediaInfoService {
         return repo.findById(id).orElseThrow(()-> new DBEntityNotFoundException("No media with id : " + id));
     }
 
-    public MediaInfo getMediaInfo(String fileName) {
-        return repo.findByFileName(fileName).orElseThrow(()-> new DBEntityNotFoundException("No media with fileName : " + fileName));
-    }
-
     public Boolean IsFileNameDuplicate(String fileName){
         return repo.findByFileName(fileName).isPresent();
     }
 
-    private long calculateOrderNum() {
-        return 1; // 일단 1을 뱉어.
+    private int createOrderNum() {
+        var maxOrderNumInfo = repo.findTopByOrderByOrderNumDesc();
+        return maxOrderNumInfo.map(mediaInfo -> mediaInfo.getOrderNum() + 1).orElse(1);
     }
 
     private double convertBytesToMB(long bytes) {
@@ -60,13 +57,55 @@ public class MediaInfoService {
     }
 
     public List<MediaInfo> getAllValidMediaInfo() {
-        List<MediaInfo> infoList = repo.findAllByOrderByOrderNumAsc();
-        infoList.removeIf(info -> info.getDueDateTime().isBefore(LocalDateTime.now()));
-
-        return infoList;
+        deleteInvalidMediaInfo();
+        return repo.findAllByOrderByOrderNumAsc();
     }
 
-    public void deleteMediaInfo(Long id) {
+    public void deleteMediaInfoById(Long id) {
         repo.delete(repo.findById(id).isPresent() ? repo.findById(id).get() : null);
+        reorderOrderNums();
+    }
+
+    public MediaInfo extendDueDate(Long id) {
+        var mediaInfo = getMediaInfo(id);
+        mediaInfo.setDueDateTime(mediaInfo.getDueDateTime().plusDays(7));
+        return repo.save(mediaInfo);
+    }
+
+    public MediaInfo changeOrderNum(Long id, int upDown) {
+        deleteInvalidMediaInfo();
+
+        var mediaInfoA = getMediaInfo(id);
+        var mediaInfoB = repo.findByOrderNum(mediaInfoA.getOrderNum() + upDown)
+                .orElse(null);
+
+        if(mediaInfoB == null){
+            return mediaInfoA;
+        }
+
+        var tempOrderNum = mediaInfoA.getOrderNum();
+        mediaInfoA.setOrderNum(mediaInfoB.getOrderNum());
+        mediaInfoB.setOrderNum(tempOrderNum);
+
+        repo.save(mediaInfoB);
+        return repo.save(mediaInfoA);
+    }
+
+    private void deleteInvalidMediaInfo() {
+        var infoList = repo.findAll();
+        for(var mediaInfo : infoList){
+            if(mediaInfo.getDueDateTime().isBefore(LocalDateTime.now())){
+                repo.delete(mediaInfo);
+            }
+        }
+        reorderOrderNums();
+    }
+
+    private void reorderOrderNums() {
+        List<MediaInfo> infoList = repo.findAllByOrderByOrderNumAsc();
+        for(int i = 0; i < infoList.size(); i++){
+            infoList.get(i).setOrderNum(i+1);
+            repo.save(infoList.get(i));
+        }
     }
 }
