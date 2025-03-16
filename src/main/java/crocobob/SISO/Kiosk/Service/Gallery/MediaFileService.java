@@ -86,7 +86,7 @@ public class MediaFileService {
     }
 
     private void saveFileInLocalDirectory(MultipartFile file, String fileName) throws IOException {
-        String cleanedFileName = fileName.replaceAll("[\\r\\n]","").replaceAll("[^a-zA-Z0-9.\\-]","");
+        String cleanedFileName = fileName.replaceAll("[\r\n]","").replaceAll("[^a-zA-Z0-9.\\-]","");
         String encodeFileName = URLEncoder.encode(cleanedFileName, StandardCharsets.UTF_8);
 
         File uploadDir = new File(fileDirPath);
