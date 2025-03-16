@@ -102,7 +102,7 @@ public class MediaController {
     }
 
     @DeleteMapping(path="/medias/{id}")
-    public ResponseEntity<Boolean> deleteFile(@PathVariable("id") Long id) {
+    public ResponseEntity<String> deleteFile(@PathVariable("id") Long id) {
         logger.info("DELETE /medias/" + id + " request received.");
         return ResponseEntity.ok().body(fileService.deleteFile(id));
     }
