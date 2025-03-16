@@ -7,9 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.data.repository.init.ResourceReader;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,11 +14,8 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class MediaFileService {
@@ -95,7 +89,7 @@ public class MediaFileService {
 
     public Boolean deleteFile(Long id){
         MediaInfo info = infoService.getMediaInfo(id);
-        infoService.deleteMediaInfo(id);
+        infoService.deleteMediaInfoById(id);
         File file = new File(fileDirPath + info.getFileName());
         return file.delete();
     }

@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MediaInfoService {
@@ -62,8 +61,9 @@ public class MediaInfoService {
         return repo.findAllByOrderByOrderNumAsc();
     }
 
-    public void deleteMediaInfo(Long id) {
+    public void deleteMediaInfoById(Long id) {
         repo.delete(repo.findById(id).isPresent() ? repo.findById(id).get() : null);
+        reorderOrderNums();
     }
 
     public MediaInfo extendDueDate(Long id) {
@@ -97,6 +97,15 @@ public class MediaInfoService {
             if(mediaInfo.getDueDateTime().isBefore(LocalDateTime.now())){
                 repo.delete(mediaInfo);
             }
+        }
+        reorderOrderNums();
+    }
+
+    private void reorderOrderNums() {
+        List<MediaInfo> infoList = repo.findAllByOrderByOrderNumAsc();
+        for(int i = 0; i < infoList.size(); i++){
+            infoList.get(i).setOrderNum(i+1);
+            repo.save(infoList.get(i));
         }
     }
 }

@@ -79,16 +79,26 @@ public class MediaController {
         return ResponseEntity.ok().body(mediaInfo);
     }
 
+    @Operation(
+            summary = "순서를 위로 올려요.",
+            description = "순서를 바꿔요. 리스트 상에서 상단으로 올려요.\n" +
+                    "orderNum은 작아져요. 작을수록 상단이거든요."
+    )
     @PostMapping(path="/medias/{id}/order/up")
     public ResponseEntity<MediaInfo> orderUp(@PathVariable("id") Long id) {
         logger.info("POST /medias/{}/order/up request received.", id);
-        return ResponseEntity.ok().body(infoService.changeOrderNum(id, 1));
+        return ResponseEntity.ok().body(infoService.changeOrderNum(id, -1));
     }
 
+    @Operation(
+            summary = "순서를 아래로 내려요.",
+            description = "순서를 바꿔요. 리스트 상에서 하단으로 내려요.\n" +
+                    "orderNum는 커져요. 클수록 하단이거든요."
+    )
     @PostMapping(path="medias/{id}/order/down")
     public ResponseEntity<MediaInfo> orderDown(@PathVariable("id") Long id) {
         logger.info("POST /medias/{}/order/down request received.", id);
-        return ResponseEntity.ok().body(infoService.changeOrderNum(id, -1));
+        return ResponseEntity.ok().body(infoService.changeOrderNum(id, 1));
     }
 
     @DeleteMapping(path="/medias/{id}")
