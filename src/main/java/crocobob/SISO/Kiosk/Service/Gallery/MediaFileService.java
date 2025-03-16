@@ -87,10 +87,15 @@ public class MediaFileService {
         }
     }
 
-    public Boolean deleteFile(Long id){
+    public String deleteFile(Long id){
         MediaInfo info = infoService.getMediaInfo(id);
         infoService.deleteMediaInfoById(id);
         File file = new File(fileDirPath + info.getFileName());
-        return file.delete();
+        try{
+            file.delete();
+            return "Successfully deleted file.";
+        }catch (Exception e){
+            return "Error deleting file.";
+        }
     }
 }
