@@ -49,6 +49,9 @@ public class MediaController {
         return ResponseEntity.ok().body(infoService.getAllMediaInfo());
     }
 
+    @Operation(
+            summary = "id로 조회해요."
+    )
     @GetMapping(path="/medias/{id}")
     public ResponseEntity<Resource> getMediaById(@PathVariable("id") Long id) {
         logger.info("GET /medias/" + id + " request received.");
@@ -65,12 +68,22 @@ public class MediaController {
         }
     }
 
+    @Operation(
+            summary = "기간을 연장해요.",
+            description = "만료기간을 7일 연장해요. Body 없이 POST만 보내주면, 백에서 알아서 할게요."
+    )
     @PostMapping(path="medias/{id}/prolong-due-date")
     public ResponseEntity<MediaInfo> extendDueDate(@PathVariable("id") Long id) {
         logger.info("POST /medias/" + id + "/extendDueDate request received.");
         return ResponseEntity.ok().body(infoService.extendDueDate(id));
     }
 
+    @Operation(
+            summary = "파일을 업로드해요.",
+            description = "그... swagger에선 'file'을 string이라고 소개하는데, 그건 무시해주시구요." +
+                    " 프론트에서 어떻게 파일을 POST Request에 담는지 제가 잘 몰라요." +
+                    " '파라미터'로 전달하는 거 같은데... 뭔가 정보가 더 필요하면 연락주세요."
+    )
     @PostMapping(path="/medias/upload")
     public ResponseEntity<MediaInfo> saveFile(@RequestParam("file") MultipartFile file) {
         logger.info("POST /medias/upload request received.");
@@ -81,8 +94,8 @@ public class MediaController {
 
     @Operation(
             summary = "순서를 위로 올려요.",
-            description = "순서를 바꿔요. 리스트 상에서 상단으로 올려요.\n" +
-                    "orderNum은 작아져요. 작을수록 상단이거든요."
+            description = "리스트 상에서 상단으로 올려요." +
+                    "(참고 : orderNum은 작아져요. 작을수록 상단이거든요.) || 다른 파일의 순서는 상관하지 마세요. 백에서 알아서 해요."
     )
     @PostMapping(path="/medias/{id}/order/up")
     public ResponseEntity<MediaInfo> orderUp(@PathVariable("id") Long id) {
@@ -92,8 +105,8 @@ public class MediaController {
 
     @Operation(
             summary = "순서를 아래로 내려요.",
-            description = "순서를 바꿔요. 리스트 상에서 하단으로 내려요.\n" +
-                    "orderNum는 커져요. 클수록 하단이거든요."
+            description = "리스트 상에서 하단으로 내려요.\n" +
+                    "(참고 : orderNum는 커져요. 클수록 하단이거든요.) || 다른 파일의 순서는 상관하지 마세요. 백에서 알아서 해요."
     )
     @PostMapping(path="medias/{id}/order/down")
     public ResponseEntity<MediaInfo> orderDown(@PathVariable("id") Long id) {
@@ -101,6 +114,10 @@ public class MediaController {
         return ResponseEntity.ok().body(infoService.changeOrderNum(id, 1));
     }
 
+    @Operation(
+            summary = "지워요.",
+            description = "지운답니다."
+    )
     @DeleteMapping(path="/medias/{id}")
     public ResponseEntity<String> deleteFile(@PathVariable("id") Long id) {
         logger.info("DELETE /medias/" + id + " request received.");
