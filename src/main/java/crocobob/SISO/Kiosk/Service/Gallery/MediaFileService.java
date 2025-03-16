@@ -2,6 +2,8 @@ package crocobob.SISO.Kiosk.Service.Gallery;
 
 import crocobob.SISO.Exception.NoFileNameInLocalException;
 import crocobob.SISO.Kiosk.Domain.Gallery.MediaInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -23,6 +25,7 @@ import java.util.List;
 
 @Service
 public class MediaFileService {
+    private static Logger logger = LoggerFactory.getLogger(MediaFileService.class);
 
     private final String fileDirPath;
     private final MediaInfoService infoService;
@@ -90,7 +93,8 @@ public class MediaFileService {
         if(!uploadDir.exists()){
             uploadDir.mkdir();
         }
-
+        
+        logger.info("Saving file " + encodeFileName + " in " + uploadDir.getAbsolutePath());
         File destination = new File(fileDirPath + encodeFileName);
         file.transferTo(destination);
     }
