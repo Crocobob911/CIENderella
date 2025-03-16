@@ -12,8 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -101,12 +100,10 @@ public class MediaFileService {
     }
 
     private String readMediaFilePath(){
-        try{
-            ClassPathResource resource = new ClassPathResource("mediaFilePath.txt");
-            return new String(Files.readAllBytes(Paths.get(resource.getURI())));
-        }catch (IOException e){
-            e.printStackTrace();
-            return null;
+        try (BufferedReader reader = new BufferedReader(new FileReader("mediaFilePath.txt"))) {
+            return reader.readLine().trim(); // trim()써서 앞뒤 개행문자 제거해도 될 것 같아
+        } catch (IOException e){
+            throw new RuntimeException(e);
         }
     }
 
