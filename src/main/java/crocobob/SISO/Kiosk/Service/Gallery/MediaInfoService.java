@@ -3,14 +3,13 @@ package crocobob.SISO.Kiosk.Service.Gallery;
 import crocobob.SISO.Exception.DBEntityNotFoundException;
 import crocobob.SISO.Kiosk.Domain.Gallery.MediaInfo;
 import crocobob.SISO.Kiosk.Repository.MediaInfo.MediaInfoRepository;
-import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MediaInfoService {
@@ -22,7 +21,7 @@ public class MediaInfoService {
 
     public MediaInfo processFile(MultipartFile file, String fileName){
         MediaInfo mediaInfo = new MediaInfo(
-                calculateOrderNum(),
+                createOrderNum(),
                 fileName,
                 file.getContentType(),
                 "default-uploader",
@@ -39,16 +38,13 @@ public class MediaInfoService {
         return repo.findById(id).orElseThrow(()-> new DBEntityNotFoundException("No media with id : " + id));
     }
 
-    public MediaInfo getMediaInfo(String fileName) {
-        return repo.findByFileName(fileName).orElseThrow(()-> new DBEntityNotFoundException("No media with fileName : " + fileName));
-    }
-
     public Boolean IsFileNameDuplicate(String fileName){
         return repo.findByFileName(fileName).isPresent();
     }
 
-    private long calculateOrderNum() {
-        return 1; // 일단 1을 뱉어.
+    private int createOrderNum() {
+        var maxOrderNumInfo = repo.findTopByOrderByOrderNumDesc();
+        return maxOrderNumInfo.map(mediaInfo -> mediaInfo.getOrderNum() + 1).orElse(1);
     }
 
     private double convertBytesToMB(long bytes) {
@@ -62,10 +58,8 @@ public class MediaInfoService {
     }
 
     public List<MediaInfo> getAllValidMediaInfo() {
-        List<MediaInfo> infoList = repo.findAllByOrderByOrderNumAsc();
-        infoList.removeIf(info -> info.getDueDateTime().isBefore(LocalDateTime.now()));
-
-        return infoList;
+        deleteInvalidMediaInfo();
+        return repo.findAllByOrderByOrderNumAsc();
     }
 
     public void deleteMediaInfo(Long id) {
@@ -76,5 +70,33 @@ public class MediaInfoService {
         var mediaInfo = getMediaInfo(id);
         mediaInfo.setDueDateTime(mediaInfo.getDueDateTime().plusDays(7));
         return repo.save(mediaInfo);
+    }
+
+    public MediaInfo changeOrderNum(Long id, int upDown) {
+        deleteInvalidMediaInfo();
+
+        var mediaInfoA = getMediaInfo(id);
+        var mediaInfoB = repo.findByOrderNum(mediaInfoA.getOrderNum() + upDown)
+                .orElse(null);
+
+        if(mediaInfoB == null){
+            return mediaInfoA;
+        }
+
+        var tempOrderNum = mediaInfoA.getOrderNum();
+        mediaInfoA.setOrderNum(mediaInfoB.getOrderNum());
+        mediaInfoB.setOrderNum(tempOrderNum);
+
+        repo.save(mediaInfoB);
+        return repo.save(mediaInfoA);
+    }
+
+    private void deleteInvalidMediaInfo() {
+        var infoList = repo.findAll();
+        for(var mediaInfo : infoList){
+            if(mediaInfo.getDueDateTime().isBefore(LocalDateTime.now())){
+                repo.delete(mediaInfo);
+            }
+        }
     }
 }

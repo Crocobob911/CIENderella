@@ -71,13 +71,24 @@ public class MediaController {
         return ResponseEntity.ok().body(infoService.extendDueDate(id));
     }
 
-
     @PostMapping(path="/medias/upload")
     public ResponseEntity<MediaInfo> saveFile(@RequestParam("file") MultipartFile file) {
         logger.info("POST /medias/upload request received.");
 
         MediaInfo mediaInfo = fileService.processFile(file);
         return ResponseEntity.ok().body(mediaInfo);
+    }
+
+    @PostMapping(path="/medias/{id}/order/up")
+    public ResponseEntity<MediaInfo> orderUp(@PathVariable("id") Long id) {
+        logger.info("POST /medias/{}/order/up request received.", id);
+        return ResponseEntity.ok().body(infoService.changeOrderNum(id, 1));
+    }
+
+    @PostMapping(path="medias/{id}/order/down")
+    public ResponseEntity<MediaInfo> orderDown(@PathVariable("id") Long id) {
+        logger.info("POST /medias/{}/order/down request received.", id);
+        return ResponseEntity.ok().body(infoService.changeOrderNum(id, -1));
     }
 
     @DeleteMapping(path="/medias/{id}")

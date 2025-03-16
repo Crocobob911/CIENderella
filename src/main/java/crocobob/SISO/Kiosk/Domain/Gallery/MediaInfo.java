@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class MediaInfo {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    Long orderNum;
+    Integer orderNum;
     String fileName;
     String mediaType;
     String uploader;
@@ -23,7 +23,7 @@ public class MediaInfo {
     LocalDateTime uploadDateTime;
     LocalDateTime dueDateTime;
 
-    public MediaInfo(Long orderNum, String fileName, String mediaType, String uploader, Double fileSizeMB, LocalDateTime uploadDateTime, LocalDateTime dueDateTime) {
+    public MediaInfo(Integer orderNum, String fileName, String mediaType, String uploader, Double fileSizeMB, LocalDateTime uploadDateTime, LocalDateTime dueDateTime) {
         this.orderNum = orderNum;
         this.fileName = fileName;
         this.mediaType = mediaType;
