@@ -96,7 +96,7 @@ public class MediaFileService {
 
         logger.info("Saving file " + encodeFileName + " in " + uploadDir.getAbsolutePath());
 
-        Path destination = Paths.get(uploadDir.getAbsolutePath(), encodeFileName);
+        Path destination = Paths.get(uploadDir.getAbsolutePath()).resolve(encodeFileName).normalize();
         file.transferTo(destination);
     }
 
