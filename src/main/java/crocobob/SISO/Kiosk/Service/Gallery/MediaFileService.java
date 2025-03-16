@@ -93,9 +93,10 @@ public class MediaFileService {
         if(!uploadDir.exists()){
             uploadDir.mkdir();
         }
-        
+
         logger.info("Saving file " + encodeFileName + " in " + uploadDir.getAbsolutePath());
-        File destination = new File(fileDirPath + encodeFileName);
+
+        Path destination = Paths.get(uploadDir.getAbsolutePath(), encodeFileName);
         file.transferTo(destination);
     }
 
