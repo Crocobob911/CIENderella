@@ -2,6 +2,8 @@ package crocobob.SISO.Kiosk.Service.Gallery;
 
 import crocobob.SISO.Exception.NoFileNameInLocalException;
 import crocobob.SISO.Kiosk.Domain.Gallery.MediaInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -10,8 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -23,6 +24,7 @@ import java.util.List;
 
 @Service
 public class MediaFileService {
+    private static Logger logger = LoggerFactory.getLogger(MediaFileService.class);
 
     private final String fileDirPath;
     private final MediaInfoService infoService;
@@ -68,7 +70,7 @@ public class MediaFileService {
     public MediaInfo processFile(MultipartFile file) {
         String fileName = file.getOriginalFilename();
         while(infoService.IsFileNameDuplicate(fileName)) {
-            fileName = "_" + fileName;
+            fileName = fileName + "1";
         }
 
         var mediaInfoOfFile = infoService.processFile(file, fileName);
@@ -83,24 +85,25 @@ public class MediaFileService {
     }
 
     private void saveFileInLocalDirectory(MultipartFile file, String fileName) throws IOException {
-        String encodeFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8);
+        String cleanedFileName = fileName.replaceAll("[\r\n]","").replaceAll("[^a-zA-Z0-9.\\-]","");
+        String encodeFileName = URLEncoder.encode(cleanedFileName, StandardCharsets.UTF_8);
 
         File uploadDir = new File(fileDirPath);
         if(!uploadDir.exists()){
             uploadDir.mkdir();
         }
 
-        File destination = new File(fileDirPath + encodeFileName);
+        logger.info("Saving file " + encodeFileName + " in " + uploadDir.getAbsolutePath());
+
+        Path destination = uploadDir.toPath().resolve(encodeFileName).normalize();
         file.transferTo(destination);
     }
 
     private String readMediaFilePath(){
-        try{
-            ClassPathResource resource = new ClassPathResource("mediaFilePath.txt");
-            return new String(Files.readAllBytes(Paths.get(resource.getURI())));
-        }catch (IOException e){
-            e.printStackTrace();
-            return null;
+        try (BufferedReader reader = new BufferedReader(new FileReader("/home/crocobob/CIENderella/src/main/resources/mediaFilePath.txt"))) {
+            return reader.readLine().trim();
+        } catch (IOException e){
+            throw new RuntimeException(e);
         }
     }
 
