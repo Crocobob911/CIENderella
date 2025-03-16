@@ -26,7 +26,7 @@ public class MediaInfoService {
                 "default-uploader",
                 convertBytesToMB(file.getSize()),
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now().plusDays(7)
         );
 
         repo.save(mediaInfo);

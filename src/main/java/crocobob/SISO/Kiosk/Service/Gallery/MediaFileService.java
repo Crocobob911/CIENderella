@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.repository.init.ResourceReader;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -36,14 +37,8 @@ public class MediaFileService {
     }
 
     public ResponseEntity<Resource> getResponseEntityWithResource(long id){
-        return makeResponseEntity(infoService.getMediaInfo(id));
-    }
+        var mediaInfo = infoService.getMediaInfo(id);
 
-    public ResponseEntity<Resource> getResponseEntityWithResource(String fileName){
-        return makeResponseEntity(infoService.getMediaInfo(fileName));
-    }
-
-    private ResponseEntity<Resource> makeResponseEntity(MediaInfo mediaInfo) {
         Resource resource = getResource(mediaInfo.getFileName());
         if(resource.exists()){
             return ResponseEntity.ok()
@@ -68,11 +63,7 @@ public class MediaFileService {
     }
 
     public MediaInfo processFile(MultipartFile file) {
-        String fileName = file.getOriginalFilename();
-        while(infoService.IsFileNameDuplicate(fileName)) {
-            fileName = fileName + "1";
-        }
-
+        String fileName = makeFileNameDoesntDuplicate(file.getOriginalFilename());
         var mediaInfoOfFile = infoService.processFile(file, fileName);
 
         try {
@@ -82,6 +73,13 @@ public class MediaFileService {
         }
 
         return mediaInfoOfFile;
+    }
+
+    private String makeFileNameDoesntDuplicate(String fileName) {
+        while(infoService.IsFileNameDuplicate(fileName)) {
+            fileName = "_" + fileName;
+        }
+        return fileName;
     }
 
     private void saveFileInLocalDirectory(MultipartFile file, String fileName) throws IOException {
@@ -100,7 +98,8 @@ public class MediaFileService {
     }
 
     private String readMediaFilePath(){
-        try (BufferedReader reader = new BufferedReader(new FileReader("/home/crocobob/CIENderella/src/main/resources/mediaFilePath.txt"))) {
+        ClassPathResource resource = new ClassPathResource("mediaFilePath.txt");
+        try (BufferedReader reader = new BufferedReader(new FileReader(resource.getFile()))) {
             return reader.readLine().trim();
         } catch (IOException e){
             throw new RuntimeException(e);

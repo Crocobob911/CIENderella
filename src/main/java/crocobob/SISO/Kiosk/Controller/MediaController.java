@@ -3,6 +3,8 @@ package crocobob.SISO.Kiosk.Controller;
 import crocobob.SISO.Kiosk.Domain.Gallery.MediaInfo;
 import crocobob.SISO.Kiosk.Service.Gallery.MediaFileService;
 import crocobob.SISO.Kiosk.Service.Gallery.MediaInfoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,29 +27,33 @@ public class MediaController {
         this.infoService = infoService;
     }
 
+    @Operation(
+            summary = "만료되지 않은 미디어 정보들",
+            description = "만료되지 않은 MediaInfo 들을 조회해요. 실제 파일은 id를 기반으로 하나하나 따로 Get 요청을 해주세요. \n" +
+                    "저도 이 요청의 Response로 mp4, jpg 등을 바로 드리고 싶었는데, 그게 쉽지 않더라구요."
+    )
+    @GetMapping(path="/medias")
+    public ResponseEntity<List<MediaInfo>> getAllValidMedia(){
+        logger.info("GET /medias/all/valid request received.");
+        return ResponseEntity.ok().body(infoService.getAllValidMediaInfo());
+    }
+
+    @Operation(
+            summary = "모든 미디어 정보들",
+            description = "만료된 MediaInfo 들까지 모두 뱉어내요."
+    )
     @GetMapping(path="/medias/all")
     public ResponseEntity<List<MediaInfo>> getAllMediaInfo(){
         logger.info("GET /medias/all request received.");
         return ResponseEntity.ok().body(infoService.getAllMediaInfo());
     }
 
-    @GetMapping(path="/medias/all/valid")
-    public ResponseEntity<List<MediaInfo>> getAllValidMedia(){
-        logger.info("GET /medias/all/valid request received.");
-        return ResponseEntity.ok().body(infoService.getAllValidMediaInfo());
-    }
-
-    @GetMapping(path="/medias/id/{id}")
+    @GetMapping(path="/medias/{id}")
     public ResponseEntity<Resource> getMediaById(@PathVariable("id") Long id) {
         logger.info("GET /medias/" + id + " request received.");
         return fileService.getResponseEntityWithResource(id);
     }
 
-    @GetMapping(path="/medias/fileName/{fileName}")
-    public ResponseEntity<Resource> getMediaByFileName(@PathVariable("fileName") String fileName) {
-        logger.info("GET /medias/" + fileName + " request received.");
-        return fileService.getResponseEntityWithResource(fileName);
-    }
 
     @PostMapping(path="/medias/upload")
     public ResponseEntity<MediaInfo> saveFile(@RequestParam("file") MultipartFile file) {
@@ -57,7 +63,7 @@ public class MediaController {
         return ResponseEntity.ok().body(mediaInfo);
     }
 
-    @DeleteMapping(path="/medias/id/{id}")
+    @DeleteMapping(path="/medias/{id}")
     public ResponseEntity<Boolean> deleteFile(@PathVariable("id") Long id) {
         logger.info("DELETE /medias/" + id + " request received.");
         return ResponseEntity.ok().body(fileService.deleteFile(id));
