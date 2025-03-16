@@ -100,8 +100,8 @@ public class MediaFileService {
     }
 
     private String readMediaFilePath(){
-        try (BufferedReader reader = new BufferedReader(new FileReader("mediaFilePath.txt"))) {
-            return reader.readLine().trim(); // trim()써서 앞뒤 개행문자 제거해도 될 것 같아
+        try (BufferedReader reader = new BufferedReader(new FileReader("/home/crocobob/CIENderella/src/main/resources/mediaFilePath.txt"))) {
+            return reader.readLine().trim();
         } catch (IOException e){
             throw new RuntimeException(e);
         }
