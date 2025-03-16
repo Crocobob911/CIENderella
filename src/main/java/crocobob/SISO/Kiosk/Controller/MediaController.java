@@ -68,6 +68,14 @@ public class MediaController {
         }
     }
 
+    @GetMapping(path="/medias/{id}/thumbnail")
+    public ResponseEntity<Resource> getThumbnail(@PathVariable("id") Long id) {
+        logger.info("GET /medias/" + id + "/thumbnail request received.");
+
+        var thumbnail = fileService.getThumbnail(id);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(thumbnail);
+    }
+
     @Operation(
             summary = "기간을 연장해요.",
             description = "만료기간을 7일 연장해요. Body 없이 POST만 보내주면, 백에서 알아서 할게요."

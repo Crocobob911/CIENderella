@@ -29,6 +29,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4"
     implementation 'org.json:json:20231013'
+    implementation 'org.jcodec:jcodec-javase:0.2.5'
 
     compileOnly 'org.projectlombok:lombok'
     compileOnly 'org.springframework.boot:spring-boot-devtools'
