@@ -36,20 +36,7 @@ public class MediaFileService {
         fileDirPath = readMediaFilePath();
     }
 
-    public ResponseEntity<Resource> getResponseEntityWithResource(long id){
-        var mediaInfo = infoService.getMediaInfo(id);
-
-        Resource resource = getResource(mediaInfo.getFileName());
-        if(resource.exists()){
-            return ResponseEntity.ok()
-                    .contentType(MediaType.valueOf(mediaInfo.getMediaType()))
-                    .body(resource);
-        }else{
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    private Resource getResource(String fileName) {
+    public Resource getResource(String fileName) {
         Path filePath = Paths.get(fileDirPath).resolve(fileName).normalize();
         return getFileFromStorage(filePath);
     }

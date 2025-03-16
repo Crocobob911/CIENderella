@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,7 +52,23 @@ public class MediaController {
     @GetMapping(path="/medias/{id}")
     public ResponseEntity<Resource> getMediaById(@PathVariable("id") Long id) {
         logger.info("GET /medias/" + id + " request received.");
-        return fileService.getResponseEntityWithResource(id);
+
+        var mediaInfo = infoService.getMediaInfo(id);
+        var resource = fileService.getResource(mediaInfo.getFileName());
+
+        if(resource.exists()){
+            return ResponseEntity.ok()
+                    .contentType(MediaType.valueOf(infoService.getMediaInfo(id).getMediaType()))
+                    .body(resource);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping(path="medias/{id}/prolong-due-date")
+    public ResponseEntity<MediaInfo> extendDueDate(@PathVariable("id") Long id) {
+        logger.info("POST /medias/" + id + "/extendDueDate request received.");
+        return ResponseEntity.ok().body(infoService.extendDueDate(id));
     }
 
 

@@ -3,6 +3,8 @@ package crocobob.SISO.Kiosk.Service.Gallery;
 import crocobob.SISO.Exception.DBEntityNotFoundException;
 import crocobob.SISO.Kiosk.Domain.Gallery.MediaInfo;
 import crocobob.SISO.Kiosk.Repository.MediaInfo.MediaInfoRepository;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -68,5 +70,11 @@ public class MediaInfoService {
 
     public void deleteMediaInfo(Long id) {
         repo.delete(repo.findById(id).isPresent() ? repo.findById(id).get() : null);
+    }
+
+    public MediaInfo extendDueDate(Long id) {
+        var mediaInfo = getMediaInfo(id);
+        mediaInfo.setDueDateTime(mediaInfo.getDueDateTime().plusDays(7));
+        return repo.save(mediaInfo);
     }
 }
