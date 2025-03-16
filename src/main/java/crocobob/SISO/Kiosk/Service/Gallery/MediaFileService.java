@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -81,12 +83,14 @@ public class MediaFileService {
     }
 
     private void saveFileInLocalDirectory(MultipartFile file, String fileName) throws IOException {
+        String encodeFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8);
+
         File uploadDir = new File(fileDirPath);
         if(!uploadDir.exists()){
             uploadDir.mkdir();
         }
 
-        File destination = new File(fileDirPath + fileName);
+        File destination = new File(fileDirPath + encodeFileName);
         file.transferTo(destination);
     }
 
