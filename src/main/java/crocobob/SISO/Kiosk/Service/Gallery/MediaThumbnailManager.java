@@ -13,29 +13,61 @@ import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 @Component
 public class MediaThumbnailManager {
     private static final String EXTENSION = "png";
     private static Logger log = LoggerFactory.getLogger(MediaThumbnailManager.class);
 
-    public void generateMediaThumbnail(String dirPath, String fileName) {
-        File file = new File(dirPath + fileName);
-        File thumbNailFile = new File(formatAsThumbnail(dirPath, fileName));
+    public void generateMediaThumbnail(File file) {
+        String fileExtension = getFileExtension(file.getName());
+
+        String thumbnailPath = file.getAbsolutePath().replace("."+ fileExtension, ".png");
+
+        log.info("file.getParent : " + file.getParent());
+        log.info("file.getName : " + file.getName());
+        log.info("thumbnailPath : " + new File(thumbnailPath).getName());
+
+        ProcessBuilder pb = new ProcessBuilder(
+                "docker", "run", "--rm", "-v", file.getParent() + ":/data", // 디렉토리 마운트
+                "jrottenberg/ffmpeg", "-i", "/data/" + file.getName(), //
+                "-ss", "00:00:01.000", "-vframes", "1", // 영상의 1초 부분에, 1프레임을 추출
+                "-f", "image2", "-c:v", "png",
+                "/data/thumbnails/" + new File(thumbnailPath).getName()); // thumbnails 폴더에 .png 저장
+        pb.redirectErrorStream(true);
         try{
-            FrameGrab frameGrab = FrameGrab.createFrameGrab(NIOUtils.readableChannel(file));
-
-            frameGrab.seekToSecondPrecise(0);
-            Picture picture = frameGrab.getNativeFrame();
-
-            BufferedImage bi = AWTUtil.toBufferedImage(picture);
-            ImageIO.write(bi, EXTENSION, thumbNailFile);
+            Process process = pb.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+            process.waitFor();
         } catch (Exception e){
             log.error(e.getMessage());
+        }
+
+//        moveThumbNail(Paths.get(thumbnailPath));
+    }
+
+    private void moveThumbNail(Path sourcePath) {
+        Path targetDir = Paths.get(sourcePath.getParent().toString(), "thumbnails");
+        if(!Files.exists(targetDir)){ targetDir.toFile().mkdirs(); }
+        Path targetPath = targetDir.resolve(sourcePath.getFileName());
+
+        try {
+            Files.move(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -50,6 +82,11 @@ public class MediaThumbnailManager {
 
     private String formatAsThumbnail(String dirPath, String fileName) {
         return dirPath + "thumbnails" + File.separator + "th_" + removeExtension(fileName) + "." + EXTENSION;
+    }
+
+    private String getFileExtension(String filePath) {
+        int dotIndex = filePath.lastIndexOf('.');
+        return (dotIndex == -1) ? "" : filePath.substring(dotIndex + 1);
     }
 
     private String removeExtension(String fileName) {

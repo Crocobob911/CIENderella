@@ -76,7 +76,7 @@ public class MediaFileService {
         Path destination = uploadDir.toPath().resolve(fileName).normalize();
         file.transferTo(destination);
 
-        makeThumbnail(fileName);
+        makeThumbnail(destination);
     }
 
     private String readMediaFilePath(){
@@ -100,8 +100,9 @@ public class MediaFileService {
         }
     }
 
-    private void makeThumbnail(String fileName) {
-        thumbnailManager.generateMediaThumbnail(fileDirPath, fileName);
+    private void makeThumbnail(Path path) {
+        File file = new File(path.toString());
+        thumbnailManager.generateMediaThumbnail(file);
     }
 
     public Resource getThumbnail(Long id) {
