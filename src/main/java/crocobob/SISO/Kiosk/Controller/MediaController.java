@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -60,7 +61,8 @@ public class MediaController {
 
         if(resource.exists()){
             return ResponseEntity.ok()
-                    .contentType(MediaType.valueOf(infoService.getMediaInfo(id).getMediaType()))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + mediaInfo.getFileName() + "\"")
+                    .contentType(MediaType.valueOf(mediaInfo.getMediaType()))
                     .body(resource);
         }else{
             return ResponseEntity.notFound().build();
