@@ -18,12 +18,12 @@ public class MediaInfoService {
         this.repo = mediaInfoRepository;
     }
 
-    public MediaInfo processFile(MultipartFile file, String fileName){
+    public MediaInfo processFile(MultipartFile file, String fileName, String uploader){
         MediaInfo mediaInfo = new MediaInfo(
                 createOrderNum(),
                 fileName,
                 file.getContentType(),
-                "default-uploader",
+                uploader,
                 convertBytesToMB(file.getSize()),
                 LocalDateTime.now(),
                 LocalDateTime.now().plusDays(7)

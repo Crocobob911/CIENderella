@@ -45,9 +45,9 @@ public class MediaFileService {
         }
     }
 
-    public MediaInfo processFile(MultipartFile file) {
+    public MediaInfo processFile(MultipartFile file, String writer) {
         String fileName = makeFileNameDoesntDuplicate(file.getOriginalFilename());
-        var mediaInfoOfFile = infoService.processFile(file, fileName);
+        var mediaInfoOfFile = infoService.processFile(file, fileName, writer);
 
         try {
             saveFileInLocalDirectory(file, fileName);
