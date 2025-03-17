@@ -45,11 +45,6 @@ public class MediaThumbnailManager {
         pb.redirectErrorStream(true);
         try{
             Process process = pb.start();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }
             process.waitFor();
         } catch (Exception e){
             log.error(e.getMessage());
