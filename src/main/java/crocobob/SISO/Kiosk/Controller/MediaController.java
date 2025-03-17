@@ -4,7 +4,6 @@ import crocobob.SISO.Kiosk.Domain.Gallery.MediaInfo;
 import crocobob.SISO.Kiosk.Service.Gallery.MediaFileService;
 import crocobob.SISO.Kiosk.Service.Gallery.MediaInfoService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +67,14 @@ public class MediaController {
         }
     }
 
+    @GetMapping(path="/medias/{id}/thumbnail")
+    public ResponseEntity<Resource> getThumbnail(@PathVariable("id") Long id) {
+        logger.info("GET /medias/" + id + "/thumbnail request received.");
+
+        var thumbnail = fileService.getThumbnail(id);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(thumbnail);
+    }
+
     @Operation(
             summary = "기간을 연장해요.",
             description = "만료기간을 7일 연장해요. Body 없이 POST만 보내주면, 백에서 알아서 할게요."
@@ -85,10 +92,12 @@ public class MediaController {
                     " '파라미터'로 전달하는 거 같은데... 뭔가 정보가 더 필요하면 연락주세요."
     )
     @PostMapping(path="/medias/upload")
-    public ResponseEntity<MediaInfo> saveFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<MediaInfo> saveFile(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("uploader") String uploader) {
         logger.info("POST /medias/upload request received.");
 
-        MediaInfo mediaInfo = fileService.processFile(file);
+        MediaInfo mediaInfo = fileService.processFile(file, uploader);
         return ResponseEntity.ok().body(mediaInfo);
     }
 

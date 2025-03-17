@@ -23,9 +23,11 @@ public class MediaFileService {
 
     private final String fileDirPath;
     private final MediaInfoService infoService;
+    private final MediaThumbnailManager thumbnailManager;
 
-    public MediaFileService(MediaInfoService infoService) {
+    public MediaFileService(MediaInfoService infoService, MediaThumbnailManager thumbnailManager) {
         this.infoService = infoService;
+        this.thumbnailManager = thumbnailManager;
 
         fileDirPath = readMediaFilePath();
     }
@@ -43,9 +45,9 @@ public class MediaFileService {
         }
     }
 
-    public MediaInfo processFile(MultipartFile file) {
+    public MediaInfo processFile(MultipartFile file, String writer) {
         String fileName = makeFileNameDoesntDuplicate(file.getOriginalFilename());
-        var mediaInfoOfFile = infoService.processFile(file, fileName);
+        var mediaInfoOfFile = infoService.processFile(file, fileName, writer);
 
         try {
             saveFileInLocalDirectory(file, fileName);
@@ -64,18 +66,17 @@ public class MediaFileService {
     }
 
     private void saveFileInLocalDirectory(MultipartFile file, String fileName) throws IOException {
-        String cleanedFileName = fileName.replaceAll("[\r\n]","").replaceAll("[^a-zA-Z0-9.\\-]","");
-        String encodeFileName = URLEncoder.encode(cleanedFileName, StandardCharsets.UTF_8);
-
         File uploadDir = new File(fileDirPath);
         if(!uploadDir.exists()){
             uploadDir.mkdir();
         }
 
-        logger.info("Saving file " + encodeFileName + " in " + uploadDir.getAbsolutePath());
+        logger.info("Saving file " + fileName + " in " + uploadDir.getAbsolutePath());
 
-        Path destination = uploadDir.toPath().resolve(encodeFileName).normalize();
+        Path destination = uploadDir.toPath().resolve(fileName).normalize();
         file.transferTo(destination);
+
+        makeThumbnail(fileName);
     }
 
     private String readMediaFilePath(){
@@ -97,5 +98,14 @@ public class MediaFileService {
         }catch (Exception e){
             return "Error deleting file.";
         }
+    }
+
+    private void makeThumbnail(String fileName) {
+        thumbnailManager.generateMediaThumbnail(fileDirPath, fileName);
+    }
+
+    public Resource getThumbnail(Long id) {
+        var mediaInfo = infoService.getMediaInfo(id);
+        return thumbnailManager.getThumbnail(fileDirPath, mediaInfo.getFileName());
     }
 }
