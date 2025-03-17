@@ -1,6 +1,7 @@
 package crocobob.SISO.Kiosk.Service.Gallery;
 
 import crocobob.SISO.Exception.NoFileNameInLocalException;
+import crocobob.SISO.Exception.NoThumbnailCreatedException;
 import crocobob.SISO.Kiosk.Domain.Gallery.MediaInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +52,7 @@ public class MediaFileService {
 
         try {
             saveFileInLocalDirectory(file, fileName);
+            makeThumbnail(mediaInfoOfFile);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -75,8 +77,6 @@ public class MediaFileService {
 
         Path destination = uploadDir.toPath().resolve(fileName).normalize();
         file.transferTo(destination);
-
-        makeThumbnail(destination);
     }
 
     private String readMediaFilePath(){
@@ -100,13 +100,18 @@ public class MediaFileService {
         }
     }
 
-    private void makeThumbnail(Path path) {
-        File file = new File(path.toString());
+    private void makeThumbnail(MediaInfo info) {
+        if(!info.getMediaType().startsWith("video")) return;
+
+        File file = new File(fileDirPath + info.getFileName());
         thumbnailManager.generateMediaThumbnail(file);
     }
 
     public Resource getThumbnail(Long id) {
         var mediaInfo = infoService.getMediaInfo(id);
+        if(!infoService.getMediaInfo(id).getMediaType().startsWith("video"))
+            throw new NoThumbnailCreatedException("There is no Thumbnail, because the media IS NOT VIDEO.");
+
         return thumbnailManager.getThumbnail(fileDirPath, mediaInfo.getFileName());
     }
 }

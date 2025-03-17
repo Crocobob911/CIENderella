@@ -30,7 +30,6 @@ public class MediaThumbnailManager {
 
     public void generateMediaThumbnail(File file) {
         String fileExtension = getFileExtension(file.getName());
-
         String thumbnailPath = file.getAbsolutePath().replace("."+ fileExtension, ".png");
 
         log.info("file.getParent : " + file.getParent());
@@ -55,20 +54,6 @@ public class MediaThumbnailManager {
         } catch (Exception e){
             log.error(e.getMessage());
         }
-
-//        moveThumbNail(Paths.get(thumbnailPath));
-    }
-
-    private void moveThumbNail(Path sourcePath) {
-        Path targetDir = Paths.get(sourcePath.getParent().toString(), "thumbnails");
-        if(!Files.exists(targetDir)){ targetDir.toFile().mkdirs(); }
-        Path targetPath = targetDir.resolve(sourcePath.getFileName());
-
-        try {
-            Files.move(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public Resource getThumbnail(String dirPath, String fileName) {
@@ -81,7 +66,7 @@ public class MediaThumbnailManager {
     }
 
     private String formatAsThumbnail(String dirPath, String fileName) {
-        return dirPath + "thumbnails" + File.separator + "th_" + removeExtension(fileName) + "." + EXTENSION;
+        return dirPath + "thumbnails" + File.separator + removeExtension(fileName) + "." + EXTENSION;
     }
 
     private String getFileExtension(String filePath) {
