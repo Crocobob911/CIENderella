@@ -38,8 +38,20 @@ public class MediaFileService {
         return getFileFromStorage(filePath);
     }
 
+    public Resource getThumbnail(Long id) {
+        var info = infoService.getMediaInfo(id);
+
+        if (!info.getMediaType().startsWith("video"))
+            throw new NoThumbnailCreatedException("There is no Thumbnail, because the media IS NOT VIDEO.");
+
+        String fileNameNoExtension = removeExtension(info.getFileName());
+        Path filePath = Paths.get(fileDirPath + "thumbnails/" + fileNameNoExtension + ".png");
+
+        return getFileFromStorage(filePath);
+    }
+
     private Resource getFileFromStorage(Path filePath) {
-        try{
+        try {
             return new UrlResource(filePath.toUri());
         } catch (MalformedURLException e) {
             throw new NoFileNameInLocalException("Invalid file path OR Invalid Name of file. : " + filePath);
@@ -61,7 +73,7 @@ public class MediaFileService {
     }
 
     private String makeFileNameDoesntDuplicate(String fileName) {
-        while(infoService.IsFileNameDuplicate(fileName)) {
+        while (infoService.IsFileNameDuplicate(fileName)) {
             fileName = "_" + fileName;
         }
         return fileName;
@@ -69,7 +81,7 @@ public class MediaFileService {
 
     private void saveFileInLocalDirectory(MultipartFile file, String fileName) throws IOException {
         File uploadDir = new File(fileDirPath);
-        if(!uploadDir.exists()){
+        if (!uploadDir.exists()) {
             uploadDir.mkdir();
         }
 
@@ -79,39 +91,38 @@ public class MediaFileService {
         file.transferTo(destination);
     }
 
-    private String readMediaFilePath(){
+    private String readMediaFilePath() {
         ClassPathResource resource = new ClassPathResource("mediaFilePath.txt");
         try (BufferedReader reader = new BufferedReader(new FileReader(resource.getFile()))) {
             return reader.readLine().trim();
-        } catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public String deleteFile(Long id){
+    public String deleteFile(Long id) {
         MediaInfo info = infoService.getMediaInfo(id);
         infoService.deleteMediaInfoById(id);
         File file = new File(fileDirPath + info.getFileName());
-        try{
+        try {
             file.delete();
             return "Successfully deleted file.";
-        }catch (Exception e){
+        } catch (Exception e) {
             return "Error deleting file.";
         }
     }
 
     private void makeThumbnail(MediaInfo info) {
-        if(!info.getMediaType().startsWith("video")) return;
+        if (!info.getMediaType().startsWith("video")) return;
 
         File file = new File(fileDirPath + info.getFileName());
         thumbnailManager.generateMediaThumbnail(file);
     }
 
-    public Resource getThumbnail(Long id) {
-        var mediaInfo = infoService.getMediaInfo(id);
-        if(!infoService.getMediaInfo(id).getMediaType().startsWith("video"))
-            throw new NoThumbnailCreatedException("There is no Thumbnail, because the media IS NOT VIDEO.");
-
-        return thumbnailManager.getThumbnail(fileDirPath, mediaInfo.getFileName());
+    private String removeExtension(String fileName) {
+        if(fileName == null || fileName.lastIndexOf(".") == -1){
+            return fileName;
+        }
+        return fileName.substring(0, fileName.lastIndexOf("."));
     }
 }

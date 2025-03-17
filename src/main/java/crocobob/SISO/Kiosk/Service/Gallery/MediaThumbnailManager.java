@@ -32,10 +32,6 @@ public class MediaThumbnailManager {
         String fileExtension = getFileExtension(file.getName());
         String thumbnailPath = file.getAbsolutePath().replace("."+ fileExtension, ".png");
 
-        log.info("file.getParent : " + file.getParent());
-        log.info("file.getName : " + file.getName());
-        log.info("thumbnailPath : " + new File(thumbnailPath).getName());
-
         ProcessBuilder pb = new ProcessBuilder(
                 "docker", "run", "--rm", "-v", file.getParent() + ":/data", // 디렉토리 마운트
                 "jrottenberg/ffmpeg", "-i", "/data/" + file.getName(), //
@@ -51,28 +47,8 @@ public class MediaThumbnailManager {
         }
     }
 
-    public Resource getThumbnail(String dirPath, String fileName) {
-        String filePath = formatAsThumbnail(dirPath, fileName);
-        try{
-            return new UrlResource(filePath);
-        } catch (MalformedURLException e) {
-            throw new NoFileNameInLocalException("Invalid file path OR Invalid Name of file. : " + filePath);
-        }
-    }
-
-    private String formatAsThumbnail(String dirPath, String fileName) {
-        return dirPath + "thumbnails" + File.separator + removeExtension(fileName) + "." + EXTENSION;
-    }
-
     private String getFileExtension(String filePath) {
         int dotIndex = filePath.lastIndexOf('.');
         return (dotIndex == -1) ? "" : filePath.substring(dotIndex + 1);
-    }
-
-    private String removeExtension(String fileName) {
-        if(fileName == null || fileName.lastIndexOf(".") == -1){
-            return fileName;
-        }
-        return fileName.substring(0, fileName.lastIndexOf("."));
     }
 }
