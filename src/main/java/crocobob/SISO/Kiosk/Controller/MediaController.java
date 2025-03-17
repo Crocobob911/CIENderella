@@ -89,7 +89,7 @@ public class MediaController {
 
     @Operation(
             summary = "파일을 업로드해요.",
-            description = "그... swagger에선 'file'을 string이라고 소개하는데, 그건 무시해주시구요." +
+            description = "제한 용량은 일단 50MB예요. 나중에 바꿀 수 있어요. 그... swagger에선 'file'을 string이라고 소개하는데, 그건 무시해주시구요." +
                     " 프론트에서 어떻게 파일을 POST Request에 담는지 제가 잘 몰라요." +
                     " '파라미터'로 전달하는 거 같은데... 뭔가 정보가 더 필요하면 연락주세요."
     )
