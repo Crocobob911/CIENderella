@@ -61,7 +61,7 @@ public class MediaController {
 
         if(resource.exists()){
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + mediaInfo.getFileName() + "\"")
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + mediaInfo.getFileName() + "\"")
                     .contentType(MediaType.valueOf(mediaInfo.getMediaType()))
                     .body(resource);
         }else{
