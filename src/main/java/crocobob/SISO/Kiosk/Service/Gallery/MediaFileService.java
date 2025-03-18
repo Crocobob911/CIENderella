@@ -1,6 +1,7 @@
 package crocobob.SISO.Kiosk.Service.Gallery;
 
 import crocobob.SISO.Exception.NoFileNameInLocalException;
+import crocobob.SISO.Exception.NoThumbnailCreatedException;
 import crocobob.SISO.Kiosk.Domain.Gallery.MediaInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -125,15 +126,20 @@ public class MediaFileService {
     public String deleteFile(Long id) {
         MediaInfo info = infoService.getMediaInfo(id);
         File file = new File(fileDirPath + info.getFileName());
-        File thumnailFile = new File(fileDirPath + thumbnailService.getThumbnailFilePath(id));
-        infoService.deleteMediaInfoById(id);
         try {
             file.delete();
-            thumnailFile.delete();
-            return "Successfully deleted file.";
         } catch (Exception e) {
             return "Error deleting file.";
         }
-    }
 
+        try{
+            File thumnailFile = new File(fileDirPath + thumbnailService.getThumbnailFilePath(id));
+            thumnailFile.delete();
+        }catch (NoThumbnailCreatedException _){
+
+        }
+
+        infoService.deleteMediaInfoById(id);
+        return file.getAbsolutePath();
+    }
 }
