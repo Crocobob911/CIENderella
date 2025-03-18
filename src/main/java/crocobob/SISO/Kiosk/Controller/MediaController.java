@@ -8,12 +8,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 @Tag(name = "Gallery Media", description = "갤러리에 띄울 영상, 이미지")
@@ -40,16 +44,6 @@ public class MediaController {
     }
 
     @Operation(
-            summary = "모든 미디어 정보들",
-            description = "만료된 MediaInfo 들까지 모두 뱉어내요."
-    )
-    @GetMapping(path="/medias/all")
-    public ResponseEntity<List<MediaInfo>> getAllMediaInfo(){
-        logger.info("GET /medias/all request received.");
-        return ResponseEntity.ok().body(infoService.getAllMediaInfo());
-    }
-
-    @Operation(
             summary = "id로 조회해요."
     )
     @GetMapping(path="/medias/{id}")
@@ -61,7 +55,7 @@ public class MediaController {
 
         if(resource.exists()){
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + mediaInfo.getFileName() + "\"")
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + mediaInfo.getFileName() + "\"")
                     .contentType(MediaType.valueOf(mediaInfo.getMediaType()))
                     .body(resource);
         }else{
@@ -94,12 +88,26 @@ public class MediaController {
                     " '파라미터'로 전달하는 거 같은데... 뭔가 정보가 더 필요하면 연락주세요."
     )
     @PostMapping(path="/medias/upload")
-    public ResponseEntity<MediaInfo> saveFile(
+    public ResponseEntity<MediaInfo> uploadFile(
             @RequestParam("file") MultipartFile file,
             @RequestParam("uploader") String uploader) {
         logger.info("POST /medias/upload request received.");
 
         MediaInfo mediaInfo = fileService.processFile(file, uploader);
+        return ResponseEntity.ok().body(mediaInfo);
+    }
+
+    @Operation(
+            summary = "파일을 업로드해요. URL로."
+    )
+    @PostMapping(path="/medias/upload/url")
+    public ResponseEntity<MediaInfo> uploadFileWithURL(
+            @RequestParam("fileURL") String urlString,
+            @RequestParam("uploader") String uploader) {
+        logger.info("POST /medias/upload/url request received.");
+        logger.info("URL = " + urlString);
+
+        MediaInfo mediaInfo = fileService.processFile(urlString, uploader);
         return ResponseEntity.ok().body(mediaInfo);
     }
 

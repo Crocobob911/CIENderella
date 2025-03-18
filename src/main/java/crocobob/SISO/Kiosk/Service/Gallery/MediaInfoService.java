@@ -6,6 +6,9 @@ import crocobob.SISO.Kiosk.Repository.MediaInfo.MediaInfoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,6 +34,29 @@ public class MediaInfoService {
 
         repo.save(mediaInfo);
         return mediaInfo;
+    }
+
+    public MediaInfo processFile(Path path, String fileName, String uploader){
+        try {
+            String contentType = Files.probeContentType(path);
+            long size = Files.size(path);
+
+            MediaInfo mediaInfo = new MediaInfo(
+                    createOrderNum(),
+                    fileName,
+                    contentType,
+                    uploader,
+                    convertBytesToMB(size),
+                    LocalDateTime.now(),
+                    LocalDateTime.now().plusDays(7)
+            );
+
+            repo.save(mediaInfo);
+            return mediaInfo;
+
+        }catch (IOException e){
+            throw new RuntimeException(e);
+        }
     }
 
     public MediaInfo getMediaInfo(long id) {
