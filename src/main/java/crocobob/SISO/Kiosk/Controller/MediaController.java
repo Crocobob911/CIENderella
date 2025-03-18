@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Locale;
 
 @Tag(name = "Gallery Media", description = "갤러리에 띄울 영상, 이미지")
 @RestController
@@ -62,6 +63,10 @@ public class MediaController {
         }
     }
 
+    @Operation(
+            summary = "id로 썸네일 조회",
+            description = "썸네일을 조회해요."
+    )
     @GetMapping(path="/medias/{id}/thumbnail")
     public ResponseEntity<Resource> getThumbnail(@PathVariable("id") Long id) {
         logger.info("GET /medias/" + id + "/thumbnail request received.");
