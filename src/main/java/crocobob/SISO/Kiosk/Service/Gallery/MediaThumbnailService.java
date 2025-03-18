@@ -5,7 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 
 @Service
 public class MediaThumbnailService {
@@ -30,21 +32,27 @@ public class MediaThumbnailService {
 
     public void generateMediaThumbnail(File file) {
         String fileExtension = getFileExtension(file.getName());
-        String thumbnailPath = file.getAbsolutePath().replace("."+ fileExtension, ".png");
+        String thumbnailFileName = file.getName().replace("."+ fileExtension, ".png");
 
         ProcessBuilder pb = new ProcessBuilder(
                 "docker", "run", "--rm", "-v", file.getParent() + ":/data", // 디렉토리 마운트
                 "jrottenberg/ffmpeg", "-i", "/data/" + file.getName(), //
                 "-ss", "00:00:01.000", "-vframes", "1", // 영상의 1초 부분에, 1프레임을 추출
                 "-f", "image2", "-c:v", "png",
-                "/data/thumbnails/" + new File(thumbnailPath).getName()); // thumbnails 폴더에 .png 저장
+                "/data/thumbnails/" + thumbnailFileName); // thumbnails 폴더에 .png 저장
         pb.redirectErrorStream(true);
         try{
             Process process = pb.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
             process.waitFor();
         } catch (Exception e){
             log.error(e.getMessage());
         }
+        log.info("Thumbnail successfully generated.");
     }
 
     private String getFileExtension(String filePath) {
