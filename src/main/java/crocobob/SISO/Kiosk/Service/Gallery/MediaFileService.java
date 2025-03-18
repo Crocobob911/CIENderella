@@ -124,10 +124,12 @@ public class MediaFileService {
 
     public String deleteFile(Long id) {
         MediaInfo info = infoService.getMediaInfo(id);
-        infoService.deleteMediaInfoById(id);
         File file = new File(fileDirPath + info.getFileName());
+        File thumnailFile = new File(fileDirPath + thumbnailService.getThumbnailFilePath(id));
+        infoService.deleteMediaInfoById(id);
         try {
             file.delete();
+            thumnailFile.delete();
             return "Successfully deleted file.";
         } catch (Exception e) {
             return "Error deleting file.";
