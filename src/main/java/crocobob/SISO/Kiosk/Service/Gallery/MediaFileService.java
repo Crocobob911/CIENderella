@@ -13,14 +13,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.net.MalformedURLException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.net.URI;
+import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 @Service
 public class MediaFileService {
-    private static Logger logger = LoggerFactory.getLogger(MediaFileService.class);
+    private static final Logger logger = LoggerFactory.getLogger(MediaFileService.class);
 
     private final String fileDirPath;
     private final MediaInfoService infoService;
@@ -32,6 +34,8 @@ public class MediaFileService {
 
         fileDirPath = readMediaFilePath();
     }
+
+    // ------------------- <<READ>> -------------------
 
     public Resource getResource(String fileName) {
         Path filePath = Paths.get(fileDirPath).resolve(fileName).normalize();
@@ -58,9 +62,11 @@ public class MediaFileService {
         }
     }
 
-    public MediaInfo processFile(MultipartFile file, String writer) {
+    // ------------------- <<CREATE>> -------------------
+
+    public MediaInfo processFile(MultipartFile file, String uploader) {
         String fileName = makeFileNameDoesntDuplicate(file.getOriginalFilename());
-        var mediaInfoOfFile = infoService.processFile(file, fileName, writer);
+        var mediaInfoOfFile = infoService.processFile(file, fileName, uploader);
 
         try {
             saveFileInLocalDirectory(file, fileName);
@@ -70,6 +76,33 @@ public class MediaFileService {
         }
 
         return mediaInfoOfFile;
+    }
+
+    public MediaInfo processFile(String urlString, String uploader) {
+        String fileName = makeFileNameDoesntDuplicate(getFileNameFromUrl(urlString));
+
+        try{
+            Path filePath = downloadFileFromUrl(urlString, fileName);
+            return infoService.processFile(filePath, fileName, uploader);
+        }catch(IOException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String getFileNameFromUrl(String fileUrl) {
+        return Paths.get(URI.create(fileUrl).getPath()).getFileName().toString();
+    }
+
+    private Path downloadFileFromUrl(String urlString, String fileName) throws MalformedURLException {
+        Path filePath = Paths.get(fileDirPath).resolve(fileName);
+
+        URL url = new URL(urlString);
+        try (InputStream in = url.openStream()) {
+            Files.copy(in, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return filePath;
     }
 
     private String makeFileNameDoesntDuplicate(String fileName) {
@@ -85,7 +118,7 @@ public class MediaFileService {
             uploadDir.mkdir();
         }
 
-        logger.info("Saving file " + fileName + " in " + uploadDir.getAbsolutePath());
+        logger.info("Saving file {} in {}", fileName, uploadDir.getAbsolutePath());
 
         Path destination = uploadDir.toPath().resolve(fileName).normalize();
         file.transferTo(destination);
@@ -97,18 +130,6 @@ public class MediaFileService {
             return reader.readLine().trim();
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    public String deleteFile(Long id) {
-        MediaInfo info = infoService.getMediaInfo(id);
-        infoService.deleteMediaInfoById(id);
-        File file = new File(fileDirPath + info.getFileName());
-        try {
-            file.delete();
-            return "Successfully deleted file.";
-        } catch (Exception e) {
-            return "Error deleting file.";
         }
     }
 
@@ -125,4 +146,19 @@ public class MediaFileService {
         }
         return fileName.substring(0, fileName.lastIndexOf("."));
     }
+
+    // ------------------- <<DELETE>> -------------------
+
+    public String deleteFile(Long id) {
+        MediaInfo info = infoService.getMediaInfo(id);
+        infoService.deleteMediaInfoById(id);
+        File file = new File(fileDirPath + info.getFileName());
+        try {
+            file.delete();
+            return "Successfully deleted file.";
+        } catch (Exception e) {
+            return "Error deleting file.";
+        }
+    }
+
 }
