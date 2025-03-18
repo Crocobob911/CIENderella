@@ -3,21 +3,18 @@ package crocobob.SISO.Kiosk.Controller;
 import crocobob.SISO.Kiosk.Domain.Gallery.MediaInfo;
 import crocobob.SISO.Kiosk.Service.Gallery.MediaFileService;
 import crocobob.SISO.Kiosk.Service.Gallery.MediaInfoService;
+import crocobob.SISO.Kiosk.Service.Gallery.MediaThumbnailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 @Tag(name = "Gallery Media", description = "갤러리에 띄울 영상, 이미지")
@@ -26,10 +23,12 @@ public class MediaController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final MediaFileService fileService;
     private final MediaInfoService infoService;
+    private final MediaThumbnailService thumbnailService;
 
-    public MediaController(MediaFileService fileService, MediaInfoService infoService) {
+    public MediaController(MediaFileService fileService, MediaInfoService infoService, MediaThumbnailService thumbnailService) {
         this.fileService = fileService;
         this.infoService = infoService;
+        this.thumbnailService = thumbnailService;
     }
 
     @Operation(
@@ -67,7 +66,7 @@ public class MediaController {
     public ResponseEntity<Resource> getThumbnail(@PathVariable("id") Long id) {
         logger.info("GET /medias/" + id + "/thumbnail request received.");
 
-        var thumbnail = fileService.getThumbnail(id);
+        var thumbnail = fileService.getResource(thumbnailService.getThumbnailFilePath(id));
         return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(thumbnail);
     }
 

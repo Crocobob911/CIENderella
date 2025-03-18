@@ -1,7 +1,6 @@
 package crocobob.SISO.Kiosk.Service.Gallery;
 
 import crocobob.SISO.Exception.NoFileNameInLocalException;
-import crocobob.SISO.Exception.NoThumbnailCreatedException;
 import crocobob.SISO.Kiosk.Domain.Gallery.MediaInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,11 +25,11 @@ public class MediaFileService {
 
     private final String fileDirPath;
     private final MediaInfoService infoService;
-    private final MediaThumbnailManager thumbnailManager;
+    private final MediaThumbnailService thumbnailService;
 
-    public MediaFileService(MediaInfoService infoService, MediaThumbnailManager thumbnailManager) {
+    public MediaFileService(MediaInfoService infoService, MediaThumbnailService thumbnailService) {
         this.infoService = infoService;
-        this.thumbnailManager = thumbnailManager;
+        this.thumbnailService = thumbnailService;
 
         fileDirPath = readMediaFilePath();
     }
@@ -39,22 +38,6 @@ public class MediaFileService {
 
     public Resource getResource(String fileName) {
         Path filePath = Paths.get(fileDirPath).resolve(fileName).normalize();
-        return getFileFromStorage(filePath);
-    }
-
-    public Resource getThumbnail(Long id) {
-        var info = infoService.getMediaInfo(id);
-
-        if (!info.getMediaType().startsWith("video"))
-            throw new NoThumbnailCreatedException("There is no Thumbnail, because the media IS NOT VIDEO.");
-
-        String fileNameNoExtension = removeExtension(info.getFileName());
-        Path filePath = Paths.get(fileDirPath + "thumbnails/" + fileNameNoExtension + ".png");
-
-        return getFileFromStorage(filePath);
-    }
-
-    private Resource getFileFromStorage(Path filePath) {
         try {
             return new UrlResource(filePath.toUri());
         } catch (MalformedURLException e) {
@@ -67,39 +50,48 @@ public class MediaFileService {
     public MediaInfo processFile(MultipartFile file, String uploader) {
         String fileName = makeFileNameDoesntDuplicate(file.getOriginalFilename());
         var mediaInfoOfFile = infoService.processFile(file, fileName, uploader);
-
-        try {
-            saveFileInLocalDirectory(file, fileName);
-            makeThumbnail(mediaInfoOfFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        saveFileInLocalDirectory(file, fileName);
+        makeThumbnail(mediaInfoOfFile);
         return mediaInfoOfFile;
     }
 
     public MediaInfo processFile(String urlString, String uploader) {
         String fileName = makeFileNameDoesntDuplicate(getFileNameFromUrl(urlString));
-
-        try{
-            Path filePath = downloadFileFromUrl(urlString, fileName);
-            return infoService.processFile(filePath, fileName, uploader);
-        }catch(IOException e){
-            throw new RuntimeException(e);
-        }
+        Path filePath = saveFileInLocalDirectory_URL(urlString, fileName);
+        var mediaInfoOfFile = infoService.processFile(filePath, fileName, uploader);
+        makeThumbnail(mediaInfoOfFile);
+        return mediaInfoOfFile;
     }
 
     private String getFileNameFromUrl(String fileUrl) {
         return Paths.get(URI.create(fileUrl).getPath()).getFileName().toString();
     }
 
-    private Path downloadFileFromUrl(String urlString, String fileName) throws MalformedURLException {
-        Path filePath = Paths.get(fileDirPath).resolve(fileName);
+    private Path saveFileInLocalDirectory(MultipartFile file, String fileName) {
+        File fileDir = new File(fileDirPath);
+        if (!fileDir.exists()) {
+            fileDir.mkdir();
+        }
 
-        URL url = new URL(urlString);
-        try (InputStream in = url.openStream()) {
+        logger.info("Saving file {} in {}", fileName, fileDir.getAbsolutePath());
+
+        Path filePath = fileDir.toPath().resolve(fileName).normalize();
+        try{
+            file.transferTo(filePath);
+        }catch (IOException e){
+            throw new RuntimeException();
+        }
+
+        return filePath;
+    }
+
+    private Path saveFileInLocalDirectory_URL(String urlString, String fileName) {
+        Path filePath = Paths.get(fileDirPath).resolve(fileName);
+        try{
+            URL url = new URL(urlString);
+            InputStream in = url.openStream();
             Files.copy(in, filePath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
+        } catch(IOException e) {
             throw new RuntimeException(e);
         }
         return filePath;
@@ -110,18 +102,6 @@ public class MediaFileService {
             fileName = "_" + fileName;
         }
         return fileName;
-    }
-
-    private void saveFileInLocalDirectory(MultipartFile file, String fileName) throws IOException {
-        File uploadDir = new File(fileDirPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdir();
-        }
-
-        logger.info("Saving file {} in {}", fileName, uploadDir.getAbsolutePath());
-
-        Path destination = uploadDir.toPath().resolve(fileName).normalize();
-        file.transferTo(destination);
     }
 
     private String readMediaFilePath() {
@@ -137,14 +117,7 @@ public class MediaFileService {
         if (!info.getMediaType().startsWith("video")) return;
 
         File file = new File(fileDirPath + info.getFileName());
-        thumbnailManager.generateMediaThumbnail(file);
-    }
-
-    private String removeExtension(String fileName) {
-        if(fileName == null || fileName.lastIndexOf(".") == -1){
-            return fileName;
-        }
-        return fileName.substring(0, fileName.lastIndexOf("."));
+        thumbnailService.generateMediaThumbnail(file);
     }
 
     // ------------------- <<DELETE>> -------------------
