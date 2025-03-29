@@ -4,12 +4,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import crocobob.SISO.Cienderella.Domain.CamApiResponse;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 
 @Service
@@ -58,6 +63,11 @@ public class CamApiService {
     }
 
     private String readApiKeyFromLocal(){
-        return "";
+        ClassPathResource resource = new ClassPathResource("camApiKey.txt");
+        try (BufferedReader reader = new BufferedReader(new FileReader(resource.getFile()))) {
+            return reader.readLine().trim();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
