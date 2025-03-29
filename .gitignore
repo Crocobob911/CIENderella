@@ -76,3 +76,5 @@ src/main/resources/mealJsonPath.txt
 logs/application.log
 
 logs/
+
+src/main/resources/camApiKey.txt
