@@ -23,7 +23,7 @@ public class MediaThumbnailService {
     public String getThumbnailFilePath(Long id) {
         var info = infoService.getMediaInfo(id);
 
-        if (!info.getMediaType().startsWith("video"))
+        if (info.getMediaType()!=null && !info.getMediaType().startsWith("video"))
             throw new NoThumbnailCreatedException("There is no Thumbnail, because the media IS NOT VIDEO.");
 
         String fileNameNoExtension = removeExtension(info.getFileName());

@@ -16,9 +16,9 @@ public class MediaInfo {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     Integer orderNum;
-    String fileName;
-    String mediaType;
-    String uploader;
+    String fileName = "";
+    String mediaType = "";
+    String uploader = "";
     Double fileSizeMB;
     LocalDateTime uploadDateTime;
     LocalDateTime dueDateTime;

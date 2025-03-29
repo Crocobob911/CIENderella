@@ -125,21 +125,29 @@ public class MediaFileService {
 
     public String deleteFile(Long id) {
         MediaInfo info = infoService.getMediaInfo(id);
+
+        var returnString = deleteLocalFile(info) + "\n" + deleteThumbnail(info);
+        infoService.deleteMediaInfoById(id);
+        return returnString;
+    }
+
+    private String deleteLocalFile(MediaInfo info) {
         File file = new File(fileDirPath + info.getFileName());
         try {
             file.delete();
+            return "File " + file.getAbsolutePath() + " deleted successfully";
         } catch (Exception e) {
             return "Error deleting file.";
         }
+    }
 
+    private String deleteThumbnail(MediaInfo info) {
         try{
-            File thumnailFile = new File(fileDirPath + thumbnailService.getThumbnailFilePath(id));
+            File thumnailFile = new File(fileDirPath + thumbnailService.getThumbnailFilePath(info.getId()));
             thumnailFile.delete();
+            return "Thumbnail " + thumbnailService.getThumbnailFilePath(info.getId()) + " deleted successfully";
         }catch (NoThumbnailCreatedException _){
-
+            return "Error deleting thumbnail.";
         }
-
-        infoService.deleteMediaInfoById(id);
-        return file.getAbsolutePath();
     }
 }
