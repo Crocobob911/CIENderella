@@ -31,7 +31,7 @@ public class NoticeService {
     public List<Notice> getNotices(){
         LocalDate twoMonthsAgo = LocalDate.now().minusMonths(2);
 
-        List<Notice> notices = repo.findTop3OrderByDateDesc();
+        List<Notice> notices = repo.findTop3ByOrderByDateDesc();
         notices.removeIf(notice -> notice.getDate().isBefore(twoMonthsAgo));
 
         if(notices.isEmpty())
