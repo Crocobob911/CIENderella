@@ -9,7 +9,7 @@ public interface NoticeRepository {
     Notice save(Notice notice);
     Optional<Notice> findById(long id);
     Optional<Notice> findByNotice(String notice);
-    List<Notice> findTop3ByOrderByIdDesc();
+    List<Notice> findTop3ByOrderDateDesc();
     void delete(Notice notice);
     List<Notice> findAll();
 }
