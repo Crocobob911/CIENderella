@@ -1,5 +1,6 @@
 package crocobob.SISO.Kiosk.Service;
 
+import crocobob.SISO.Exception.DBEntityNotFoundException;
 import crocobob.SISO.Kiosk.Domain.Notice.Notice;
 import crocobob.SISO.Kiosk.Domain.Notice.NoticeDTO;
 import crocobob.SISO.Kiosk.Repository.Notice.NoticeRepository;
@@ -43,5 +44,7 @@ public class NoticeService {
         return repo.findAll();
     }
 
-    public void delete(Notice notice) {}
+    public void deleteNotice(long id) {
+        repo.delete(repo.findById(id).orElseThrow(() -> new DBEntityNotFoundException("<< No Notice found >>")));
+    }
 }

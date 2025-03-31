@@ -10,10 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -43,6 +40,19 @@ public class NoticeController {
         return service.getNotices();
     }
 
+    @GetMapping(path="/notices/all")
+    @Operation(
+            summary = "공지 모두 조회",
+            description = "DB에 있는 모든 Notices 조회"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "성공"
+    )
+    public List<Notice> getAllNotice() {
+        logger.info("GET /notices/all request received.");
+        return service.getAllNotices();
+    }
 
     @PostMapping(path="/notices")
     @Operation(
@@ -57,5 +67,19 @@ public class NoticeController {
         logger.info("POST /notices request received.");
 
         return ResponseEntity.ok().body(service.save(dto));
+    }
+
+    @DeleteMapping(path = "notices/{id}")
+    @Operation(
+            summary = "공지 삭제",
+            description = "그 id의 notice를 삭제할게요."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "성공"
+    )
+    public void deleteNotice(@PathVariable("id") long id) {
+        logger.info("DELETE /notice/" + id + " request received.");
+        service.deleteNotice(id);
     }
 }
